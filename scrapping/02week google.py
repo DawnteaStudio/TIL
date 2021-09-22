@@ -24,7 +24,7 @@ ws1.column_dimensions['A'].width = 50 # A열
 ws1.column_dimensions['B'].width = 20 # B열
 wb.save(filename='colaa test.xlsx')
 
-driver.quit()
+# driver.quit()
 
 #rso > div:nth-child(1) > g-card > div > div > a > div > div.iRPxbe > div.mCBkyc.JQe2Ld.nDgy9d
 #rso > div:nth-child(2) > g-card > div > div > a > div > div.iRPxbe > div.mCBkyc.JQe2Ld.nDgy9d
