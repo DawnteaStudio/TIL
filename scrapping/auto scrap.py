@@ -6,7 +6,7 @@ import time
 
 driver = webdriver.Chrome('./chromedriver')
 driver.implicitly_wait(10)
-url = "https://www.google.com/search?q=intitle:environment+and+intitle:social&rlz=1C5CHFA_enKR917KR917&tbm=nws&sxsrf=AOaemvK0SyNx5_LVZhLKJ8O-THER4Q7DiQ:1632302696709&ei=aPZKYZ_fKo3ChwO9-qDACA&start=0&sa=N&ved=2ahUKEwifs5yzoZLzAhUN4WEKHT09CIg4UBDy0wN6BAgBEDY&biw=1309&bih=1015&dpr=2"
+url = "https://www.google.com/search?q=intitle:government+and+intitle:company&rlz=1C5CHFA_enKR917KR917&sxsrf=AOaemvI6LHYfxY5hya945sglRkYUl6rSug:1632374238047&source=lnms&tbm=nws&sa=X&ved=2ahUKEwikh-X0q5TzAhVwyIsBHUq9B74Q_AUoA3oECAEQBQ&biw=1925&bih=1014&dpr=2"
 # 뉴스 1페이지에서 링크는 직접 입력
 
 driver.get(url)
@@ -54,7 +54,7 @@ while onlynext == "pnnext":
         continue
 ws1.column_dimensions['A'].width = 100 # A열
 ws1.column_dimensions['B'].width = 20 # B열
-wb.save(filename='esg.xlsx')
+wb.save(filename='company_government.xlsx')
 driver.quit()
     # print("https://www.google.com" + reallinks)
     # print(onlynext)
