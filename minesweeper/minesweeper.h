@@ -18,7 +18,7 @@ const int SIZE = 8;
 
 void minesweeper( string input, string output );
 
-void initBoard( char board[][SIZE], string file );
+void initBoard( char board[SIZE][SIZE], string file );
 /******************************************************************************
  * This method will read the file that is loaded and store the locations of the
  * bombs as well as figure out the values for the numbers on the board.
@@ -27,7 +27,7 @@ void initBoard( char board[][SIZE], string file );
  * file - the name of the file that contains the locations of the bombs
  ******************************************************************************/ 
 
-void displayBoard( ostream& out, char board[][SIZE], bool touchedBoard[][SIZE], bool gameOver = false );
+void displayBoard(string command, string output, char board[SIZE][SIZE], int& count, int& cx, int& cy );
 /******************************************************************************
  * This function will read a board from the given file
  *
@@ -46,7 +46,7 @@ void initTouched( bool touchedBoard[][SIZE] );
  * has been touched at a given spot.
  ******************************************************************************/ 
 
-void touchBoard( bool board[][SIZE], int x, int y );
+void touchBoard( char board[SIZE][SIZE], int w, int h);
 /******************************************************************************
  * This will go to the given board and indicate that it's been touched at the
  * given location.
