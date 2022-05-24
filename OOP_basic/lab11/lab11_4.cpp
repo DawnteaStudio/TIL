@@ -33,9 +33,9 @@ int main() {
 		int balance;
 		cout << i << "번째 학생 계좌 입력 : 학번 : ";
 		cin >> id;
-		cout << "\n이름 : ";
+		cout <<'\n' << "이름 : ";
 		cin >> name;
-		cout << "\n잔액 : ";
+		cout << '\n' << "잔액 : ";
 		cin >> balance;
 		cout << "==========================" << endl;
 
