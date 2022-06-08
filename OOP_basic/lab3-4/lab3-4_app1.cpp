@@ -1,25 +1,57 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
-void change(vector<double> v) {
-    for (double &elem : v)
-        cin >> elem;
-}
+int myadd(int x, int y);
+int mysub(int x, int y);
+int mymul(int x, int y);
+float mydiv(int x, int y);
+
+int addmul(int x, int y, int z); // return value: (x + y) * z
+double muldiv(int x, int y, int z); // return value: (x * y) / z
+int addmuladd(int x, int y, int z); // return value: (x + y) * (y + z)
+double subdivsub(int x, int y, int z); // return value: (x - y) / (y - z)
+
+
 
 int main() {
-    // Declare a vector of ten numbers
-    std::vector<double> vec(4, 5);
-    // Allow the user to populate the vector
-    std::cout << "Please enter 10 numbers: ";
+    int x,y,z;
 
-    // Print the vector's contents
-    for (double elem : vec)
-        std::cout << elem << '\n';
-    change(vec);
-
-    for (double elem : vec)
-        cout << elem << '\n';    
-    
+    cout << "Enter a number : ";
+    cin >> x;
+    cout << "Enter a number : ";
+    cin >> y;
+    cout << "Enter a number : ";
+    cin >> z;
+    cout << "x = " << x <<", y = " << y << ", z = " << z <<endl;
+    cout << addmul(x,y,z) << endl;
+    cout << muldiv(x,y,z) << endl;
+    cout << addmuladd(x,y,z) << endl;
+    cout << subdivsub(x,y,z) << endl;
 }
+
+int myadd(int x, int y) {
+    return x+y; }
+int mysub(int x, int y) {
+    return x-y; }
+int mymul(int x, int y) {
+    return x*y; }
+float mydiv(int x, int y) {
+    return float(x)/y; }
+
+int addmul(int x, int y, int z){
+    cout << "(x + y) * z = ";
+    return mymul(myadd(x,y),z);
+}
+double muldiv(int x, int y, int z){
+    cout << "(x * y) / z  = ";
+    return mydiv(mymul(x,y), double(z));
+    }
+int addmuladd(int x, int y, int z){
+    cout << "(x + y) * (y + z) = ";
+    return mymul(myadd(x,y), myadd(y,z));
+    }
+double subdivsub(int x, int y, int z){
+    cout << "(x - y) / (y - z) = ";
+    return mydiv(mysub(x,y), double(mysub(y,z)));
+    }
