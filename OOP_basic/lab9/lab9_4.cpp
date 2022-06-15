@@ -1,45 +1,31 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
 using namespace std;
 
-int** buildTable(int n) {
-    int i =0;
-    int** array = new int *[n];
-array[i] = new int[n];
-    return (int**)array;
-}
-void make_identity_matrix(int** table, int n) { 
-    for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
-            if(i == j)
-            table[i][j] = 1;
-        }
-    }
-}
-void printTable(int** table, int n) { 
-    for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) { 
-            cout << table[i][j]<< '\t';
-        }
-        cout << endl;
-    }
-}
-
+//정적 배열(static array):프로그램 실행중 크기가 고정되어 변경 불가
+//동적 배열(dynamic array): 프로그램 실행중(run time) 할당/해제가 가능
 int main() {
-	int n = 0;
-	cout << "N을 입력하시오: ";
-	cin >> n;
-	if (n < 1) {
-		cout << "\n행렬을 생성할 수 없습니다.\n" << endl;
-		exit(EXIT_FAILURE);
-	}
+	const int size = 3;
+	int list[size] = { 10, 20, 30 };
 
-	int** table = buildTable(n);
-	make_identity_matrix(table, n);
-	printTable(table, n);
+	int length = 3;
+	cin >> length; // 키보드로부터 배열의 크기를 입력받음
+	int* list2 = new int [length]; //동적 배열 선언
+// double* list2 = new double[length]
 
-	for (int i = 0; i < n; i++)
-		delete[] table[i];
-	delete[] table;
+	int* begin = list2;
+	int* end = list2 + length;
+
+	for (int* curr = begin; curr != end; curr++)
+		cin >> *curr;
+
+	for (int* curr = begin; curr != end; curr++)
+		cout << *curr << '\t';
+	cout << endl;
+
+	delete[] list2; //할당 해제
+
+
 
 	return 0;
 }
