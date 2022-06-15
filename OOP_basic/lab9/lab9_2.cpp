@@ -1,46 +1,56 @@
 #include <iostream>
+#include <vector>
+#include <iomanip>
 using namespace std;
-
-int* make_arr(int n) {
-		int *arr;
-		arr = new int[n];
-		return arr;
-}
-
-void print_arr(int* a, int n) {
-	cout << "\nOdd Number Array:" << endl;
-	for (int i = 0; i < n; i++){
-		a[i] = i*2 + 1;
-	cout << a[i] << " ";
-}
-	cout << endl;
-}
+using Matrix = vector<vector<int>>;
 
 
-int sum_arr(int* a, int n) {
-	int s = 0;
-	while (n) {
-		s += *a;
-		a++;
-		n--;
+void print(const Matrix& mat) {
+	// vector index를 이용한 for 문 작성
+		for (unsigned row = 0; row < mat.size(); row++) {
+			for (unsigned col = 0; col < mat[row].size(); col++) {
+				//mat.at(row).at(col);
+				cout << setw(4) << mat[row][col];
+			}
+			cout << endl;
+		}
+
+	// vector 원소를 이용한 for 문 작성
+    for (const vector<int>& row:mat) {
+        for (int col : row) {
+            cout << setw(4) << col;
+        }
+        cout << endl;
+    }
+
+	//유추 가능한 경우, 자료형 부분을 auto로 치환가능
+	// vector<int> row = mat[0];
+	//  ==    auto row = mat[0];
+	// auto와 벡터 원소를 이용하여 for문 구현
+	for (const auto& row : mat) {
+		for (auto col : row) {
+			cout << setw(4) << col;
+		}
+		cout << endl;
 	}
-	cout << endl;
-	return s;
 }
 
 
 
 int main() {
-	int n;
-	cout << "Enter a number: ";
-	cin >> n;
+	// 2 x 3 matrix
+	//	vector<vector<int>> mat(2, vector < int>(3) );
+	Matrix mat{ { 1, 2, 3 },
+	{ 4, 5, 6 } };
 
-	int* arr = make_arr(n);
-	print_arr(arr, n);
+	mat[0][0] = 1;
+	mat[0][1] = 2;
+	mat[0][2] = 3;
+	mat[1][0] = 4;
+	mat[1][1] = 5;
+	mat[1][2] = 6;
 
-	int sum = sum_arr(arr, n);
-	cout << "\nSum of the array: " << sum << endl;
+	print(mat);
 
-	delete[] arr;
 	return 0;
 }
