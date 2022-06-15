@@ -1,47 +1,38 @@
 #include <iostream>
-#include <string>
+#include <vector>
+#include <iomanip>
 using namespace std;
 
+
+//소수 : 1과 자기자신을 제외하고는 약수가 없는 1보다 큰 정수
+bool is_prime(int n) {
+	if (n < 2)
+		return false;
+	for (int i = 2; i < n; i++)
+		if(n%i == 0)
+			return false; // n을 i로 나눈 나머지가 0이면 false를 리턴
+	return true;
+}
+
+vector<int> primes(int low, int high) {
+	vector<int> result;
+	for (int i = low; i <= high; i++)
+		if(is_prime(i))
+			result.push_back(i); // 소수이면 (is_prime이 참이면) 뒤에 push
+	return result;
+}
+
+void print(const vector<int>& v) {
+	for (const int elem : v) //vector index가 아닌 원소를 이용한 for문
+		cout << setw(4) << elem;
+	cout << endl;
+}
+
 int main() {
-	int n;
-	bool check = false;
-		cout << "Please enter a number: ";
-		cin >> n;
-		if (n < 2){
-            cout << "Wrong number!!!" << endl;
-			return 0;
-        }
-
-        cout << "Size of random array: " << n/2 << endl;
-        cout << "[ Array ]" << endl;
-		int *list;
-		list = new int[n/2];
-		cout << n/2 << endl;
-		for (int i = 0; i < n/2; i++)
-			list[i] = rand() % n + 1;
-
-		for (int i = 0; i < n/2; i++) {
-				cout << list[i] << " ";
-			}
-			cout << endl;
-		while (1){
-			for (int i = 0; i < n/2; i++) {
-				for (int j = i+1; j < n/2; j++) {
-					if (list[i] == list[j]){
-						cout << "Duplicates found." << endl;
-						check = true;
-						break;
-					}
-				if (check)
-				break;
-				}
-		}	if (!check)
-				cout << "Duplicates not found." << endl;
-			break;
-		
-		}
-
-		delete[] list;		
+	int low, high;
+	cin >> low >> high;
+	vector<int> vec = primes(low, high);
+	print(vec);
 
 	return 0;
 }
