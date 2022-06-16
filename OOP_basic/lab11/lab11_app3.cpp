@@ -28,17 +28,17 @@ int main() {
 	int num;
 	cin >> num;
 	Account* acnt = new Account[num];
-	for (int i = 1; i < num+1; i++) {
+	for (int i = 0; i < num; i++) {
 		string id, name;
 		int balance;
-		cout << i << "번째 학생 계좌 입력 : 학번 : ";
+		cout << i+1 << "번째 학생 계좌 입력 : 학번 : ";
 		cin >> id;
 		cout <<'\n' << "이름 : ";
 		cin >> name;
 		cout << '\n' << "잔액 : ";
 		cin >> balance;
 		cout << "==========================" << endl;
-
+		
 		for (int j = 0; j < i; j++) {
 			if (id == acnt[j].getId()) {
 				cout << "중복된 학번이 존재합니다." << endl << "프로그램을 종료합니다." << endl;
@@ -48,6 +48,8 @@ int main() {
         acnt[i].setBalance(balance);
 		acnt[i].setName(name);
 		acnt[i].setId(id);
+
+
 	}
 
 	cout << "회수된 금액 : " << Account::getSum() << endl;
