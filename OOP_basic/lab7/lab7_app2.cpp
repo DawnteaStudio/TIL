@@ -29,7 +29,6 @@ int main(){
             endPoint =  searchPoint + keyword.length();
             result += data.substr(startPoint, endPoint - startPoint) + " ";
             data = data.substr(endPoint);
-            cout << data << endl;
         }
         else{
             startPoint = searchPoint;
@@ -40,7 +39,6 @@ int main(){
             endPoint = searchPoint + cnt;
             result += data.substr(startPoint, endPoint - startPoint) + " ";
             data = data.substr(endPoint);
-            cout << data << endl;
             }
         }
     cout << "검색결과 : " << result << endl;
