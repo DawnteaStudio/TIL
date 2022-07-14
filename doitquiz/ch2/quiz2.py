@@ -1,8 +1,7 @@
-# quiz1
-kor = 80
-eng = 75
-math = 55
+# quiz2
+num = 13
 
-sum = kor + eng + math
-q1 = sum/3
-print(f"1번 답은 : {q1}")
+if(num%2 == 0):
+    print("짝수입니다.")
+else:
+    print("홀수입니다.")
