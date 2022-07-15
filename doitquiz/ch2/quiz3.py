@@ -1,8 +1,6 @@
-# quiz1
-kor = 80
-eng = 75
-math = 55
-
-sum = kor + eng + math
-q1 = sum/3
-print(f"1번 답은 : {q1}")
+# quiz3
+pin = "881120-1068234"
+yyyymmdd = "19" + pin[0:6]
+num = pin[7:]
+print(yyyymmdd)
+print(num)
