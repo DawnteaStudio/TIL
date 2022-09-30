@@ -1,41 +1,10 @@
-# # quiz1
-# result = 0
-# i = 1
-# while i <= 1000:
-#     if i % 3 == 0:
-#         result += i
-#     i += 1
-# print(result)
+#리스트에서 50이상의 총합을 구하시오
+A = [20,55,67,82,45,33,90,87,100,25]
 
-# # quiz2
-
-# star = 1
-# while star < 6:
-#     print("*"*star)
-#     star += 1
-
-# # quiz3
-# for i in range(1,101):
-#     print(i)
-
-# quiz4
-score = [70,60,55,75,95,90,80,80,85,100]
+#my code
 sum = 0
-for i in score:
-    sum += i
-print("Mean Value is" , sum/len(score))
-pp = sum/len(score)
-print("Mean Value is %f" % pp)
+for i in A:
+    if i >= 50:
+        sum += i
 
-# quiz5 basic
-numbers = [1,2,3,4,5]
-result = []
-for i in numbers:
-    if i % 2 != 0:
-        result.append(i*2)
-print(result)
-
-# quiz5 list comprehension
-numbers = [1,2,3,4,5]
-result = [i*2 for i in numbers if i%2 != 0]
-print(result)
+print(sum)
