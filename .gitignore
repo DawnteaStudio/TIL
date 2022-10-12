@@ -3,3 +3,5 @@
 .gitattributes
 
 /.metadata/
+helloworld/.DS_Store
+helloworld/src/.DS_Store
