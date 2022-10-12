@@ -1,7 +1,6 @@
 
-*.DS_Store
+.DS_Store
 .gitattributes
-.gitignore
 /.metadata/
 helloworld/.DS_Store
 helloworld/src/.DS_Store
