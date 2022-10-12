@@ -9,3 +9,4 @@ test/.classpath
 test/.project
 *.prefs
 .gitignore
+/.gitignore
