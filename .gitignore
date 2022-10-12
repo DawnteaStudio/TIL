@@ -2,9 +2,6 @@
 .DS_Store
 .gitattributes
 /.metadata/
-helloworld/.DS_Store
-helloworld/src/.DS_Store
-helloworld/src/.DS_Store
 .classpath
 .project
 *.prefs
