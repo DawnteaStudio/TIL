@@ -5,8 +5,6 @@
 helloworld/.DS_Store
 helloworld/src/.DS_Store
 helloworld/src/.DS_Store
-test/.classpath
-test/.project
+.classpath
+.project
 *.prefs
-.gitignore
-/.gitignore
