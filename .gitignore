@@ -3,5 +3,9 @@
 .gitattributes
 /.metadata/
 .classpath
+.gitignore
 .project
+.DS_Store
 *.prefs
+*.tmp
+자바의 정석 연습문제/ch4/~$4조건문과반복문.docx
