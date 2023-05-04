@@ -12,13 +12,13 @@
 
 ### 문제 설명
 
-<p>Napisz program, który odwraca podane słowo trzyliterowe.</p>
+<p>주어진 세 글자 단어를 뒤집는 프로그램을 작성합시다.</p>
 
 ### 입력 
 
- <p>W pierwszym i jedynym wierszu podane jest jedno słowo trzyliterowe.</p>
+ <p>유일한 줄에 하나의 세 글자 단어가 주어집니다.</p>
 
 ### 출력 
 
- <p>Pierwszy i jedyny wiersz wyjścia powinien zawierać odwrócone słowo wejściowe.</p>
+ <p>유일한 줄에 입력 단어를 뒤집은 결과를 출력합니다.</p>
 
