@@ -12,27 +12,27 @@
 
 ### 문제 설명
 
-<p>Julka zaskoczyła wczoraj w przedszkolu swoją wychowawczynię rozwiązując następującą zagadkę:</p>
+<p>율카는 어제 아래의 수수께끼를 풀어 유치원 선생님을 놀라게 했습니다.</p>
 
-<blockquote>Klaudia i Natalia mają razem 10 jabłek, ale Klaudia ma o 2 jabłka więcej niż Natalia. Ile jabłek ma każda z dziewczynek?</blockquote>
+<blockquote>클라우디아와 나탈리아는 총 10개의 사과를 가지고 있는데, 클라우디아가 나탈리아보다 사과 2개를 더 가지고 있어요. 그러면 두 소녀는 각각 몇 개의 사과를 가지고 있을까요?</blockquote>
 
-<p>Julka odpowiedziała bez namysłu: Klaudia ma sześć jabłek, natomiast Natalia ma cztery jabłka.</p>
+<p>율카는 고민하는 기색도 없이 대답했습니다: 클라우디아가 6개, 나탈리아가 4개요.</p>
 
-<p>Wychowywaczyni postanowiła sprawdzić, czy odpowiedź Julki nie była przypadkowa i powtarzała zagadkę, za każdym razem zwiększając liczby jabłek w zadaniu. Julka zawsze odpowiadała prawidłowo. Zaskoczona wychowawczyni chciała kontynuować ,,badanie'' Julki, ale przy bardzo dużych liczbach sama nie potrafiła szybko rozwiązać zagadki. Pomóż pani przedszkolance i napisz program, który będzie podpowiadał jej rozwiązania.</p>
+<p>선생님은 율카가 우연히 정답을 말한 게 아닐지 확인하기 위해 사과의 숫자를 늘려가며 수수께끼를 물어보기로 했습니다. 그러나 율카는 언제나 정답을 말했습니다. 놀란 선생님은 과정을 계속 반복하다가, 숫자가 너무 커져 그녀 스스로가 답을 찾지 못하는 지경에 이르렀습니다. 유치원 선생님을 도와 수수께끼의 답을 구하는 프로그램을 작성합시다.</p>
 
-<p>Napisz program, który:</p>
+<p>프로그램은 아래의 과정을 만족해야 합니다.:</p>
 
 <ul>
-	<li>wczyta (ze standardowego wejścia) liczbę jabłek, które mają razem obie dziewczynki oraz o ile więcej jabłek ma Klaudia,</li>
-	<li>obliczy, ile jabłek ma Klaudia i ile jabłek ma Natalia,</li>
-	<li>wypisze wynik (na standardowe wyjście).</li>
+	<li>두 소녀가 가지고 있는 사과의 총 개수와 클라우디아가 더 가지고 있는 사과가 몇 개인지를 표준 입력으로 받아,</li>
+	<li>클라우디아와 나탈리아가 각각 몇 개의 사과를 가지고 있는지 계산한 후,</li>
+	<li>결과 값을 표준 출력합니다.</li>
 </ul>
 
 ### 입력 
 
- <p>Wejście składa się z dwóch wierszy. Pierwszy wiersz zawiera liczbę wszystkich jabłek posiadanych przez dziewczynki, natomiast drugi - liczbę mówiącą, o ile więcej jabłek ma Klaudia. Obie liczby są całkowite i dodatnie. Wiadomo, że dziewczynki mają razem nie więcej niż 10<sup>100</sup> (jedynka i sto zer) jabłek. Jak widać, jabłka mogą być bardzo malutkie.</p>
+ <p>입력은 두 줄로 주어집니다. 첫 줄에는 두 소녀가 가지고 있는 사과의 총 개수, 둘째 줄에는 클라우디아가 더 가지고 있는 사과의 개수가 주어집니다. 두 수는 모두 자연수입니다. 두 소녀가 가지고 있는 사과의 총 개수는 10의 100제곱을 넘지 않습니다. 두 소녀가 10의 100제곱 개의 사과를 가질 수 있을 만큼 사과의 크기는 충분히 작을 수 있습니다.</p>
 
 ### 출력 
 
- <p>Twój program powinien wypisać (na standardowe wyjście) w dwóch kolejnych wierszach dwie liczby całkowite, po jednej w wierszu. Pierwszy wiersz powinien zawierać liczbę jabłek Klaudii, natomiast drugi - liczbę jabłek Natalii. Wiadomo, że dziewczynki zawsze mają całe jabłka.</p>
+ <p>당신의 프로그램은 두 개의 줄에 줄마다 하나, 총 두 개의 정수를 출력해야 합니다. 첫 줄에는 클라우디아의 사과의 수, 둘째 줄에는 나탈리아의 사과의 수를 출력합니다. 두 소녀가 가지고 있는 사과의 수가 정수임은 보장됩니다.</p>
 
