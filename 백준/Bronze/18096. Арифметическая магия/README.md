@@ -12,15 +12,15 @@
 
 ### 문제 설명
 
-<p>Дэвид Блейн попросил зрителя задумать два числа.  Затем он попросил перемножить два числа, большие каждого из задуманных на единицу,  вычесть из результата сначала одно задуманное число, затем другое, а затем --- их произведение, а полученный результат возвести в <mjx-container class="MathJax" jax="CHTML" style="font-size: 109%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math></mjx-assistive-mml><span aria-hidden="true" class="no-mathjax mjx-copytext">$N$</span></mjx-container>-ю степень.</p>
+<p>데이비드는 관객에게 두 개의 숫자를 떠올려 보라고 말합니다. 그리고 두 숫자에 각각 1씩 더한 수를 서로 곱한 다음, 첫 번째로 떠올린 수만큼 빼고, 두 번째로 떠올린 수만큼 빼고, 또 처음 떠올렸던 두 수의 곱만큼 뺀 후에, 그 결과를 N제곱하라고 합니다.
 
-<p>После чего Дэвид внимательно вгляделся в лицо зрителя и правильно назвал получившийся результат. Ваша задача --- повторить фокус Дэвида. По заданному <mjx-container class="MathJax" jax="CHTML" style="font-size: 109%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math></mjx-assistive-mml><span aria-hidden="true" class="no-mathjax mjx-copytext">$N$</span></mjx-container> угадайте получившееся у зрителя число.</p>
+그 후 데이비드는 관객의 얼굴을 유심히 들여다보더니 그 결과를 정확히 맞췄습니다. 당신의 목표는 David의 마술을 반복하는 것입니다. N이 주어질 때, 관객이 생각하는 숫자를 맞춰보세요.</p>
 
 ### 입력 
 
- <p>Входные данные содержат одно целое число <mjx-container class="MathJax" jax="CHTML" style="font-size: 109%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math></mjx-assistive-mml><span aria-hidden="true" class="no-mathjax mjx-copytext">$N$</span></mjx-container> (<mjx-container class="MathJax" jax="CHTML" style="font-size: 109%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mn class="mjx-n"><mjx-c class="mjx-c30"></mjx-c></mjx-mn><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c2264"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="4"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c2264"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c30"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>0</mn><mo>≤</mo><mi>N</mi><mo>≤</mo><mn>1000</mn></math></mjx-assistive-mml><span aria-hidden="true" class="no-mathjax mjx-copytext">$0 \le N \le 1000$</span></mjx-container>).</p>
+ <p>입력으로는 하나의 정수 N (1 <= N <= 1000)이 주어집니다.</p>
 
 ### 출력 
 
- <p>Выведите одно число --- получившийся у зрителя результат.</p>
+ <p>하나의 숫자 - 관객이 생각하는 숫자 - 를 출력합니다.</p>
 
