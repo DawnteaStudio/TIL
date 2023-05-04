@@ -8,4 +8,5 @@ var input = fs.readFileSync(filePath).toString().trim().split('\n');
 
 //cording here
 let [_,a,b] = input;
-console.log(a*b);
+let res = BigInt(a)*BigInt(b);
+console.log(res.toString());
