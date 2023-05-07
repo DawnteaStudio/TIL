@@ -12,19 +12,22 @@
 
 ### 문제 설명
 
-<p>W Bajtocji noszenie skarpetek o różnych kolorach i wzorach przestało już być modne. Teraz nastała moda na noszenie wyłącznie dwóch skarpetek białych lub dwóch skarpetek czarnych.</p>
+<p>Byteotia에서 다른 색상과 패턴의 양말을 신는 것은 더 이상 유행이 아닙니다. 지금은 흰 양말 두 개나 검은 양말 두 개만 신는 것이 유행입니다.</p>
 
-<p>Bajtazar, który zawsze stara się nadążać za trendami w modzie, zakupił dużo pojedynczych skarpetek (białych i czarnych). Chciałby wiedzieć ile jednokolorowych (albo białych albo czarnych) par skarpetek uda mu się skompletować.</p>
+<p>항상 패션 트렌드를 따라가려고 노력하는 Byteasar는 단일 양말 (흰색과 검정색)을 많이 구입했습니다. 그는 자신이 완성할 수 있는 단일 색상(흰색 또는 검정색) 양말을 몇 켤레나 알고 싶어합니다.</p>
 
-<p>Ponieważ Bajtazar nie radzi sobie za dobrze ze zliczaniem swoich skarpetek, zwrócił się do Ciebie z prośbą o pomoc. Napisz program, który wczyta ciąg opisujący skarpetki Bajtazara i wyznaczy liczbę jednokolorowych par skarpetek, które można z nich skompletować.</p>
+<p>Byteasar는 양말을 세는 데 능숙하지 않기 때문에 도움을 요청했습니다. Byteasar의 양말을 설명하는 문자열을 읽고 그로부터 조립할 수 있는 단색 양말 쌍의 수를 결정하는 프로그램을 작성하십시오.</p>
 
 ### 입력 
 
- <p>W pierwszym (jedynym) wierszu wejścia znajduje się niepusty ciąg liter <code>B</code> oraz <code>C</code> oznaczających kolory kolejnych skarpetek Bajtazara (<code>B</code> oznacza skarpetkę białą, a <code>C</code> skarpetkę czarną).</p>
-
-<p>Długość ciągu nie przekracza 1 000 000 znaków.</p>
+ <p>입력의 첫 번째이자 유일한 줄에는 Byteasar의 양말 색상을 나타내는 비어 있지 않은, B와 C로만 구성된 문자열이 입력됩니다.B는 흰색 양말을 나타내고 C는 검은색 양말을 나타냅니다. 문자열의 길이는 1,000,000자를 초과하지 않습니다.</p>
 
 ### 출력 
 
- <p>W pierwszym (jedynym) wierszu wyjścia należy wypisać jedną nieujemną liczbę całkowitą – liczbę par skarpetek jednokolorowych, jakie można stworzyć ze skarpetek opisanych na wejściu.</p>
+ <p>입력에서 설명된 양말들에서 만들 수 있는 단색 양말 쌍의 수를 한 줄에 출력합니다.
+
+예제 입력/출력
+BBCBCCBCB
+4
+예제 설명: 총 5짝의 흰색 양말(두 켤레로 만들 수 있음)과 검은색 양말 4짝(두 켤레로 만들 수 있음)이 있습니다. 따라서 총 2 + 2 = 4 켤레를 만들 수 있습니다.</p>
 
