@@ -36,7 +36,7 @@ function solution(numbers) {
     function permutate(arr){
         function tree(i, arr){
             if(i == arr.length){
-                return caseSet.add(Number([...arr].join('')));
+                return caseSet.add(Number(arr.join('')));
             }            
             for(let j=i;j<arr.length;j++){
                 [arr[i], arr[j]] = [arr[j],arr[i]];
