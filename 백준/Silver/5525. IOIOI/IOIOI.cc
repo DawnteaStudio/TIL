@@ -1,33 +1,35 @@
 #include <iostream>
 #include <string>
+#include <utility>
+
 using namespace std;
+#define fast ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
 
 int main()
 {
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-  cout.tie(NULL);
+  fast;
 
-  int N, M, res = 0;
-  int i = 0, j = 0;
-  cin >> N >> M;
-  N = N * 2;
+  int N, M;
+  int res = 0, len, i = 0;
   string str;
-  cin >> str;
-  char I = 'I';
-  char O = 'O';
+  cin >> N >> M >>str;
 
-  while (i < M - 1)
+  while (i < M)
   {
-    j = 0;
-    if (str[i] == I)
+    if (str[i] == 'I')
     {
-      while (j < N && str[i+j] != str[i+j+1] && j + i < M - 1)
-        j++;
-      if (j == N)
-        res++;
+      len = 1;
+      while (i + 1 < M && str[i] != str[i + 1])
+      {
+        len++;
+        i++;
+      }
+      if (len >=  N * 2 + 1)
+        res += (len - (N * 2 + 1)) / 2 + 1;
+      i++;
     }
-    i++;
+    else
+      i++;
   }
   cout << res;
 }
