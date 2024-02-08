@@ -13,10 +13,10 @@ int main()
     res = str;
     for (int i = 0; i < str.length(); i++)
     {
-        if (str[i] != ' ' && str[i] != '<' && str[i] != '>')
+        if (str[i] != ' ' && str[i] != '<')
         {
             start_i = i;
-            while (str[i] != ' ' && str[i] != '<' && str[i] != '>' && i < str.length())
+            while (str[i] != ' ' && str[i] != '<' && i < str.length())
                 i++;
             i--;
             end_i = i;
@@ -29,20 +29,10 @@ int main()
             }
         }
         else if (str[i] == ' ')
-        {
-            res[i] = str[i];
             continue;
-        }
         else
-        {
-            res[i] = str[i];
             while (str[i] != '>')
-            {
-                res[i] = str[i];
                 i++;
-            }
-            res[i] = str[i];
-        }
     }
     cout << res;
 }
