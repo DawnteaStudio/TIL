@@ -1,76 +1,93 @@
 #include <iostream>
 #include <string>
 #include <queue>
-
 #define fast ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
 using namespace std;
 
-struct Node{
-	int	x;
-	int y;
-	int chance;
-};
-
-int arr[1000][1000];
-int visit[1000][1000][2] = {0};
-int	N, M;
-
-int	bfs(Node n)
+typedef struct s_pos
 {
-	int dy[4] = {0, -1, 0, 1}; 
-	int dx[4] = {-1, 0, 1, 0};
-	queue<Node> q;
-	Node next;
-	Node tmp;
+    int y;
+    int x;
+    bool chance;
+} pos;
 
-	q.push(n);
-	visit[n.y][n.x][n.chance] = 1;
-	while(!q.empty())
-	{
-		next = q.front();
-		q.pop();
-		if (next.y == N-1 && next.x == M-1)
-			return(visit[next.y][next.x][next.chance]);
-		for (int i = 0; i < 4; i++)
-		{
-			if(next.y + dy[i] < 0 || next.x + dx[i] < 0 || next.y + dy[i] >= N || next.x + dx[i] >= M)
-				continue;
-			if(arr[next.y + dy[i]][next.x + dx[i]] == 0 && visit[next.y + dy[i]][next.x + dx[i]][next.chance] == 0)
-			{
-				visit[next.y + dy[i]][next.x + dx[i]][next.chance] = visit[next.y][next.x][next.chance] + 1; 
-				tmp.y = next.y + dy[i];
-				tmp.x = next.x + dx[i];
-				tmp.chance = next.chance;
-				q.push(tmp);
-			}
-			else if(arr[next.y + dy[i]][next.x + dx[i]] == 1)
-			{
-				if (next.chance == 1)
-					continue;
-				else if (visit[next.y + dy[i]][next.x + dx[i]][next.chance] == 0)
-				{
-					visit[next.y + dy[i]][next.x + dx[i]][next.chance + 1] = visit[next.y][next.x][next.chance] + 1;
-					tmp.y = next.y + dy[i];
-					tmp.x = next.x + dx[i];
-					tmp.chance = 1;
-					q.push(tmp);
-				}
-			}
-		}
-	}
-	return (-1);
+int res[1001][1001][2];
+int height, width;
+int dx[4] = {-1, 0, 1, 0};
+int dy[4] = {0, -1, 0, 1};
+
+void bfs(queue<pos>& q, int arr[][1001])
+{
+    pos p;
+    int new_x, new_y;
+    while (!q.empty())
+    {
+        p = q.front();
+        q.pop();
+        for (int i = 0; i < 4; i++)
+        {
+            new_y = p.y + dy[i];
+            new_x = p.x + dx[i];
+            if (new_y < 0 || new_x < 0 || new_y >= height || new_x >= width)
+                continue;
+            if (arr[new_y][new_x] == 1)
+            {
+                if (p.chance == false)
+                    continue;
+                else
+                {
+                    if (res[new_y][new_x][1] > res[p.y][p.x][0] + 1 || res[new_y][new_x][1] == 0)
+                    {
+                        res[new_y][new_x][1] = res[p.y][p.x][0] + 1;
+                        q.push({new_y, new_x, false});
+                    }
+                }
+            }
+            else
+            {
+                if (p.chance == true)
+                {
+                    if (res[new_y][new_x][0] > res[p.y][p.x][0] + 1 || res[new_y][new_x][0] == 0)
+                    {
+                        res[new_y][new_x][0] = res[p.y][p.x][0] + 1;
+                        q.push({new_y, new_x, true});
+                    }
+                }
+                else
+                {
+                    if (res[new_y][new_x][1] > res[p.y][p.x][1] + 1 || res[new_y][new_x][1] == 0)
+                    {
+                        res[new_y][new_x][1] = res[p.y][p.x][1] + 1;
+                        q.push({new_y, new_x, false});
+                    }
+                }
+            }
+        }
+    }
 }
 
 int main()
 {
-	string str;
-	Node n = {0, 0, 0};
-	cin >> N >> M;
-	for (int i = 0; i < N; i++)
-	{
-		cin >> str;
-		for (int j = 0; j < M; j++)
-			arr[i][j] = str[j] - '0';
-	}
-	cout << bfs(n);	
+    fast;
+    string input;
+    cin >> height >> width;
+    int arr[1001][1001];
+    queue<pos> q;
+    q.push({0, 0, true});
+    res[0][0][0] = 1;
+    for (int i = 0; i < height; i++)
+    {
+        cin >> input;
+        for (int j = 0; j < width; j++)
+            arr[i][j] = input[j] - '0';
+    }
+    bfs(q, arr);
+    if (res[height - 1][width - 1][0] == 0 && res[height - 1][width - 1][1] == 0)
+        cout << -1;
+    else if (res[height - 1][width - 1][0] != 0 && res[height - 1][width - 1][1] != 0)
+        cout << (res[height - 1][width - 1][0] < res[height - 1][width - 1][1] ? res[height - 1][width - 1][0] : res[height - 1][width - 1][1]);
+    else if (res[height - 1][width - 1][0] == 0)
+        cout << res[height - 1][width - 1][1];
+    else
+        cout << res[height - 1][width - 1][0];
 }
