@@ -1,54 +1,68 @@
 #include <iostream>
 #include <vector>
+
 #define fast ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
 using namespace std;
 
-int dp[100000][2];
+void	find_max(int col)
+{
+	vector<vector<int>> v(2, vector<int> (col));
+	vector<vector<int>> res(2, vector<int> (col));
+	int input, main_line;
+
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			cin >> input;
+			if (i == 0)
+			{
+				if (j % 2 == 0)
+					v[0][j] = input;
+				else
+					v[1][j] = input;
+			}
+			else
+			{
+				if (j % 2 != 0)
+					v[0][j] = input;
+				else
+					v[1][j] = input;
+			}
+
+		}
+	}
+
+	res[0][0] = v[0][0];
+	res[1][0] = v[1][0];
+	for (int i = 1; i < col; i++)
+	{
+		if (i < 2)
+		{
+			res[0][1] = v[0][1] + res[0][0];
+			res[1][1] = v[1][1] + res[1][0];
+		}
+		else
+		{
+			res[0][i] = res[0][i - 1] > res[1][i - 2] ? res[0][i - 1] : res[1][i - 2];
+			res[0][i] += v[0][i];
+			res[1][i] = res[1][i - 1] > res[0][i - 2] ? res[1][i - 1] : res[0][i - 2];
+			res[1][i] += v[1][i];
+		}
+	}
+	cout << (res[0][col - 1] > res[1][col - 1] ? res[0][col - 1] : res[1][col - 1]) << '\n';
+}
+
 int main()
 {
-    int T, N, num, res;
-    cin >> T;
+	fast;
 
-    for (int i = 0; i < T; i++)
-    {
-        cin >> N;
-        res = 0;
-        vector<pair<int, int>> v(N);
-        for (int j = 0; j < N; j++)
-        {
-            cin >> num;
-            if (j % 2 == 0)
-                v[j].first = num;
-            else
-                v[j].second = num;
-        }
-        for (int j = 0; j < N; j++)
-        {
-            cin >> num;
-            if (j % 2 == 0)
-                v[j].second = num;
-            else
-                v[j].first = num;
-        }
-        for (int j = 0; j < N; j++)
-        {
-            if (j == 0)
-            {
-                dp[0][0] = v[j].first;
-                dp[0][1] = v[j].second;
-            }
-            else if (j == 1)
-            {
-                dp[1][0] = v[j].first + v[j - 1].first;
-                dp[1][1] = v[j].second + v[j - 1].second;
-            }
-            else
-            {
-                dp[j][0] = v[j].first + dp[j - 1][0] > v[j].first + dp[j - 2][1] ? v[j].first + dp[j - 1][0] : v[j].first + dp[j - 2][1];
-                dp[j][1] = v[j].second + dp[j - 1][1] > v[j].second + dp[j - 2][0] ? v[j].second + dp[j - 1][1] : v[j].second + dp[j - 2][0];
-            }
-        }
-        res = dp[N - 1][0] > dp[N - 1][1] ? dp[N - 1][0] : dp[N - 1][1];
-        cout << res << '\n';
-    }
+	int T, col;
+	cin >> T;
+
+	for (int i = 0; i < T; i++)
+	{
+		cin >> col;
+		find_max(col);
+	}
 }
