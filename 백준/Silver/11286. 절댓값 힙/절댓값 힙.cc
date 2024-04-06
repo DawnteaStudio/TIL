@@ -1,56 +1,100 @@
 #include <iostream>
-#include <string>
-#include <queue>
+
+#define fast ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
 using namespace std;
 
-int ft_abs(int num)
+int last_node;
+
+bool	ft_abs(int a, int b)
 {
-  num = num > 0 ? num : -num;
-  return (num);
+	int tmp_a = a;
+	int tmp_b = b;
+	if (a < 0)
+		a *= -1;
+	if (b < 0)
+		b *= -1;
+	if (a < b)
+		return (true);
+	else if (a == b)
+	{
+		if (tmp_a < tmp_b)
+			return (true);
+		return (false);
+	}
+	else
+		return (false);
 }
 
-struct comp{
-  bool operator() (int a, int b){
-    bool res = false;
-    if (ft_abs(a) > ft_abs(b))
-      res = true;
-    else if (ft_abs(a) == ft_abs(b))
-    {
-      if(a > b)
-        res = true;
-      else
-        res = false;
-    }
+void	swap(int *heap, int a, int b)
+{
+	int tmp = heap[a];
+	heap[a] = heap[b];
+	heap[b] = tmp;
+}
 
-    return res;
-  }
-};
+void	rearrange(int *heap)
+{
+	int tmp, index = 1;
+
+	while (index << 1 <= last_node)
+	{
+		if ((index << 1) + 1 <= last_node)
+			tmp = ft_abs(heap[index << 1], heap[(index << 1) + 1]) ? index << 1 : (index << 1) + 1;
+		else
+			tmp = index << 1;
+		if (ft_abs(heap[tmp], heap[index]))
+		{
+			swap(heap, index, tmp);
+			index = tmp;
+		}
+		else
+			break;
+	}
+}
+
+void	pop(int *heap)
+{
+	if (last_node == 0)
+		cout << 0;
+	else
+	{
+		cout << heap[1];
+		heap[1] = heap[last_node];
+		last_node--;
+		rearrange(heap);
+	}
+	cout << '\n';
+}
+
+void	push(int *heap, int input)
+{
+	heap[++last_node] = input;
+	int index = last_node;
+
+	while (1 < index)
+	{
+		if (ft_abs(heap[index], heap[index >> 1]))
+			swap(heap, index, index >> 1);
+		else
+			break;
+		index >>= 1;
+	}
+}
 
 int main()
 {
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-  cout.tie(NULL);
+	fast;
 
-  int cases;
-  int command;
-  priority_queue<int, vector<int>, comp> heap;
+	int n, tmp;
+	cin >> n;
+	int heap[n + 1];
 
-  cin >> cases;
-  while(cases--)
-  {
-    cin >> command;
-    if (command == 0)
-    {
-      if (heap.empty())
-        cout << 0 << '\n';
-      else
-      {
-        cout << heap.top() << '\n';
-        heap.pop();
-      }
-    }
-    else
-      heap.push(command);
-  }
+	for (int i = 1; i <= n; i++)
+	{
+		cin >> tmp;
+		if (tmp == 0)
+			pop(heap);
+		else
+			push(heap, tmp);
+	}
 }
