@@ -9,15 +9,16 @@ int main()
 {
 	fast;
 
-	string str, tmp;
+	string str, res;
 	cin >> str;
 	set<string> sub;
 	for (int i = 0; i < str.length(); i++)
 	{
-		for (int j = 1; j <= str.length(); j++)
+        res = "";
+		for (int j = i; j < str.length(); j++)
 		{
-			tmp = str.substr(i, j);
-			sub.insert(tmp);
+		    res += str[j];
+			sub.insert(res);
 		}
 	}
 	cout << sub.size();
