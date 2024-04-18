@@ -1,47 +1,90 @@
 #include <iostream>
 #include <string>
-#include <vector>
+#include <stack>
 #include <algorithm>
 #define fast ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
 using namespace std;
 
-bool cmp(string s1, string s2)
+bool	comp(string a, string b)
 {
-    if (s1.size() == s2.size()) {
-        for (int i=0; i<s1.size(); i++) {
-            if (s1[i] != s2[i]) return (s1[i] < s2[i]);
-        }
-    }
-    return (s1.size() < s2.size());
+	int i = 0;
+	if (a.length() > b.length())
+		return false;
+	else if (a.length() == b.length())
+	{
+		while (i < a.length())
+		{
+			if (a[i] > b[i])
+				return false;
+			else if (a[i] < b[i])
+				return true;
+			else
+				i++;
+		}
+	}
+	return true;
 }
 
 int main()
 {
 	fast;
-	int n, idx, start, size;
-	string str;
-	vector<string> numbers;
+	int n;
+	string str, tmp;
+	stack<string> s;
 
 	cin >> n;
-	for (int i=0; i<n; i++) {
+	for (int i = 0; i < n; i++)
+	{
 		cin >> str;
-		size = str.size();
-		idx = 0;
-		while (idx < size) {
-			while (idx < size && (str[idx] >= 'a' && str[idx] <= 'z'))
-				idx++;
-            if (idx == size) break ;
-            while (idx < size && str[idx] == '0') idx++;
-            if (str[idx] >= '1' && str[idx] <= '9') {
-                start = idx;
-			    while (idx < size && str[idx] >= '0' && str[idx] <= '9') idx++;
-			    if (start != idx)
-				    numbers.push_back(str.substr(start, idx - start));
-            }
-			else numbers.push_back("0");
+		tmp = "";
+		for (int j = 0; j < str.length(); j++)
+		{
+			if (str[j] >= '0' && str[j] <= '9')
+				tmp += str[j];
+			else if (tmp.length() > 0)
+			{
+				int idx = 0;
+				if (tmp[0] != '0')
+					s.push(tmp);
+				else if (tmp[0] == '0')
+				{
+					while (tmp[idx] == '0')
+						idx++;
+					if (idx == tmp.length())
+						tmp = "0";
+					else
+						tmp = tmp.substr(idx);
+					s.push(tmp);
+				}
+				tmp = "";
+			}
+		}
+		if (tmp.length() > 0)
+		{
+				int idx = 0;
+				if (tmp[0] != '0')
+					s.push(tmp);
+				else if (tmp[0] == '0')
+				{
+					while (tmp[idx] == '0')
+						idx++;
+					if (idx == tmp.length())
+						tmp = "0";
+					else
+						tmp = tmp.substr(idx);
+					s.push(tmp);
+				}
+				tmp = "";
 		}
 	}
-	sort(numbers.begin(), numbers.end(), cmp);
-	for (int i=0; i<numbers.size(); i++) cout << numbers[i] << '\n';
-	return (0);
+	int size = s.size();
+	string arr[size];
+	for (int i = 0; i < size; i++)
+	{
+		arr[i] = s.top();
+		s.pop();
+	}
+	sort(arr, arr + size, comp);
+	for (int i = 0; i < size; i++)
+		cout << arr[i] << '\n';
 }
