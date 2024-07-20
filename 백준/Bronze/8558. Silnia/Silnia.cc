@@ -1,20 +1,16 @@
 #include <iostream>
-#define fast ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
+
 using namespace std;
 
 int main()
 {
-    int a;
-    cin >> a;
-
-    if (a <= 1)
-        cout << 1;
-    else if (a == 2)
-        cout << 2;
-    else if (a == 3)
-        cout << 6;
-    else if (a == 4)
-        cout << 4;
-    else
-        cout << 0;
+    int n;
+    
+    cin >> n;
+    if (n == 0) cout << 1;
+    else if (n <= 2) cout << n;
+    else if (n == 3) cout << 6;
+    else if (n == 4) cout << 4;
+    else if (n >= 5) cout << 0;
+    return 0;
 }
