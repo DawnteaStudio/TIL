@@ -1,57 +1,30 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
 #define fast ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
 using namespace std;
-
-using ll = long long;
-
-ll ft_pow(ll num)
-{
-	return (num * num);
-}
 
 int main()
 {
 	fast;
-	ll g, val;
-	cin >> g;
-	vector<ll> v;
-	vector<ll> res;
+	int n;
+	vector <int> vec;
+	cin >> n;
 
-	if (g == 1)
+	for (int i = 2; i < n; i++)
 	{
-		cout << -1;
-		return (0);
-	}
-	for (ll i = 0; i < g; i++)
-		v.push_back(i);
-	
-	int end = g - 1, start = g - 2;
-	while (end != 1)
-	{
-		val = ft_pow(v[end]) - ft_pow(v[start]);
-		if (val > g)
-			end--;
-		else if (val < g)
+		for (int j = i - 1; j > 0; j--)
 		{
-			start--;
-			if (start == 0)
+			if ((i + j) * (i - j) > n)
 				break;
-		}
-		else
-		{
-			res.push_back(v[end]);
-			end--;
+			else if ((i + j) * (i - j) == n)
+				vec.push_back(i);
 		}
 	}
-	if (res.size() == 0)
-	{
+	if (vec.empty())
 		cout << -1;
-		return (0);
+	else
+	{
+		for (int i = 0; i < vec.size(); i++)
+			cout << vec[i] << '\n';
 	}
-	sort(res.begin(), res.end());
-	for (int i = 0; i < res.size(); i++)
-		cout << res[i] << '\n';
 }
