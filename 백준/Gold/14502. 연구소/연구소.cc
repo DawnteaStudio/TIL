@@ -1,127 +1,98 @@
 #include <iostream>
+#include <vector>
+#include <utility>
+#include <queue>
 #define fast ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
 using namespace std;
 
-int N, M, max_num;
-int matrix[8][8];
-int tmp[8][8];
-bool include[8][8];
-bool visited[8][8];
-int buff[3][2];
+int n, m, res;
+pair<int, int> dot1, dot2, dot3;
+vector<pair<int, int> > virus;
 int dx[4] = {-1, 0, 1, 0};
 int dy[4] = {0, -1, 0, 1};
 
-void tmp_clear()
+void	get_res(vector<vector<int> > vec)
 {
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < M; j++)
-            tmp[i][j] = matrix[i][j];
-    }
+	int space = 0;
+	vec[dot1.first][dot1.second] = 1;
+	vec[dot2.first][dot2.second] = 1;
+	vec[dot3.first][dot3.second] = 1;
+
+	queue<pair<int, int> > q;
+	for (int i = 0; i < virus.size(); i++)
+		q.push(virus[i]);
+	while (!q.empty())
+	{
+		int new_x, new_y;
+		pair<int, int> tmp = q.front();
+		q.pop();
+		for (int i = 0; i < 4; i++)
+		{
+			new_y = tmp.first + dy[i];
+			new_x = tmp.second + dx[i];
+			if (new_y < 0 || new_x < 0 || new_y >= n || new_x >= m)
+				continue;
+			if (vec[new_y][new_x] == 0)
+			{
+				vec[new_y][new_x] = 2;
+				q.push(make_pair(new_y, new_x));
+			}
+		}
+	}
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			if (vec[i][j] == 0)
+				space++;
+		}
+	}
+	if (res < space)
+		res = space;
 }
 
-void visited_clear()
+void	solve(int y, int x, vector<vector<int> >&vec, int depth)
 {
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < M; j++)
-            visited[i][j] = false;
-    }
+	if (depth == 3)
+		get_res(vec);
+	else
+	{
+		for (int i = y; i < n; i++)
+		{
+			for (int j = 0; j < m; j++)
+			{
+				if (i == y && j <= x && depth != 0)
+					continue;
+				if (vec[i][j] == 0)
+				{
+					if (depth == 0)
+						dot1 = make_pair(i , j);
+					else if (depth == 1)
+						dot2 = make_pair(i, j);
+					else
+						dot3 = make_pair(i, j);
+					solve(i, j, vec, depth + 1);
+				}
+			}
+		}
+	}
 }
 
-void cal_max()
-{
-    int num = 0;
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < M; j++)
-        {
-            if (tmp[i][j] == 0)
-                num++;
-        }
-    }
-    if (num > max_num)
-        max_num = num;
-}
+int main() {
+	fast;
+	cin >> n >> m;
+	vector<vector<int> > vec(n, vector<int>(m));
 
-void dfs(int y, int x)
-{
-    int new_y;
-    int new_x;
-    visited[y][x] = true;
-    for (int i = 0; i < 4; i++)
-    {
-        new_y = y + dy[i];
-        new_x = x + dx[i];
-        if (new_y < 0 || new_x < 0 || new_y >= N || new_x >= M)
-            continue;
-        if (tmp[new_y][new_x] == 0)
-        {
-            tmp[new_y][new_x] = 2;
-            dfs(new_y, new_x);
-        }
-    }
-}
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			cin >> vec[i][j];
+			if (vec[i][j] == 2)
+				virus.push_back(make_pair(i, j));
+		}
+	}
 
-void search_virus()
-{
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < M; j++)
-        {
-            if (tmp[i][j] == 2 && visited[i][j] == false)
-                dfs(i, j);
-        }
-    }
-}
-
-void make_wall()
-{
-    int wall_y, wall_x;
-    for (int i = 0; i < 3; i++)
-    {
-        wall_y = buff[i][0];
-        wall_x = buff[i][1];
-        tmp[wall_y][wall_x] = 1;
-    }
-}
-
-void all_case_wall(int depth)
-{
-    if (depth == 3)
-    {
-        tmp_clear();
-        make_wall();
-        visited_clear();
-        search_virus();
-        cal_max();
-        return ;
-    }
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < M; j++)
-        {
-            if (matrix[i][j] != 0 || include[i][j] == true)
-                continue;
-            include[i][j] = true;
-            buff[depth][0] = i;
-            buff[depth][1] = j;
-            all_case_wall(depth + 1);
-            include[i][j] = false;
-        }
-    }
-}
-
-int main()
-{
-    fast;
-    cin >> N >> M;
-
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < M; j++)
-            cin >> matrix[i][j];
-    }
-    all_case_wall(0);
-    cout << max_num;
+	solve(0, 0, vec, 0);
+	cout << res;
 }
