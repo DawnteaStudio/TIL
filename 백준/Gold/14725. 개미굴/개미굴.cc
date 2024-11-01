@@ -1,43 +1,85 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 #include <string>
-#include <map>
-
 #define fast ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
 using namespace std;
 
 struct node
 {
-	map<string, node *> m;
+	vector<node*> vec;
+	int		depth;
+	string	value;
 };
 
-node *head;
-void print(node *cur, string depth)
+bool	cmp(node *a, node *b)
 {
-	for (auto s : cur->m)
+	return a->value < b->value;
+}
+
+void	input_node(node &head, vector<string> &tmp, int k)
+{
+	int i = 0;
+	node *n = &head;
+	bool	flag;
+
+	while (i < k)
 	{
-		cout << depth + s.first << "\n";
-		print(s.second, depth + "--");
+		node *target;
+		flag = false;
+		for (int j = 0; j < n->vec.size(); j++)
+		{
+			if (n->vec[j]->value == tmp[i])
+			{
+				target = n->vec[j];
+				flag = true;
+				break;
+			}
+		}
+		if (!flag)
+		{
+			node *input = new node;
+			input->value = tmp[i];
+			input->depth = n->depth + 1;
+			n->vec.push_back(input);
+			target = input;
+		}
+		n = target;
+		i++;
 	}
 }
 
-int main()
+void	print_node(node &head)
 {
-	fast;
-	int N, K;
-	string food;
-	head = new node;
-	cin >> N;
-	while (N--)
+	int size = head.vec.size();
+	if (head.depth >= 0)
 	{
-		cin >> K;
-		node *cur = head;
-		while (K--)
-		{
-			cin >> food;
-			if (cur->m.find(food) == cur->m.end())
-				cur->m[food] = new node;
-			cur = cur->m[food];
-		}
+		for (int i = 0; i < head.depth; i++)
+			cout << "--";
+		cout << head.value << '\n';
 	}
-	print(head, "");
+	sort(head.vec.begin(), head.vec.end(), cmp);
+	for (int i = 0; i < size; i++)
+		print_node(*head.vec[i]);
+}
+
+int main() {
+	fast;
+	int n, k;
+	vector<string> tmp(15);
+	cin >> n;
+
+
+	node head;
+	head.value = "test";
+	head.depth = -1;
+
+	for (int i = 0; i < n; i++)
+	{
+		cin >> k;
+		for (int j = 0; j < k; j++)
+			cin >> tmp[j];
+		input_node(head, tmp, k);
+	}
+	print_node(head);
 }
