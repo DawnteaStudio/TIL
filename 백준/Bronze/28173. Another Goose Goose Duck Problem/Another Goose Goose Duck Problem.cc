@@ -12,11 +12,6 @@ int main()
 	if (l <= b)
 		res = b * k;
 	else
-	{
-		int tmp = b;
-		while (tmp < l)
-			tmp += b;
-		res = tmp * k;
-	}
+		res = (long long)ceil((double)l / b) * b * k;
 	cout << res;
 }
