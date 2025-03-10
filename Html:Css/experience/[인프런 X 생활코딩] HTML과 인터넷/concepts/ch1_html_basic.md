@@ -15,7 +15,7 @@
 - `content` 는 태그의 내용이 들어갈 자리다.
 - `arg="something"` 에서 arg 는 tag의 속성명이 들어가는 자리고 something은 해당 속성의 속성 값이다.
 - 속성명 대소문자는 HTML5에서 구분하고 있지 않다고 하나 W3C에서 소문자를 권장하므로 소문자를 사용하는 것이 좋다고 한다.
-- <span style="font-weight: lighter; font-style: italic;">참고로 W3school 에 너무 좋은 자료가 많다!</span>
+- *참고로 W3school 에 너무 좋은 자료가 많다!*
 
 
 ## 2. 적절한 태그
