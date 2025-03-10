@@ -1,5 +1,14 @@
 ## 💻 HTML의 기본기 "태그"
 
+
+## 📌 목차
+- [1. 태그](#1-태그)
+- [2. 적절한 태그](#2-적절한-태그)
+- [3. HTML의 구조](#3-html의-구조)
+- [4. 관련개념](#4-관련-개념)
+- [📌 참고 자료](#-참고-자료)
+
+
 ### **1.  태그**
 
 #### 1-1. 태그란?
@@ -69,7 +78,7 @@ HTML 문서는 `<html>`, `<head>`, `<body>` 3가지 주요 섹션으로 구성�
 
 `<head>` 태그에는 웹페이지의 메타정보가 포함되며, 브라우저가 문서를 올바르게 해석하는 데 도움을 준다.
 
-#### 📌 주요 요소
+📌 주요 요소
 
 ```
 <head>
@@ -139,7 +148,7 @@ HTML 문서는 `<html>`, `<head>`, `<body>` 3가지 주요 섹션으로 구성�
 
 ---
 
-#### 📌 참고 자료
+### 📌 참고 자료
 
 -   [MDN - 웹의 동작 원리](https://developer.mozilla.org/ko/docs/Learn/Getting_started_with_the_web/How_the_Web_works)
 -   [TCPSCHOOL - HTML 태그](https://tcpschool.com/html-tags/intro)
