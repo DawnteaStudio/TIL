@@ -15,14 +15,11 @@ HTML과 CSS의 기초 학습
 ---
 
 ## 📖 개념 정리 (Concepts)
-### 🎨 HTML & CSS 기본 개념
+### 🎨 HTML & CSS & 웹 기본 개념
 - [HTML의 기본기 "태그"](concepts/ch1_html_basic.md)
+- [웹 호스팅과 서버-클라이언트](concepts/ch2_web_intro.md)
 <!-- - CSS를 이용한 웹페이지 스타일링
 - JavaScript로 웹페이지에 생동감 불어넣기 -->
-
-### 🌐 웹 기초 개념
-<!-- - 웹 호스팅과 서버-클라이언트 모델의 이해
-- 프론트엔드와 백엔드 개발의 차이와 역할 -->
 
 ---
 
