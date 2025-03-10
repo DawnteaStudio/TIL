@@ -12,6 +12,7 @@ HTML과 CSS의 기초 학습
 ![HTML5 Badge](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=fff&style=flat)
 <br/>
 ![CSS Badge](https://img.shields.io/badge/CSS-639?logo=css&logoColor=fff&style=flat)
+
 ---
 
 ## 📖 개념 정리 (Concepts)
