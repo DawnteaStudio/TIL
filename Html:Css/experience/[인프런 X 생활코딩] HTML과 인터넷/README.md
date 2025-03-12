@@ -19,8 +19,7 @@ HTML과 CSS의 기초 학습
 ### 🎨 HTML & CSS & 웹 기본 개념
 - [HTML의 기본기 "태그"](concepts/ch1_html_basic.md)
 - [웹 호스팅과 서버-클라이언트](concepts/ch2_web_intro.md)
-<!-- - CSS를 이용한 웹페이지 스타일링
-- JavaScript로 웹페이지에 생동감 불어넣기 -->
+- [CSS && JS](concepts/ch3_css_js_intro.md)
 
 ---
 
@@ -28,7 +27,7 @@ HTML과 CSS의 기초 학습
 | 날짜 | 학습 내용 | 비고 | 소스 코드 |
 |------|----------|------|----------|
 | 2025-03-10 | Section 1 | HTML과 인터넷 | |
-| 2025-03-11 | Section 2 | 웹의 디자인과 상호작용 | |
+| 2025-03-13 | Section 2 | 웹의 디자인과 상호작용 | |
 
 ---
 
