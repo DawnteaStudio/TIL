@@ -100,32 +100,68 @@ strPrim.customProp = "test";
 console.log(strPrim.customProp); // undefined (원시 값은 프로퍼티를 가질 수 없음)
 ```
 
+#### **String과 메모리**
+
+-   공부를 하다보면 js에서 String이 어째서 불변일가에 대한 고민이 생긴다.
+-   C에서도 문자열을 리터럴로 사용한다면 마찬가지로 불변이지만 char 배열로 만들어서 사용하거나, cpp에서는 string자료형을 사용하면 수정이 가능하기 때문에 js는 이런 과정이 어떻게 진행될 지 궁금했다.
+
+```javascript
+let str1 = "Hello";
+let str2 = "Hello";
+console.log(str1 == str2); //true
+```
+
+-   이 경우 스택(stack)에 str1, str2가 만들어진다.
+-   그리고 힙(heap) 속에 string constant pool 이라는 string 들을 저장해 놓는 공간에 "hello"라는 배열이 생긴다.
+-   str1과 str2 모두 pool 속에 동일한 공간을 가리킨다.
+
+[##_Image|kage@ZHnn2/btsMNpqRLDg/XKAyiGONIDuSjd9ml7rKX1/img.png|CDM|1.3|{"originWidth":1086,"originHeight":600,"style":"alignCenter","width":561,"height":310,"caption":"출처 : https://www.geeksforgeeks.org/how-are-strings-stored-in-javascript/"}_##]
+
+그럼 위에서 왜 String 객체가 메모리에서 비효율적일 수 있는지 이해할 수 있다.
+
+코드를 먼저 보자면
+
+```javascript
+let str1 = new String("John");
+let str2 = new String("John");
+let str3 = new String("Doe");
+console.log(str1 == str2); // false
+console.log(str1 == str3); // false
+```
+
+new로 객체를 동적으로 생성하면, str1과 str2는 각각 다른 객체를 가리키고 각각의 객체 안에서 동일한 "John"이라는 문자열을 가리키고 있기 때문에 다른 것으로 취급한다.
+
+[##_Image|kage@cpZj4m/btsMK7yYlo8/1tFxqhOUT15grAvPoYaAR0/img.png|CDM|1.3|{"originWidth":1176,"originHeight":588,"style":"alignCenter","width":682,"height":341,"caption":"출처 : https://www.geeksforgeeks.org/how-are-strings-stored-in-javascript/"}_##]
+
 ---
 
-### **4. 관련 개념**
+### **관련 개념**
 
 #### **원시 문자열의 메모리 구조**
-- 원시 문자열은 **스택(stack)에 저장됨** (변경 불가, immutable)
-- `new String()`을 사용하면 **힙(heap)에 저장**됨 (객체로 취급됨)
-- 문자열을 수정하면 새로운 문자열이 할당되며, 기존 문자열은 GC(가비지 컬렉션)에 의해 정리됨
+
+-   원시 문자열은 **스택(stack)에만 저장됨** (변경 불가, immutable)
+-   `new String()`을 사용하면 **힙(heap)에도 저장**됨 (객체로 취급됨)
+-   문자열을 수정하면 새로운 문자열이 할당되며, 기존 문자열은 GC(가비지 컬렉션)에 의해 정리됨
 
 #### **인터프리터의 문자열 처리 방식**
-1. 원시 문자열이 메서드를 호출하면, 자바스크립트 엔진이 자동으로 `new String(str)`을 실행하여 **임시 객체**를 생성한다.
-2. 메서드가 실행되고, 결과가 반환된 후 **임시 객체는 즉시 삭제(GC 처리됨)**.
 
-```js
+1.  원시 문자열이 메서드를 호출하면, 자바스크립트 엔진이 자동으로 `new String(str)`을 실행하여 **임시 객체**를 생성한다.
+2.  메서드가 실행되고, 결과가 반환된 후 **임시 객체는 즉시 삭제(GC 처리됨)**.
+
+```
 let str = "hello";
 str.test = "test"; // 원시 값에 프로퍼티 추가 시도
 console.log(str.test); // undefined
 ```
 
-- 원시 값은 프로퍼티를 추가할 수 없지만, 메서드는 실행 가능한 이유가 여기에 있음.
+-   원시 값은 프로퍼티를 추가할 수 없지만, 메서드는 실행 가능한 이유가 여기에 있음.
 
 ---
 
-### 📌 참고 자료
+## 📌 참고 자료
 
-- [생활코딩 - 자바스크립트(JavaScript) 기본](https://www.inflearn.com/course/%EC%A7%80%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%96%B8%EC%96%B4-%EA%B8%B0%EB%B3%B8)
-- [MDN - BigInt (JavaScript)](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/BigInt)
-- [MDN - Number (JavaScript)](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Number)
-- [MDN - String (JavaScript)](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/String)
+-   [생활코딩 - 자바스크립트(JavaScript) 기본](https://www.inflearn.com/course/%EC%A7%80%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%96%B8%EC%96%B4-%EA%B8%B0%EB%B3%B8)
+-   [MDN - BigInt (JavaScript)](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/BigInt)
+-   [MDN - Number (JavaScript)](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Number)
+-   [MDN - String (JavaScript)](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/String)
+-   [https://www.geeksforgeeks.org/how-are-strings-stored-in-javascript/](https://www.geeksforgeeks.org/how-are-strings-stored-in-javascript/)
