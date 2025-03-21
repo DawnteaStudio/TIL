@@ -159,10 +159,10 @@ function outerFunction(outerValue) {
 const closureFunc = outerFunction("outside");
 closureFunc("inside"); // "Outer: outside, Inner: inside"
 ```
-- `innerFunction`은 `outerValue`를 참조할 수 있다.
-- 클로저를 활용하면 **데이터 은닉**이나 **상태 유지**가 가능하다.
+    - `innerFunction`은 `outerValue`를 참조할 수 있다.
+    - 클로저를 활용하면 **데이터 은닉**이나 **상태 유지**가 가능하다.
 
-
+</br>
 - **호이스팅**: 변수와 함수 선언이 코드 실행 전에 최상단으로 끌어올려지는 JavaScript의 동작 방식
 - **실행 컨텍스트**: 코드가 실행될 때 생성되는 환경으로, 변수, 함수, this 등이 저장되고 관리됨
 - **일급 객체**: 변수에 할당하거나 인자로 전달할 수 있으며, 반환값으로도 사용 가능한 객체
