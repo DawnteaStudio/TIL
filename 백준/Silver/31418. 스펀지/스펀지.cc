@@ -10,12 +10,28 @@ int main()
 	long long res = 1;
 
 	long long x, y;
+	long long w_size, h_size;
 	for (int i = 0; i < k; i++) {
+		w_size = 1;
+		h_size = 1;
 		cin >> x >> y;
-
-		long long tmp1 = (min(w, x + t) - max((long long)1, x - t) + 1);
-		long long tmp2 = (min(h, y + t) - max((long long)1, y - t) + 1);
-		res = res * (tmp1 * tmp2 % 998244353) % 998244353;
+		if (x + t > w)
+			w_size += w - x;
+		else
+			w_size += t;
+		if (x - t < 1)
+			w_size += x - 1;
+		else
+			w_size += t;
+		if (y + t > h)
+			h_size += h - y;
+		else
+			h_size += t;
+		if (y - t < 1)
+			h_size += y - 1;
+		else
+			h_size += t;
+		res = res * ((w_size * h_size) % 998244353) % 998244353;
 	}
 	cout << res;
 }
