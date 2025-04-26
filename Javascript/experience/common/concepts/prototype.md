@@ -8,7 +8,7 @@
 - [4. 함수(Function)와 객체(Object)의 생성 구조](#4-함수function와-객체object의-생성-구조)
 - [5. 프로토타입 체인과 프로퍼티 탐색 과정](#5-프로토타입-체인과-프로퍼티-탐색-과정)
 - [6. Function.prototype은 왜 함수인가](#6-functionprototype은-왜-함수인가)
-- [7. 실험 코드 기반 핵심 정리](#7-실험-코드-기반-핵심-정리)
+- [7. 코드 기반 정리 및 요약](#-7-실험-코드-기반-핵심-정리-stack-overflow-이미지-구조-기반)
 - [📌 참고 자료](#-참고-자료)
 
 ---
@@ -26,7 +26,7 @@
 
 #### **2.1 prototype**
 
-- **함수(Function)**가 가진 **"설계도 객체"**.
+- **함수(Function)**가 가진 **"설계도 객체"**. (일반 객체는 존재하지 않는다. typeof로 확인하면 undefine)
 - `new` 키워드로 인스턴스 생성 시, 새 객체의 `__proto__`가 생성자의 `prototype`으로 설정된다.
 - 즉 **prototype은 내 자식에게 물려줄 요소들의 집합** 이라고 비유할 수 있다.
 
@@ -125,51 +125,155 @@ Function.prototype은 **호환성을 위해 여전히 함수 객체로 유지**�
 
 ---
 
-### **7. 실험 코드 기반 핵심 정리**
+### 📦 7. 실험 코드 기반 핵심 정리 (stack overflow 이미지 구조 기반)
 
-```javascript
-let a = {};
-console.log(typeof a.__proto__); // "object"
-console.log(typeof a.prototype); // "undefined"
+![Prototype Chain 구조](./imgs/img1.png)
 
-function b() {}
-console.log(typeof b.__proto__); // "function"
-console.log(typeof b.prototype); // "object"
+#### 7-1 등장하는 주요 객체
 
-let c = new b();
-console.log(typeof c.__proto__); // "object"
-console.log(typeof c.prototype); // "undefined"
-
-let d = new Function();
-console.log(typeof d.__proto__); // "function"
-console.log(typeof d.prototype); // "object"
-
-console.log(typeof Object.__proto__); // "function"
-console.log(typeof Object.prototype); // "object"
-
-console.log(typeof Function.__proto__); // "function"
-console.log(typeof Function.prototype); // "function"
-
-console.log(Function.__proto__ === Function.prototype); // true
-```
-
-| 변수 | typeof __proto__ | typeof prototype | 설명 |
-|:---|:---|:---|:---|
-| a (객체 `{}`) | "object" | undefined | 일반 객체는 prototype 없음 |
-| b (함수) | "function" | "object" | 함수는 Function.prototype 상속, prototype 가짐 |
-| c (new b()) | "object" | undefined | 인스턴스는 prototype 없음, __proto__는 b.prototype |
-| d (new Function()) | "function" | "object" | Function.prototype 상속 |
-| Object | "function" | "object" | 내장 함수 |
-| Function | "function" | "function" | Function은 스스로를 prototype으로 삼는다 |
+- `Function` (내장 함수 생성자)
+- `Object` (내장 객체 생성자)
+- `Person` (사용자 정의 생성자 함수)
+- `person` (`new Person()` 인스턴스)
+- `obj` (`{}` 리터럴 객체)
 
 ---
+
+#### 7-2 Function
+
+```javascript
+console.log(typeof Function.__proto__); // "function"
+console.log(typeof Function.prototype); // "function"
+console.log(Function.__proto__ === Function.prototype); // true
+console.log(Function === Function.prototype); // false
+```
+
+| 항목 | 값 | 설명 |
+|:---|:---|:---|
+| typeof Function.__proto__ | "function" | Function은 Function.prototype을 부모(__proto__)로 가진다 |
+| typeof Function.prototype | "function" | Function.prototype 자체도 호출 가능한 함수 객체다 |
+| Function.__proto__ === Function.prototype | true | Function 객체의 __proto__는 Function.prototype이다 |
+| Function === Function.prototype | false | Function 객체와 Function.prototype 객체는 다르다 |
+
+✅ **Function은 Function.prototype을 상속하는 함수 객체다.**
+
+---
+
+#### 7-3 Object
+
+```javascript
+console.log(typeof Object.__proto__); // "function"
+console.log(typeof Object.prototype); // "object"
+```
+
+| 항목 | 값 | 설명 |
+|:---|:---|:---|
+| typeof Object.__proto__ | "function" | Object는 Function.prototype을 부모로 가진 함수 객체다 |
+| typeof Object.prototype | "object" | Object.prototype은 일반 객체이다 |
+
+✅ **Object는 함수(Function)로서 동작하지만, 그 프로토타입(Object.prototype)은 일반 객체이다.**
+
+---
+
+#### 7-4 Person (사용자 정의 생성자)
+
+```javascript
+function Person() {}
+console.log(typeof Person.__proto__); // "function"
+console.log(typeof Person.prototype); // "object"
+```
+
+| 항목 | 값 | 설명 |
+|:---|:---|:---|
+| typeof Person.__proto__ | "function" | Person 함수는 Function.prototype을 부모로 가진다 |
+| typeof Person.prototype | "object" | Person.prototype은 일반 객체다 |
+
+✅ **Person은 Function.prototype을 부모로 가지는 사용자 정의 함수다.**
+
+---
+
+#### 7-5 person (new Person()) 객체
+
+```javascript
+let person = new Person();
+console.log(typeof person.__proto__); // "object"
+console.log(typeof person.prototype); // "undefined"
+```
+
+| 항목 | 값 | 설명 |
+|:---|:---|:---|
+| typeof person.__proto__ | "object" | person 인스턴스는 Person.prototype을 부모로 가진다 |
+| typeof person.prototype | "undefined" | 인스턴스는 prototype 프로퍼티를 갖지 않는다 |
+
+✅ **new Person()으로 생성된 인스턴스는 Person.prototype을 __proto__로 가진다.**
+
+---
+
+#### 7-6 obj (`{}` 리터럴 객체)
+
+```javascript
+let obj = {};
+console.log(typeof obj.__proto__); // "object"
+console.log(typeof obj.prototype); // "undefined"
+```
+
+| 항목 | 값 | 설명 |
+|:---|:---|:---|
+| typeof obj.__proto__ | "object" | obj는 Object.prototype을 부모로 가진다 |
+| typeof obj.prototype | "undefined" | 일반 객체는 prototype 프로퍼티를 가지지 않는다 |
+
+✅ **리터럴 `{}` 로 생성된 객체는 Object.prototype을 부모로 가진다.**
+
+---
+
+#### 7-7 전체 구조 요약
+
+```plaintext
+Function
+  ├─ __proto__ → Function.prototype
+  └─ prototype → (type: function) [호출 가능한 빈 함수]
+
+Object
+  ├─ __proto__ → Function.prototype
+  └─ prototype → (type: object) [일반 객체]
+
+Person (사용자 정의 생성자)
+  ├─ __proto__ → Function.prototype
+  └─ prototype → (type: object) [Person.prototype 객체]
+
+person (new Person() 인스턴스)
+  └─ __proto__ → Person.prototype
+      └─ __proto__ → Object.prototype
+          └─ __proto__ → null
+
+obj (리터럴 객체)
+  └─ __proto__ → Object.prototype
+      └─ __proto__ → null
+```
+
+---
+
+#### 7-8 그럼 prototype의 __proto__는???
+
+- prototype을 설명하는 대부분의 글에서 잘 없는 내용이기도 하고, 필자가 공부하다가 제일 헷갈렸던 부분이라 남겨둔다.
+- **__proto__는 모든 객체가 가지고 있음**을 다시 기억하자.
+- 즉 어떤 함수 f가 있다고 한다면 **f의 __proto__와 f의 prototype의 __proto__는 각각 존재한다!!!**
+- Function 내장 생성자 함수로 예를 들면 **Function의 __proto__는 function이고**, **Function의 prototype의 __proto__는 object로 서로 다르다!!!**
+
+---
+
+#### 7-9 핵심 요약 문장
+
+- **"Function, Object, Person은 모두 Function.prototype을 부모로 가지는 함수 객체다.**
+- **생성된 인스턴스(person, obj)는 각각 Person.prototype, Object.prototype을 __proto__로 삼는다.**
+- **Function과 Function.prototype은 같은 객체가 아니라, Function의 부모가 Function.prototype이다."**
+
 
 ### 📌 참고 자료
 
 - [MDN - Prototype chain](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain)
 - [V8 blog - Fast Properties and Hidden Classes](https://v8.dev/blog/fast-properties)
 - [StackOverflow - Why is Function.prototype a function?](https://stackoverflow.com/questions/32928810/function-prototype-is-a-function)
-
 ---
 
 > ✨ **최종 요약**
