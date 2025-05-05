@@ -23,10 +23,10 @@ language-basics/
 
 | 언어         | 링크                           |
 | ---------- | ---------------------------- |
-| Python     | [python/](./python/)         |
-| C          | [c/](./c/)                   |
-| C++        | [cpp/](./cpp/)               |
-| JavaScript | [javascript/](./javascript/) |
-| HTML/CSS   | [html\:css/](./html:css/)    |
+| Python     | [python/](./Python/)         |
+| C          | [c/](./C/)                   |
+| C++        | [cpp/](./Cpp/)               |
+| JavaScript | [javascript/](./Javascript/) |
+| HTML/CSS   | [html\:css/](./Html:Css/)    |
 
 ---
