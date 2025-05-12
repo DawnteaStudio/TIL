@@ -25,6 +25,7 @@
 * [객체](theory/object.md)
 * [함수](theory/function.md)
 * [프로토타입](theory/prototype.md)
+* [상속](theory/inheritence.md)
 
 ---
 
