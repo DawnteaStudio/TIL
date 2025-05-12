@@ -1,3 +1,4 @@
+[⬅️ 상위 README로 이동](../README.md)
 ## 📦 JavaScript에서 Prototype과 __proto__ 체계
 
 ## 📌 목차
