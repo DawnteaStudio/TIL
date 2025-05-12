@@ -82,6 +82,20 @@ function create(proto) {
 
 📌 위 코드는 `Object.create(proto)`가 하는 동작과 같으며, 생성자 없이 `__proto__`만 연결된 객체를 만드는 방식이다.
 
+💡 좀 더 쉬운 설명으로 `Programmer.prototype = Object.create(Person.prototype)` 는 아래 코드와 같다.
+
+```javascript
+function Temp() {}
+Temp.prototype = Person.prototype;
+Programmer.prototype = new Temp();
+```
+
+즉,
+
+- Programmer.prototype.__proto__ = Person.prototype 인 구조를 만든다.
+- 그래서 Programmer 인스턴스는 Person의 메서드들을 쓸 수 있다.
+
+
 ✅ 핵심은 `Programmer.prototype`이 `Person.prototype`을 **참조**하도록 연결하는 것이다.
 
 ---
