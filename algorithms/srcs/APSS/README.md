@@ -1,4 +1,4 @@
-[⬅️ 상위 README로 이동](../README.md)
+[⬅️ 상위 README로 이동](../../README.md)
 
 # 📚 공부 기록 (Study Notes)
 
