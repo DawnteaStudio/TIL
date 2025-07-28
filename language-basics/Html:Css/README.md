@@ -22,7 +22,7 @@ Html && CSS를 공부하며 기록한 내용을 정리합니다.
 
 ### 🎨 Html && CSS
 
-* [주제1](theory/주제1.md)
+* [html, body의 width와 height](theory/height&&width.md)
 
 ---
 
