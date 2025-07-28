@@ -23,7 +23,7 @@ Html && CSS를 공부하며 기록한 내용을 정리합니다.
 ### 🎨 Html && CSS
 
 * [html, body의 width와 height](theory/height&&width.md)
-
+* [css, align-items vs align-content](theory/flex-align.md)
 ---
 
 ## 📚 실습 자료 (Srcs)
