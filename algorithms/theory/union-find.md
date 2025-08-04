@@ -1,6 +1,6 @@
 [⬅️ 상위 README로 이동](../README.md)
 
-## 📘 자료구조: Union-Find (Disjoint Set Union, DSU)
+## 📘 알고리즘: Union-Find (Disjoint Set Union, DSU)
 
 ## 📌 목차
 
