@@ -39,13 +39,17 @@ int main() {
     int cnt = 0;
     int time = a_time > b_time ? a_time : b_time;
     int a_i, b_i;
-    for (int i = 1; i <= time; i++) {
-        if (a_time < i)
+    for (int i = 1; i < time; i++) {
+        if (a_time < i) {
             a_i = a_time;
+            a[a_i] = a[a_i - 1];
+        }
         else
             a_i = i;
-        if (b_time < i)
+        if (b_time < i) {
             b_i = b_time;
+            b[b_i] = b[b_i - 1];
+        }
         else
             b_i = i;
         if (a[a_i] == b[b_i]) {
