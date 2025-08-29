@@ -27,6 +27,6 @@ int main() {
                 dir = 3;
         }
     }
-    cout << y << " " << x;
+    cout << x << " " << y;
     return 0;
 }
