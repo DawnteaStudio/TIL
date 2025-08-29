@@ -23,7 +23,7 @@ int main() {
             dir = (dir + 1) % 4;
         else {
             dir -= 1;
-            if (dir == 0)
+            if (dir == -1)
                 dir = 3;
         }
     }
