@@ -35,11 +35,11 @@ int main() {
             break;
         case 2:
             y = n - 1;
-            x = n - 1 - (k % n);
+            x = n - 1 - ((k - 1) % n);
             break;
         case 3:
             x = 0;
-            y = n - 1 - (k % n);
+            y = n - 1 - ((k - 1) % n);
             break;
         default:
             break;
