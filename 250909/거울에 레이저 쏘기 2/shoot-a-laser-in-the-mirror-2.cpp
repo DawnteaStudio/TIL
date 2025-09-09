@@ -30,21 +30,20 @@ int main() {
             x = k - 1;
             break;
         case 1:
-            x = k - 1;
-            y = k + ((k - 1) % n);
+            x = n - 1;
+            y = (k - 1) % n;
             break;
         case 2:
-            y = k - 1;
-            x = k - 1 - (k % n);
+            y = n - 1;
+            x = n - 1 - (k % n);
             break;
         case 3:
             x = 0;
-            y = k - 1 - (k % n);
+            y = n - 1 - (k % n);
             break;
         default:
             break;
     }
-
     while (true) {
         res++;
         if (grid[y][x] == '/') {
