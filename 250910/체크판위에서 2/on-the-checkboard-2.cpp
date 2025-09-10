@@ -25,7 +25,8 @@ int main() {
 				for (int q = j + 1; q < m - 1; q++) {
 					if (grid[i][j] == grid[p][q])
 						continue;
-					res++;
+					if (grid[p][q] != grid[n - 1][m - 1])
+						res++;
 				}
 			}
 		}
