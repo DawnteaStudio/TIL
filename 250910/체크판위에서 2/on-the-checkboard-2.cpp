@@ -10,12 +10,12 @@ int main() {
     
 	int n, m;
 	cin >> n >> m;
-	char now = grid[0][0];
 
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++)
 			cin >> grid[i][j];
 	}
+	char now = grid[0][0];
 
 	for (int i = 1; i < n - 2; i++) {
 		for (int j = 1; j < m - 2; j++) {
