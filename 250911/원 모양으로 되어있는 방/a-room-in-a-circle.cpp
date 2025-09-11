@@ -18,7 +18,7 @@ int main() {
 	for (int i = 0; i < n; i++) {
 		int tmp = 0;
 		for (int j = 0; j < n; j++)
-			tmp += ((j - i + 5) % 5) * room[j];
+			tmp += ((j - i + n) % n) * room[j];
 		if (res > tmp)
 			res = tmp;
 	}
