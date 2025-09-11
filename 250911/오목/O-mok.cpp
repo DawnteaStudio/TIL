@@ -48,5 +48,5 @@ int main() {
 			}
 		}
 	}
-	cout << -1;
+	cout << 0;
 }
