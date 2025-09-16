@@ -11,13 +11,23 @@ int main() {
     for (int i = 0; i < n; i++)
         cin >> arr[i];
     
-    int res = 0;
+    int res = n;
     for (int i = 0; i < n; i++) {
-        int sum = 0;
-        for (int j = i; j < n; j++)
-            sum += arr[j];
-        if (sum > res)
-            res = sum;
+        for (int j = 1; j < n - i; j++) {
+            int sum = 0;
+            for (int k = 0; k <= j; k++) {
+                sum += arr[i + k];
+            }
+            int avg = sum / (j + 1);
+            if (sum % (j + 1) == 0) {
+                for (int t = i; t <= i + j; t++) {
+                    if (arr[t] == avg) {
+                        res++;
+                        break;
+                    }
+                }
+            }
+        }
     }
     cout << res;
     return 0;
