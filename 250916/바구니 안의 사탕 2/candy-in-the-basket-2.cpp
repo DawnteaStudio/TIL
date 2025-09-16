@@ -8,11 +8,12 @@ int res;
 
 int main() {
     cin >> N >> K;
-    int cnt, pos;
+    int cnt, pos, sum = 0;
 
     for (int i = 0; i < N; i++) {
         cin >> cnt >> pos;
         arr[pos] += cnt;
+        sum += cnt;
     }
 
     // Please write your code here.
@@ -24,6 +25,8 @@ int main() {
         if (res < tmp)
             res = tmp;
     }
+    if (K >= 100 - K)
+        res = sum;
     cout << res;
     return 0;
 }
