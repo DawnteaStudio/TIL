@@ -1,0 +1,30 @@
+#include <iostream>
+#define fast ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
+using namespace std;
+
+int main() {
+	fast;
+	int n, m, M, T, R;
+
+	cin >> n >> m >> M >> T >> R;
+
+	if (m + T > M)
+		cout << - 1;
+	else {
+		int cnt = 0, t = 0;
+		int now = m;
+		while (cnt < n) {
+			if (now + T <= M) {
+				now += T;
+				cnt++;
+			}
+			else {
+				now -= R;
+				if (now < m)
+					now = m;
+			}
+			t++;
+		}
+		cout << t;
+	}
+}
