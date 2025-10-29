@@ -43,6 +43,10 @@ def ensure_git_identity():
     subprocess.run(["git", "config", "--local", "user.email", "action@github.com"], check=True)
     subprocess.run(["git", "config", "--local", "user.name", "GitHub Action"], check=True)
 
+def normalized_ext(source_cfg, raw_ext: str) -> str:
+    mapping = source_cfg.get("ext_map", {})
+    return mapping.get(raw_ext.lower(), raw_ext)
+
 def get_commit_info(path: str) -> Dict[str, str]:
     """지정 경로의 마지막 커밋 메시지/시간. 없으면 기본값."""
     try:
@@ -90,12 +94,14 @@ def parse_problem_info(source_cfg: Dict[str, Any], file_path: str) -> Optional[D
     return {"level": level, "num": num, "title": title, "ext": ext}
 
 def build_new_path(source_cfg: Dict[str, Any], info: Dict[str, Any]) -> str:
-    """대상 경로(폴더 생성 포함)와 파일명 생성."""
     target_root = source_cfg["target_root"]
     subfolder = source_cfg["subfolder"](info)
 
+    # ✅ 확장자 매핑 적용
+    ext = normalized_ext(source_cfg, info["ext"])
+
     file_name = FILE_NAME_FORMAT.format(
-        num=info["num"], ext=info["ext"], title=info["title"], level=info["level"]
+        num=info["num"], ext=ext, title=info["title"], level=info["level"]
     )
     file_name = re.sub(r'[\\/:*?"<>|]', '_', file_name)
 
@@ -198,4 +204,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
