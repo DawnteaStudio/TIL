@@ -118,7 +118,6 @@ def move_and_commit():
 
     moved_files = []
 
-    # 백준 폴더 탐색
     for root, _, files in os.walk(SOURCE_ROOT):
         for file in files:
             if not file.lower().endswith(SOLUTION_EXTENSIONS):
@@ -129,12 +128,15 @@ def move_and_commit():
             if not problem_info or problem_info["num"] is None:
                 continue
 
-            # 커밋 메시지 + 시간
+            # 커밋 시간은 기존 파일의 마지막 커밋에서 가져오되,
+            # 메시지는 "번호 solve"로 강제
             commit = get_commit_info(file_path)
 
-            # 새 파일 경로 생성
             new_paths = get_new_paths(problem_info)
             shutil.move(file_path, new_paths["file"])
+
+            # 메시지 덮어쓰기: "12345 solve"
+            commit["message"] = f"{problem_info['num']} solve"
 
             moved_files.append({
                 "old": file_path,
@@ -142,8 +144,8 @@ def move_and_commit():
                 "commit": commit,
                 "info": problem_info
             })
-    
-    # Git add + commit
+
+    # 파일별 개별 커밋
     for f in moved_files:
         subprocess.run(["git", "add", f["new"]])
         subprocess.run([
