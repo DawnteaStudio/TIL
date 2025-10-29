@@ -5,40 +5,43 @@ on:
     paths:
       - '백준/**'
       - 'README.md'
-  workflow_dispatch:  # 수동 실행 가능
-     inputs:
-       problem_numbers:
-         description: '추가할 문제 번호를 공백으로 구분'
-         required: false
-         default: ''
-  
+  workflow_dispatch:
+    inputs:
+      problem_numbers:
+        description: '추가할 문제 번호(공백 구분)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write   # 기본 GITHUB_TOKEN으로 push 하려면 필요
+
 jobs:
   update-readme:
     runs-on: ubuntu-latest
 
     steps:
-      # 코드 가져오기
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          token: ${{ secrets.BAEKJOON_TOKEN }}
+          fetch-depth: 0   # git log 등 히스토리 필요 시 안전
 
-      # Python 환경 준비
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      # README 업데이트
-      - name: Generate README
+      - name: Run organizer script
         env:
           INPUT_PROBLEM_NUMBERS: ${{ github.event.inputs.problem_numbers }}
-        run: python .github/workflows/update_baekjoon.py
+        run: |
+          python .github/workflows/update_baekjoon.py
 
-      # 변경사항 커밋 & push
-      - name: Commit changes
+      - name: Commit & Push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add README.md
-          git diff-index --quiet HEAD || git commit -m "Update BOJ README"
+          git add -A
+          # 변경 있을 때만 커밋
+          git diff --cached --quiet || git commit -m "Update BOJ README & organize files"
+          # 원격에 푸시
           git push
