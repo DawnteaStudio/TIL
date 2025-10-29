@@ -1,9 +1,10 @@
-name: Update BOJ README
+name: Update BOJ/PGM README
 
 on:
   push:
     paths:
       - '백준/**'
+      - '프로그래머스/**'   # ✅ Programmers 소스 추가
       - 'README.md'
   workflow_dispatch:
     inputs:
@@ -13,17 +14,15 @@ on:
         default: ''
 
 permissions:
-  contents: write   # 기본 GITHUB_TOKEN으로 push 하려면 필요
+  contents: write
 
 jobs:
   update-readme:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # git log 등 히스토리 필요 시 안전
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -34,14 +33,12 @@ jobs:
         env:
           INPUT_PROBLEM_NUMBERS: ${{ github.event.inputs.problem_numbers }}
         run: |
-          python .github/workflows/update_baekjoon.py
+          python .github/workflows/update_baekjoon.py  # 파일명 유지 시 그대로 사용
 
-      - name: Commit & Push changes
+      - name: Commit & Push changes (if any)
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          # 변경 있을 때만 커밋
-          git diff --cached --quiet || git commit -m "Update BOJ README & organize files"
-          # 원격에 푸시
+          git diff --cached --quiet || git commit -m "Update coding-test index"
           git push
