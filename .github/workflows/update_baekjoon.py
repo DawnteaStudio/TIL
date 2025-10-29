@@ -4,43 +4,40 @@ import shutil
 import subprocess
 from datetime import datetime
 
-# BAEKJOON_ID = "012vision"                                                    
+# BAEKJOON_ID = "012vision"
 # git reset --hard HEAD~1
 # git push -f origin master
 
-# TODO: 본인 깃허브 사용자 / 저장소명
-GITHUB_USER = "DawnteaStudio"                                                   
-REPOSITORY_NAME = "TIL"                                
+# TODO: 본인 깃허브 사용자 / 저장소명 (현재 코드에서는 미사용)
+GITHUB_USER = "DawnteaStudio"
+REPOSITORY_NAME = "TIL"
 
-# TODO: 원래경로 / 이동경로 / 탐색할 확장자 
-SOURCE_ROOT = "백준"                                                          
-TARGET_ROOT = "coding-test/Baekjoon"                                   
-SOLUTION_EXTENSIONS = ('.cpp', '.cc', '.py', '.c', '.java', '.txt')  
+# TODO: 원래경로 / 이동경로 / 탐색할 확장자
+SOURCE_ROOT = "백준"
+TARGET_ROOT = "coding-test/Baekjoon"
+SOLUTION_EXTENSIONS = ('.cpp', '.cc', '.py', '.c', '.java', '.txt')
 
 LEVEL_FORMAT = "{level}"        # 난이도 표시 (예: Bronze)
 NUM_FORMAT = "{num}"            # 문제 번호 (예: 10804)
 TITLE_FORMAT = "{title}"        # 문제 제목 (예: 카드 역배치)
 EXT_FORMAT = "{ext}"            # 확장자 (예: .cpp)
 
-#   "{num}. {title}{ext}" → 10804. 카드 역배치.cpp
-#   "{title}{ext}"        → 카드 역배치.cpp
-#   "{num}_{title}{ext}"  → 10804_카드 역배치.cpp
-#   "{num}{ext}"          → 10804.cpp
-
-# TODO: 파일명 포맷 설정
+# 파일명 포맷 설정
 # FILE_NAME_FORMAT = f"{LEVEL_FORMAT}. {NUM_FORMAT}_{TITLE_FORMAT}{EXT_FORMAT}"
-FILE_NAME_FORMAT = f"{NUM_FORMAT}{EXT_FORMAT}" # 10804.cpp
+FILE_NAME_FORMAT = f"{NUM_FORMAT}{EXT_FORMAT}"  # 10804.cpp
 
-# TODO: 폴더 포맷 설정
+# 폴더 포맷 설정
 SUB_FOLDER_PATH_FORMAT = "{sub_folder}"  # get_sub_folder함수에 정의함
-FOLDER_PATH_FORMAT = os.path.join(TARGET_ROOT, SUB_FOLDER_PATH_FORMAT) # TIL/coding-test/Baekjoon/10000/10804. 카드 역배치.cpp
+FOLDER_PATH_FORMAT = os.path.join(TARGET_ROOT, SUB_FOLDER_PATH_FORMAT)
 
-# TODO: 문제 번호를 기준으로 1000 단위 하위 폴더 계산
+def ensure_git_identity():
+    """로컬 git 사용자 설정(액션 환경/로컬 모두 안전)."""
+    subprocess.run(["git", "config", "--local", "user.email", "action@github.com"], check=True)
+    subprocess.run(["git", "config", "--local", "user.name", "GitHub Action"], check=True)
+
+# 문제 번호를 기준으로 1000 단위 하위 폴더 계산
 def get_sub_folder(num: int) -> str:
-    return str((num // 1000) * 1000) # ex) 10804 → '10000'    
-
-
-
+    return str((num // 1000) * 1000)  # ex) 10804 → '10000'
 
 # 경로에서 난이도, 번호, 제목, 확장자 추출
 def extract_problem_info(file_path: str):
@@ -86,8 +83,10 @@ def get_commit_info(path: str):
 
     except Exception as e:
         print(f"[경고] 커밋 정보 조회 실패: {e}")
-        return {"message": "Auto organize Baekjoon files",
-                "time": datetime.now().isoformat()}
+        return {
+            "message": "Auto organize Baekjoon files",
+            "time": datetime.now().isoformat()
+        }
 
 # 새 파일명과 폴더 경로 생성
 def get_new_paths(problem_info: dict):
@@ -110,14 +109,18 @@ def get_new_paths(problem_info: dict):
     new_path = os.path.join(folder_path, file_name)
     return {"folder": folder_path, "file": new_path}
 
-# 풀이 파일 이동 및 기존 폴더 삭제, 커밋 수행
+# 풀이 파일 이동 및 파일별 개별 커밋 수행
 def move_and_commit():
     if not os.path.isdir(SOURCE_ROOT):
         print(f"원본 폴더가 없습니다: {SOURCE_ROOT}")
         return
 
+    # ✅ 커밋 전 Git 사용자 설정
+    ensure_git_identity()
+
     moved_files = []
 
+    # 백준 폴더 탐색
     for root, _, files in os.walk(SOURCE_ROOT):
         for file in files:
             if not file.lower().endswith(SOLUTION_EXTENSIONS):
@@ -129,9 +132,10 @@ def move_and_commit():
                 continue
 
             # 커밋 시간은 기존 파일의 마지막 커밋에서 가져오되,
-            # 메시지는 "번호 solve"로 강제
+            # 메시지는 "<번호> solve"로 강제
             commit = get_commit_info(file_path)
 
+            # 새 파일 경로 생성 및 이동
             new_paths = get_new_paths(problem_info)
             shutil.move(file_path, new_paths["file"])
 
@@ -145,14 +149,14 @@ def move_and_commit():
                 "info": problem_info
             })
 
-    # 파일별 개별 커밋
+    # 파일별 개별 커밋 (실패 시 즉시 중단)
     for f in moved_files:
-        subprocess.run(["git", "add", f["new"]])
+        subprocess.run(["git", "add", f["new"]], check=True)
         subprocess.run([
             "git", "commit",
-            "-m", f["commit"]["message"],
-            "--date", f["commit"]["time"]
-        ])
+            "-m", f"{f['commit']['message']}",
+            "--date", f"{f['commit']['time']}"
+        ], check=True)
 
     if moved_files:
         print(f"\n총 {len(moved_files)}개 파일 이동 및 커밋 완료.")
@@ -172,12 +176,11 @@ def remove_baekjoon_folder(base_path: str = "백준"):
         shutil.rmtree(base_path)
         print(f"🗑️ '{base_path}' 폴더 전체 삭제 완료.")
 
-        # Git 사용자 설정
-        subprocess.run(["git", "config", "--local", "user.email", "action@github.com"], check=True)
-        subprocess.run(["git", "config", "--local", "user.name", "GitHub Action"], check=True)
+        # ✅ 커밋 전 Git 사용자 설정
+        ensure_git_identity()
 
-        # 모든 변경사항 추가
-        subprocess.run(["git", "add", "-A"], check=True)
+        # 삭제 변경만 스테이징 (폴더가 사라졌어도 pathspec으로 삭제 기록 가능)
+        subprocess.run(["git", "add", "-A", "--", base_path], check=True)
 
         # 변경사항 확인 후 커밋 + 푸시
         diff = subprocess.run(["git", "diff", "--cached", "--quiet"])
@@ -191,5 +194,6 @@ def remove_baekjoon_folder(base_path: str = "백준"):
     except Exception as e:
         print(f"❌ 백준 폴더 삭제 중 오류 발생: {e}")
 
-move_and_commit()
-remove_baekjoon_folder(SOURCE_ROOT)
+if __name__ == "__main__":
+    move_and_commit()
+    remove_baekjoon_folder(SOURCE_ROOT)
