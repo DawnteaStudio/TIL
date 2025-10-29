@@ -189,6 +189,5 @@ def remove_baekjoon_folder(base_path: str = "백준"):
     except Exception as e:
         print(f"❌ 백준 폴더 삭제 중 오류 발생: {e}")
 
-if __name__ == "__main__":
-    move_and_commit()
-    remove_baekjoon_folder(SOURCE_ROOT)
+move_and_commit()
+remove_baekjoon_folder(SOURCE_ROOT)
