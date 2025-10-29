@@ -23,6 +23,7 @@ SOURCES = [
         "folder_regex": r'(\d+)\s*[.\s]\s*(.+)',
         # 삭제 후 커밋 메시지
         "delete_message": "[chore] 백준 폴더 삭제",
+        "ext_map": {".cc": ".cpp"},
     },
     {
         "name": "프로그래머스",
@@ -197,3 +198,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
