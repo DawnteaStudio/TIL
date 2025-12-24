@@ -4,6 +4,7 @@ import shutil
 import subprocess
 from datetime import datetime
 from typing import Optional, Dict, Any, List
+import filecmp
 
 # ===== 설정 =====
 SOLUTION_EXTENSIONS = ('.cpp', '.cc', '.py', '.c', '.java', '.txt')
@@ -38,10 +39,19 @@ SOURCES = [
 ]
 
 # ============= 공통 유틸 =============
+def run(cmd: List[str], check: bool = True, capture: bool = False) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        cmd,
+        check=check,
+        capture_output=capture,
+        text=True,
+        encoding="utf-8"
+    )
+
 def ensure_git_identity():
     """로컬 git 사용자 설정."""
-    subprocess.run(["git", "config", "--local", "user.email", "action@github.com"], check=True)
-    subprocess.run(["git", "config", "--local", "user.name", "GitHub Action"], check=True)
+    run(["git", "config", "--local", "user.email", "action@github.com"])
+    run(["git", "config", "--local", "user.name", "GitHub Action"])
 
 def normalized_ext(source_cfg, raw_ext: str) -> str:
     mapping = source_cfg.get("ext_map", {})
@@ -50,40 +60,38 @@ def normalized_ext(source_cfg, raw_ext: str) -> str:
 def get_commit_info(path: str) -> Dict[str, str]:
     """지정 경로의 마지막 커밋 메시지/시간. 없으면 기본값."""
     try:
-        msg_proc = subprocess.run(
-            ["git", "log", "-1", "--pretty=%B", "--", path],
-            capture_output=True, text=True, encoding="utf-8", check=False
-        )
+        msg_proc = run(["git", "log", "-1", "--pretty=%B", "--", path], check=False, capture=True)
         msg = (msg_proc.stdout or "").strip()
 
-        time_proc = subprocess.run(
-            ["git", "log", "-1", "--pretty=%ci", "--", path],
-            capture_output=True, text=True, encoding="utf-8", check=False
-        )
+        time_proc = run(["git", "log", "-1", "--pretty=%ci", "--", path], check=False, capture=True)
         time_str = (time_proc.stdout or "").strip()
 
         if not msg:
             msg = "Auto organize coding-test files"
         if not time_str:
-            time_str = datetime.now().isoformat()
+            # --date에 넣기 좋은 형태
+            time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S %z").strip() or datetime.now().isoformat()
 
         return {"message": msg, "time": time_str}
     except Exception as e:
         print(f"[경고] 커밋 정보 조회 실패: {e}")
-        return {"message": "Auto organize coding-test files",
-                "time": datetime.now().isoformat()}
+        return {
+            "message": "Auto organize coding-test files",
+            "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S %z").strip() or datetime.now().isoformat()
+        }
 
 def parse_problem_info(source_cfg: Dict[str, Any], file_path: str) -> Optional[Dict[str, Any]]:
     """경로에서 (레벨/번호/제목/확장자) 추출."""
     source_root = source_cfg["source_root"]
     rel_path = os.path.relpath(file_path, source_root)
     parts = rel_path.split(os.sep)
-    # 예상: <level>/<num. title>/파일명
+
+    # 예상: <level>/<num. title>/파일명  (len >= 3)
     if len(parts) < 3:
         return None
 
     level = parts[0]  # 백준: Bronze/Silver...   프로그래머스: 1/2/3/4...
-    folder_name = parts[1]  # "42895. N으로 표현"
+    folder_name = parts[1]  # "34236. 수학과..."
     m = re.match(source_cfg["folder_regex"], folder_name)
     if not m:
         return None
@@ -100,14 +108,73 @@ def build_new_path(source_cfg: Dict[str, Any], info: Dict[str, Any]) -> str:
     # ✅ 확장자 매핑 적용
     ext = normalized_ext(source_cfg, info["ext"])
 
-    file_name = FILE_NAME_FORMAT.format(
-        num=info["num"], ext=ext, title=info["title"], level=info["level"]
-    )
+    file_name = FILE_NAME_FORMAT.format(num=info["num"], ext=ext, title=info["title"], level=info["level"])
     file_name = re.sub(r'[\\/:*?"<>|]', '_', file_name)
 
     folder_path = os.path.join(target_root, str(subfolder))
     os.makedirs(folder_path, exist_ok=True)
     return os.path.join(folder_path, file_name)
+
+def staged_is_empty() -> bool:
+    """staged 변경이 없으면 True"""
+    cp = subprocess.run(["git", "diff", "--cached", "--quiet"])
+    return cp.returncode == 0
+
+def stage_deletions_under(path: str):
+    """path 하위 삭제/수정 변경을 stage"""
+    # -u: tracked 파일의 수정/삭제 반영
+    run(["git", "add", "-u", "--", path], check=False)
+
+def try_git_mv(src: str, dst: str, force: bool = False) -> bool:
+    """git mv 시도. 성공하면 True"""
+    cmd = ["git", "mv"]
+    if force:
+        cmd.append("-f")
+    cmd.extend([src, dst])
+    p = subprocess.run(cmd)
+    return p.returncode == 0
+
+def move_file_with_git(src: str, dst: str) -> bool:
+    """
+    가능하면 git mv로 이동(스테이징 포함).
+    dst가 이미 있으면:
+      - 내용이 같으면 src만 삭제하고(staged는 deletion만) 커밋은 스킵 가능
+      - 내용이 다르면 git mv -f 로 덮어쓰기 이동
+    """
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+
+    if os.path.exists(dst):
+        # 이미 목적지 파일이 있으면 idempotent 처리
+        try:
+            same = filecmp.cmp(src, dst, shallow=False)
+        except Exception:
+            same = False
+
+        if same:
+            # 목적지와 동일한 내용이면 src만 제거
+            os.remove(src)
+            return True
+
+        # 내용이 다르면 덮어쓰기 이동
+        if try_git_mv(src, dst, force=True):
+            return True
+        return False
+
+    # 정상 이동
+    if try_git_mv(src, dst, force=False):
+        return True
+    return False
+
+def move_file_fallback(src: str, dst: str):
+    """git mv 실패 시 shutil.move + 수동 stage"""
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+
+    # dst 존재 시 overwrite
+    if os.path.exists(dst):
+        os.remove(dst)
+
+    shutil.move(src, dst)
+    run(["git", "add", dst], check=False)
 
 # ============= 주 로직 =============
 def move_and_commit_for_source(source_cfg: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -121,10 +188,12 @@ def move_and_commit_for_source(source_cfg: Dict[str, Any]) -> List[Dict[str, Any
     ensure_git_identity()
 
     moved: List[Dict[str, Any]] = []
+
     for root, _, files in os.walk(source_root):
         for file in files:
             if not file.lower().endswith(SOLUTION_EXTENSIONS):
                 continue
+
             file_path = os.path.join(root, file)
 
             info = parse_problem_info(source_cfg, file_path)
@@ -134,20 +203,25 @@ def move_and_commit_for_source(source_cfg: Dict[str, Any]) -> List[Dict[str, Any
             commit = get_commit_info(file_path)
             new_path = build_new_path(source_cfg, info)
 
-            # 이동
-            os.makedirs(os.path.dirname(new_path), exist_ok=True)
-            shutil.move(file_path, new_path)
-
             # 커밋 메시지 강제: "<번호> solve"
             commit["message"] = f"{info['num']} solve"
 
-            # 개별 커밋
-            subprocess.run(["git", "add", new_path], check=True)
-            subprocess.run([
-                "git", "commit",
-                "-m", commit["message"],
-                "--date", commit["time"]
-            ], check=True)
+            # 1) 이동(가능하면 git mv)
+            moved_ok = move_file_with_git(file_path, new_path)
+            if not moved_ok:
+                # 2) fallback (shutil + manual stage)
+                move_file_fallback(file_path, new_path)
+
+            # 3) 삭제(stage) 보강: source_root 쪽에서 삭제/수정이 남아있을 수 있음
+            stage_deletions_under(source_root)
+
+            # 4) staged 없으면 커밋 스킵(핵심 방어)
+            if staged_is_empty():
+                print(f"⚪ staged 변경 없음 → 커밋 스킵: {commit['message']}")
+                continue
+
+            # 5) 개별 커밋
+            run(["git", "commit", "-m", commit["message"], "--date", commit["time"]])
 
             moved.append({
                 "old": file_path,
@@ -166,10 +240,10 @@ def move_and_commit_for_source(source_cfg: Dict[str, Any]) -> List[Dict[str, Any
     return moved
 
 def delete_source_folder(source_cfg: Dict[str, Any]):
-    """소스 루트 폴더 전체 삭제 + 분리 커밋."""
+    """소스 루트 폴더 전체 삭제 + 분리 커밋 (push는 하지 않음: YML에서 처리)"""
     base_path = source_cfg["source_root"]
     if not os.path.exists(base_path):
-        print(f"[오류] 경로가 존재하지 않습니다: {base_path}")
+        print(f"[skip] 경로 없음: {base_path}")
         return
 
     try:
@@ -177,16 +251,17 @@ def delete_source_folder(source_cfg: Dict[str, Any]):
         print(f"🗑️ '{base_path}' 폴더 전체 삭제 완료.")
 
         ensure_git_identity()
-        # 삭제만 스테이징
-        subprocess.run(["git", "add", "-A", "--", base_path], check=True)
 
-        diff = subprocess.run(["git", "diff", "--cached", "--quiet"])
-        if diff.returncode != 0:
-            subprocess.run(["git", "commit", "-m", source_cfg["delete_message"]], check=True)
-            subprocess.run(["git", "push"], check=True)
-            print(f"✅ {base_path} 삭제 커밋/푸시 완료.")
-        else:
-            print("⚪ 변경사항이 없습니다. 커밋 생략.")
+        # 삭제 스테이징
+        run(["git", "add", "-A", "--", base_path], check=False)
+
+        # staged 없으면 커밋 스킵
+        if staged_is_empty():
+            print("⚪ 변경사항이 없습니다. 삭제 커밋 생략.")
+            return
+
+        run(["git", "commit", "-m", source_cfg["delete_message"]])
+        print(f"✅ {base_path} 삭제 커밋 완료. (push는 workflow에서 수행)")
     except Exception as e:
         print(f"❌ '{base_path}' 폴더 삭제 중 오류 발생: {e}")
 
@@ -204,5 +279,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
