@@ -6,6 +6,7 @@ on:
       - '백준/**'
       - '프로그래머스/**'   # ✅ Programmers 소스 추가
       - 'README.md'
+      - '.github/workflows/update_baekjoon.py'
   workflow_dispatch:
     inputs:
       problem_numbers:
