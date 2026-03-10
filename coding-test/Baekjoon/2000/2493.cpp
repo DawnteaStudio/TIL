@@ -6,26 +6,22 @@ using namespace std;
 
 int main()
 {
-    fast;
-    int n;
-    cin >> n;
+	fast;
+	int n, tmp;
+	cin >> n;
 
-    stack<pair<int, int> > s;
-    for (int i = 1; i <= n; i++) {
-        int tmp;
-        cin >> tmp;
-        while (!s.empty() && s.top().first < tmp) {
-            s.pop();
-        }
-
-        if (s.empty()) {
-            s.push({tmp, i});
-            cout << 0;
-        }
-        else {
-            cout << s.top().second;
-            s.push({tmp, i});
-        }
-        cout << " ";
-    }
+	stack<pair<int, int>> s;
+	for (int i = 1; i <= n; i++) {
+		cin >> tmp;
+		while (!s.empty() && s.top().first < tmp)
+			s.pop();
+		if (s.empty()) {
+			s.push({tmp, i});
+			cout << 0 << " ";
+		}
+		else {
+			cout << s.top().second << " ";
+			s.push({tmp, i});
+		}
+	}
 }
