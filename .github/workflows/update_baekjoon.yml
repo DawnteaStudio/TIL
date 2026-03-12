@@ -4,8 +4,7 @@ on:
   push:
     paths:
       - '백준/**'
-      - '프로그래머스/**'   # ✅ Programmers 소스 추가
-      - 'README.md'
+      - '프로그래머스/**'
       - '.github/workflows/update_baekjoon.py'
   workflow_dispatch:
     inputs:
@@ -17,11 +16,18 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: update-readme-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   update-readme:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -34,12 +40,13 @@ jobs:
         env:
           INPUT_PROBLEM_NUMBERS: ${{ github.event.inputs.problem_numbers }}
         run: |
-          python .github/workflows/update_baekjoon.py  # 파일명 유지 시 그대로 사용
+          python .github/workflows/update_baekjoon.py
 
-      - name: Commit & Push changes (if any)
+      - name: Push commits
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add -A
-          git diff --cached --quiet || git commit -m "Update coding-test index"
-          git push
+
+          git fetch origin main
+          git pull --rebase origin main || true
+          git push origin HEAD:main
