@@ -10,4 +10,5 @@ int main() {
 		cin >> l >> c;
 		cout << 2 * c - l << " " << l - c << '\n';
 	}
+    return 0;
 }
