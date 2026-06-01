@@ -21,7 +21,7 @@ algorithms/
 
 | 문서 | 링크 |
 | --- | --- |
-| KMP | [바로가기](./theory/KMP.md) |
+| KMP | [바로가기](./theory/kmp.md) |
 | union-find | [바로가기](./theory/union-find.md) |
 
 ---

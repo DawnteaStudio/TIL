@@ -59,13 +59,13 @@
 
 <br>
 
-![image](./kmp_images/idx0.png)
+![image](./kmp_images/kmp-01.png)
 - 인덱스가 0일 경우에는 **접두사**와 **접미사**가 없다고 판단한다.
 - 그래서 이 경우에는 LPS가 0이다.
 
 <br>
 
-![image](./kmp_images/idx1.png)
+![image](./kmp_images/kmp-02.png)
 - 이제 AA를 보자, 이전에 len은 0이었기 때문에, 이번에는 1만큼 길이의 접두사, 접미사를 검사한다.
 - 접두사는 `A`, 접미사도 `A`로 서로 동일하다.
 - 이 경우에 len의 값은 동일한 부분 `A`의 길이인 1이 된다.
@@ -73,7 +73,7 @@
 
 <br>
 
-![image](./kmp_images/idx2.png)
+![image](./kmp_images/kmp-03.png)
 - 이제 인덱스를 2까지 늘리면 위 이미지와 같다.
 - 접두사는 `AA`, 접미사는 `AB`로 서로 다르다.
 - 이 경우에 실패 배열 알고리즘은 일정한 규칙에 따라 앞부분으로 이동해서 다시 공통 부분을 찾는다.
@@ -81,21 +81,21 @@
 
 <br>
 
-![image](./kmp_images/idx3.png)
+![image](./kmp_images/kmp-04.png)
 - 이전에 len이 0이었기 때문에, 이제 다시 길이 1만큼 문자열을 검사한다.
 - 1만큼 확인해보니, 접두사 `A`, 접미사는 `A`로 서로 동일한 것을 확인 할 수 있다. 그럼 len을 1로 올린다.
 - 그래서 len = 1, LPS[3]의 값은 1이 된다.
 
 <br>
 
-![image](./kmp_images/idx4.png)
+![image](./kmp_images/kmp-05.png)
 - 이전에 len=1 성공했기 떄문에, 길이 2만큼 확인해야 한다.
 - 접두사는 `AA`, 접미사는 `AA`로 동일하므로 성공이다. 성공이면, len을 2로 올린다.
 - 그래서 len = 2, LPS[4]의 값은 2가 된다.
 
 <br>
 
-![image](./kmp_images/idx5err.png)
+![image](./kmp_images/kmp-06.png)
 - 이전에 2짜리 길이가 성공했으므로, 이제 길이 3만큼 확인해보자
 - 그런데 B != A로 서로 다른 부분을 찾았다
 - 이 경우에 우리는 **일정 수치만큼 len을 줄여서** 다시 접두사와 접미사를 확인해야 한다.
@@ -105,7 +105,7 @@
 
 <br>
 
-![image](./kmp_images/idx5.png)
+![image](./kmp_images/kmp-07.png)
 - 위에서 틀렸을 경우, 우리는 Len값이 LPS[len - 1] 값이 된다고 설명하였다.
 - 기존에 Len은 2였고, 3을 도전했다가 실패했으므로 여전히 Len값은 2다.
 - 그래서 실패한 시점에 LPS[len - 1]은 LPS[1]이고, 이는 1이다. 즉 우리는 틀린 현 시점에 Len이 1이라는 뜻이다.
@@ -116,19 +116,19 @@
 
 <br>
 
-![image](./kmp_images/idx6.png)
+![image](./kmp_images/kmp-08.png)
 - 위에서 계속 한 것의 연장이다. 이전에 len이 2였으므로 3만큼 검사한다.
 - 접두사와 접미사가 `AAB`로 동일하니, len을 3으로 갱신하고 lps[6]은 3이 된다.
 
 <br>
 
-![image](./kmp_images/idx7.png)
+![image](./kmp_images/kmp-09.png)
 - 이전에 len이 3이였므르로 4만큼 검사한다.
 - 접두사와 접미사가 `AABA`로 동일하니, len을 4로 갱신하고 lps[7]은 4가 된다.
 
 <br>
 
-![image](./kmp_images/idx8err.png)
+![image](./kmp_images/kmp-10.png)
 - 이전에 len이 4였으므로 5만큼 검사하려고 했는데, 접두사는 `AABAA`, 접미사는 `AABAB`로 마지막 글자가 다르다.
 - 이 경우에 다시 **일정한 규칙** 대로 len값을 줄여서 다시 검사해야 한다.
 - 줄이는 방법은 LPS[Len - 1]값으로 Len을 줄이는 것이다.
@@ -137,13 +137,13 @@
 
 <br>
 
-![image](./kmp_images/idx8err2.png)
+![image](./kmp_images/kmp-11.png)
 - 2만큼 검사했는데, 이번에도 틀렸다. 접두사는 `AA`, 접미사는 `AB`로 서로 다르다.
 - 그럼 다시 LPS[Len - 1]을 보면 기존에 Len은 1이였으므로, LPS[0], 0이 Len이 된다.
 
 <br>
 
-![image](./kmp_images/idx8.png)
+![image](./kmp_images/kmp-12.png)
 - 마지막으로 Len이 0이었으므로, 길이 1만큼 검사한다.
 - 접두사와 접미사가 `A`, `B`로 각각 다르기 때문에, Len은 0으로 끝나고 LPS[8]은 0으로 LPS, 실패배열 구하는 로직이 끝이 난다.
 
@@ -174,14 +174,14 @@
 
 > **LPS[Idx]는 문자열 0부터 Idx까지 `"최대로 일치한 접두사, 접미사의 길이다"`**
 
-![image](./kmp_images/lps1.png)
+![image](./kmp_images/kmp-13.png)
 - 이해하기 쉽게 문자열을 색으로 표현해 보겠다.
 - 여기서 Idx는 검은색 화살표의 위치다.
 - 이 시점에서 LPS[Idx]는 주황색 도형 하나의 길이가 된다.
 
 <br>
 
-![image](./kmp_images/lps2.png)
+![image](./kmp_images/kmp-14.png)
 - 그런데 우리가 여기서 알고 싶은 건 LPS[len - 1]의 의미였다.
 - 그럼 Len은 이 시점에 어디서 뭘 하고 있는지 보자면 위 이미지에 초록색 화살표로 있다.
 - 이전에 접두사와 접미사가 일치했다면 Len이 가리키는 초록색 화살표가 오른쪽으로 한칸 이동해서 다음 글자를 비교한다.
@@ -190,7 +190,7 @@
 
 <br>
 
-![image](./kmp_images/lps3.png)
+![image](./kmp_images/kmp-15.png)
 - 틀린 상황은 위와 같다.
 - 그럼 이 상황에서 Len - 1이 의미하는 것이 보일 것이다. (그랬으면 좋겠다)
 - Len - 1은 **바로 이전에 일치했던 접두,접미사의 최대길이** 라는 점이다. (여기서는 주황색 도형 하나의 가로 길이)
@@ -200,7 +200,7 @@
 
 <br>
 
-![image](./kmp_images/lps4.png)
+![image](./kmp_images/kmp-16.png)
 - 우리의 기존 문자열을 시각적으로 확대 해보았다.
 - 주황색 문자열이 만약에 동일한 문자열 2개로 이루어진 문자열이였음을 가정한다.
   - ex) 주황색 : ABAB, 보라색 : AB
@@ -223,7 +223,7 @@
 
 <br>
 
-![image](./kmp_images/lps5.png)
+![image](./kmp_images/kmp-17.png)
 - 그럼 이 방법을 왜 사용할까?
 - 만약에 회색 글자가 마침 보라색 블록의 첫번째 글자와 같다고 가정해보자
 - 공통 주황색 안에서 보라색 만큼 또 접두사와 접미사가 같다는 보장이 된다면, 우리는 공통 접두사, 접미사를 처음부터 계산하는 것이 아니라 같다고 보장 받는 부분부터 다시 이어서 계산 할 수 있다.
@@ -267,7 +267,7 @@ void make_lps(vector<int> &v, string &p)
 
 <br>
 
-![image](./kmp_images/kmp1.png)
+![image](./kmp_images/kmp-18.png)
 - 우리가 탐색하려는 문자열 STR과 찾으려는 패턴 PATTERN 각각 인덱스를 따로 관리한다.
 - 만약 Str과 Pat의 인덱스에 해당하는 글자가 같다면 인덱스가 각각 증가한다.
 - 이미지 상에서 AABA까지 비교했는데, 같았기 때문에 계속 증가한 모습이다.
@@ -275,13 +275,13 @@ void make_lps(vector<int> &v, string &p)
 
 <br>
 
-![image](./kmp_images/kmp2.png)
+![image](./kmp_images/kmp-19.png)
 - 문제는 틀렸을 경우다.
 - 위 이미지 처럼 틀렸을 경우 S_Idx를 옮기든, P_Idx를 옮기든 해야한다는 것이다.
 
 <br>
 
-![image](./kmp_images/kmp3.png)
+![image](./kmp_images/kmp-20.png)
 - 위 이미지는 전통적인 완전 탐색 방법이다. (KMP X)
 - 틀렸을 경우 다시 앞으로 돌려서 한글자씩 다시 비교한다.
 - 위 경우 시간 복잡도는 (Str의 길이) * (Pat의 길이) 가 된다.
@@ -289,7 +289,7 @@ void make_lps(vector<int> &v, string &p)
 
 <br>
 
-![image](./kmp_images/kmp4.png)
+![image](./kmp_images/kmp-21.png)
 - 위 이미지는 KMP 알고리즘을 적용한 이미지다.
 - KMP알고리즘에서 **STR의 인덱스는 절대 뒤로 가지 않는다.**
 - 위 예시에서는 Lps[p_index - 1]로 P_index를 뒤로 돌린다.
@@ -297,13 +297,13 @@ void make_lps(vector<int> &v, string &p)
 
 <br>
 
-![image](./kmp_images/kmp5.png)
+![image](./kmp_images/kmp-22.png)
 - P_Idx를 뒤로 옮긴다는 것은 패턴 문자열을 앞으로 당긴다는 의미이다.
 - 이러면 시간복잡도를 곱에서 합인 (Str의 길이) + (Pat의 길이)로 확 줄일 수 있다.
 
 <br>
 
-![image](./kmp_images/kmp6.png)
+![image](./kmp_images/kmp-23.png)
 - LPS함수 만들때와 매우 유사하다.
 - 왜 p_index = lps[p_index - 1];로 이어서 할 수 있을까
 - 그건 P_index - 1은 이전까지 동일했던 부분 문자열의 길이다. (위 경우 AABA로 4)
