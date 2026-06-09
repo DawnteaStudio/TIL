@@ -1,0 +1,16 @@
+.gitignore
+.DS_Store
+C-CPP/experience/hongongC/2-1
+*.json
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Gradle
+.gradle/
+**/build/
+
+# Maven
+**/target/
