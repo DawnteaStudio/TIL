@@ -30,3 +30,12 @@ software-engineering/
 | 자료 | 링크 |
 | --- | --- |
 | 아직 기록된 자료가 없습니다. | - |
+
+<!-- til-studio:index:start -->
+## Notes
+- [etc](notes/etc/)
+
+## Theory
+
+아직 등록된 theory가 없습니다.
+<!-- til-studio:index:end -->

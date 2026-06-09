@@ -31,3 +31,12 @@ algorithms/
 | 자료 | 링크 |
 | --- | --- |
 | APSS | [바로가기](./notes/APSS/) |
+
+<!-- til-studio:index:start -->
+## Notes
+- [APSS](notes/APSS/)
+
+## Theory
+- [kmp](theory/kmp.md)
+- [union-find](theory/union-find.md)
+<!-- til-studio:index:end -->

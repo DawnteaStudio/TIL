@@ -16,23 +16,35 @@
 
 ---
 
-## 📖 노트 정리 (Notes)
-### ✏️ 핵심 개념 요약
-
-- [ch6. 무식하게 풀기](./note/ch6.md)
-
----
-
-## 📆 학습 기록 (Learning Log)
-
-
-| 날짜 | 학습 내용 | 소스 코드 |
-|------|----------|------|
-| 2025-07-21 | ch6. 무식하게 풀기 | [ch6](./code/ch6/) |
-| YYYY-MM-DD | 섹션 2 |  |
-| YYYY-MM-DD | 섹션 3 |  |
-
 ---
 
 ## 📌 참고 자료 (References)
 - []()
+
+## 디렉토리 구조
+
+```text
+APSS/
+├── README.md
+├── note/    # 학습 기록 Markdown
+└── src/     # 실행 코드와 실습 파일
+```
+
+## 작성 원칙
+
+- 학습 기록은 `note/<slug>.md`에 작성한다.
+- 관련 코드는 `src/<slug>/`에 둔다.
+- note와 src는 대소문자를 포함해 slug가 정확히 같을 때만 연결한다.
+- 아래 학습 기록 marker 사이 내용은 자동 관리되므로 직접 수정하지 않는다.
+
+<!-- til-studio:learning-log:start -->
+## 학습 기록
+
+| 날짜 | 주제 | src | note |
+| --- | --- | --- | --- |
+| - | 아직 작성된 note가 없습니다. | - | - |
+
+## note 작성 대기
+
+- 없음
+<!-- til-studio:learning-log:end -->

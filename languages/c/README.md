@@ -30,3 +30,12 @@ c/
 | 자료 | 링크 |
 | --- | --- |
 | hongongC | [바로가기](./notes/hongongC/) |
+
+<!-- til-studio:index:start -->
+## Notes
+- [hongongC](notes/hongongC/)
+
+## Theory
+
+아직 등록된 theory가 없습니다.
+<!-- til-studio:index:end -->

@@ -32,10 +32,17 @@ export async function reconcileSourceReadme(repositoryRoot, sourceRoot) {
   const notes = await readNotes(path.join(absoluteSource, "note"));
   const srcSlugs = await readSourceSlugs(path.join(absoluteSource, "src"));
   const readmePath = path.join(absoluteSource, "README.md");
-  const existing = existsSync(readmePath)
+  const current = existsSync(readmePath)
     ? await readFile(readmePath, "utf8")
+    : "";
+  const existing = current.trim()
+    ? current
     : buildMinimalReadme(path.posix.basename(sourceRoot));
-  const next = upsertManagedBlock(existing, buildManagedBlock(notes, srcSlugs));
+  const guided = ensureSourceGuidance(
+    existing,
+    path.posix.basename(sourceRoot),
+  );
+  const next = upsertManagedBlock(guided, buildManagedBlock(notes, srcSlugs));
 
   if (next === existing) return false;
   await mkdir(absoluteSource, { recursive: true });
@@ -77,8 +84,11 @@ async function readSourceSlugs(srcDirectory) {
 
 function firstHeading(content) {
   const body = content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "");
-  const match = body.match(/^#\s+(.+)$/m);
-  return match?.[1]
+  const heading = body
+    .split(/\r?\n/)
+    .map((line) => line.match(/^#{1,6}[ \t]+(.+)$/)?.[1])
+    .find(Boolean);
+  return heading
     ?.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .replace(/[*_`]/g, "")
     .trim();
@@ -99,9 +109,9 @@ function buildManagedBlock(notes, srcSlugs) {
     ? notes
         .map((note) => {
           const src = srcSlugs.includes(note.slug)
-            ? `[src](./src/${encodeURI(note.slug)}/)`
+            ? `[src](${encodeMarkdownPath(`./src/${note.slug}/`)})`
             : "-";
-          return `| ${note.created} | ${escapeTable(note.title)} | ${src} | [note](./note/${encodeURI(note.slug)}.md) |`;
+          return `| ${note.created} | ${escapeTable(note.title)} | ${src} | [note](${encodeMarkdownPath(`./note/${note.slug}.md`)}) |`;
         })
         .join("\n")
     : "| - | 아직 작성된 note가 없습니다. | - | - |";
@@ -110,7 +120,7 @@ function buildManagedBlock(notes, srcSlugs) {
     ? pending
         .map(
           (slug) =>
-            `- [ ] \`${slug}\` ([src](./src/${encodeURI(slug)}/))`,
+            `- [ ] \`${slug}\` ([src](${encodeMarkdownPath(`./src/${slug}/`)}))`,
         )
         .join("\n")
     : "- 없음";
@@ -149,7 +159,29 @@ function buildMinimalReadme(sourceName) {
 
 [상위 topic으로 이동](../../README.md)
 
-## 디렉토리 구조
+${sourceGuidance(sourceName)}
+`;
+}
+
+function ensureSourceGuidance(content, sourceName) {
+  if (
+    content.includes("## 디렉토리 구조") &&
+    content.includes("## 작성 원칙")
+  ) {
+    return content;
+  }
+
+  const guidance = sourceGuidance(sourceName);
+  const markerIndex = content.indexOf(START_MARKER);
+  if (markerIndex === -1) {
+    return `${content.trimEnd()}\n\n${guidance}\n`;
+  }
+
+  return `${content.slice(0, markerIndex).trimEnd()}\n\n${guidance}\n\n${content.slice(markerIndex)}`;
+}
+
+function sourceGuidance(sourceName) {
+  return `## 디렉토리 구조
 
 \`\`\`text
 ${sourceName}/
@@ -163,12 +195,20 @@ ${sourceName}/
 - 학습 기록은 \`note/<slug>.md\`에 작성한다.
 - 관련 코드는 \`src/<slug>/\`에 둔다.
 - note와 src는 대소문자를 포함해 slug가 정확히 같을 때만 연결한다.
-- 아래 학습 기록 marker 사이 내용은 자동 관리되므로 직접 수정하지 않는다.
-`;
+- 아래 학습 기록 marker 사이 내용은 자동 관리되므로 직접 수정하지 않는다.`;
 }
 
 function escapeTable(value) {
   return value.replaceAll("|", "\\|").replace(/\r?\n/g, " ");
+}
+
+function encodeMarkdownPath(value) {
+  return value
+    .split("/")
+    .map((segment) =>
+      encodeURIComponent(segment).replace(/\(/g, "%28").replace(/\)/g, "%29"),
+    )
+    .join("/");
 }
 
 function count(value, needle) {

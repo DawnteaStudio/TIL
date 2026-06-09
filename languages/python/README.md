@@ -30,3 +30,12 @@ python/
 | 자료 | 링크 |
 | --- | --- |
 | jump_to_python | [바로가기](./notes/jump_to_python/) |
+
+<!-- til-studio:index:start -->
+## Notes
+- [jump_to_python](notes/jump_to_python/)
+
+## Theory
+
+아직 등록된 theory가 없습니다.
+<!-- til-studio:index:end -->

@@ -1,3 +1,7 @@
+---
+created: 2025-03-13
+---
+
 ## 🌐 웹 소개
 
 
@@ -78,4 +82,3 @@
 ### 📌 참고 자료
 - [MDN - 웹의 동작 원리](https://developer.mozilla.org/ko/docs/Learn/Getting_started_with_the_web/How_the_Web_works)
 - [[인프런X생활코딩] HTML과 인터넷](https://www.inflearn.com/course/html%EA%B3%BC-%EC%9D%B8%ED%84%B0%EB%84%B7-%EC%83%9D%ED%99%9C%EC%BD%94%EB%94%A9/dashboard)
-
