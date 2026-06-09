@@ -1,9 +1,13 @@
+Jump to python 입니다. (유지보수 중)
 
+## 🔗 상위로
+
+- [🔝 C-CPP 메인으로](../../README.md)
 
 ## 디렉토리 구조
 
 ```text
-TCP_IP(윤성우의 열혈)/
+jump_to_python/
 ├── README.md
 ├── note/    # 학습 기록 Markdown
 └── src/     # 실행 코드와 실습 파일
@@ -25,9 +29,9 @@ TCP_IP(윤성우의 열혈)/
 
 ## note 작성 대기
 
-- [ ] `ch1` ([src](./src/ch1/))
 - [ ] `ch2` ([src](./src/ch2/))
 - [ ] `ch3` ([src](./src/ch3/))
 - [ ] `ch4` ([src](./src/ch4/))
 - [ ] `ch5` ([src](./src/ch5/))
+- [ ] `final 20 quiz` ([src](./src/final%2020%20quiz/))
 <!-- til-studio:learning-log:end -->

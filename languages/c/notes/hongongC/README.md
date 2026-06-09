@@ -1,4 +1,4 @@
-[⬅️ 상위 README로 이동](../README.md)
+[⬅️ 상위 README로 이동](../../README.md)
 
 # 📚 공부 기록 (Study Notes)
 
@@ -16,21 +16,44 @@
 
 ---
 
-## 📆 학습 기록 (Learning Log)
-| 날짜 | 학습 내용 | 소스 코드 | 노트 정리 |
-|------|----------|-----------|--------|
-| 2023-07-30 | Chapter 02 상수와 데이터 출력 | [ch2](./code/ch2/) | [ch2](./note/ch2.md) |
-| 2023-11-28 | Chapter 03 변수와 데이터 입력 | [ch3](./code/ch3/) | [ch3](./note/ch3.md) | 
-| 2024-03-08 | Chapter 04 연산자 | [ch4](./code/ch4/) | [ch4](./note/ch4.md) |
-| 2024-03-20 | Chapter 05 선택문 | [ch5](./code/ch5/) | [ch5](./note/ch5.md) |
-| 2024-03-20 | Chapter 06 반복문 | [ch6](./code/ch6/) | [ch6](./note/ch6.md) |
-| 2024-03-22 | Chapter 07 함수 | [ch7](./code/ch7/) | [ch7](./note/ch7.md) |
-| 2024-03-24 | Chapter 08 배열 | [ch8](./code/ch8/) | [ch8](./note/ch8.md) |
-| 2024-03-27 | Chapter 09 포인터 | [ch9](./code/ch9/) | [ch9](./note/ch9.md) |
-| 2024-04-02 | Chapter 10 배열과 포인터 | [ch10](./code/ch10/) | [ch10](./note/ch10.md) |
-| 2024-04-11 | Chapter 11 문자 | [ch11](./code/ch11/) | [ch11](./note/ch11.md) |
-
 ---
 
 ## 📌 참고 자료 (References)
 * [서현우, 『혼자 공부하는 C언어 개정판』 (2023)]()
+
+## 디렉토리 구조
+
+```text
+hongongC/
+├── README.md
+├── note/    # 학습 기록 Markdown
+└── src/     # 실행 코드와 실습 파일
+```
+
+## 작성 원칙
+
+- 학습 기록은 `note/<slug>.md`에 작성한다.
+- 관련 코드는 `src/<slug>/`에 둔다.
+- note와 src는 대소문자를 포함해 slug가 정확히 같을 때만 연결한다.
+- 아래 학습 기록 marker 사이 내용은 자동 관리되므로 직접 수정하지 않는다.
+
+<!-- til-studio:learning-log:start -->
+## 학습 기록
+
+| 날짜 | 주제 | src | note |
+| --- | --- | --- | --- |
+| 2023-07-30 | 📘 C 언어 입문: 기본 개념 정리 | [src](./src/ch2/) | [note](./note/ch2.md) |
+| 2023-11-28 | 📘 C 언어: 변수, 자료형, 입력 | [src](./src/ch3/) | [note](./note/ch3.md) |
+| 2024-03-08 | 📘 C 언어: 연산자 정리 | [src](./src/ch4/) | [note](./note/ch4.md) |
+| 2024-03-20 | 📘 C 언어: 조건문 정리 | [src](./src/ch5/) | [note](./note/ch5.md) |
+| 2024-03-20 | 📘 C 언어: 반복문과 제어문 정리 | [src](./src/ch6/) | [note](./note/ch6.md) |
+| 2024-03-22 | 📘 함수 (Functions) | [src](./src/ch7/) | [note](./note/ch7.md) |
+| 2024-03-24 | 📘 C 배열과 문자열 | [src](./src/ch8/) | [note](./note/ch8.md) |
+| 2024-03-27 | 📘 개념 정리 템플릿 - 포인터 | [src](./src/ch9/) | [note](./note/ch9.md) |
+| 2024-04-02 | 📘 배열과 포인터 | [src](./src/ch10/) | [note](./note/ch10.md) |
+| 2024-04-11 | 📘 개념 정리 템플릿 | [src](./src/ch11/) | [note](./note/ch11.md) |
+
+## note 작성 대기
+
+- 없음
+<!-- til-studio:learning-log:end -->

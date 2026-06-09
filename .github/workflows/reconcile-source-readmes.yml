@@ -1,0 +1,55 @@
+name: Reconcile source READMEs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/notes/*/note/**"
+      - "**/notes/*/src/**"
+      - "**/notes/*/README.md"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: reconcile-source-readmes-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Collect changed paths
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          CURRENT_SHA: ${{ github.sha }}
+        run: |
+          if [[ "$BEFORE_SHA" == "0000000000000000000000000000000000000000" ]]; then
+            git diff-tree --no-commit-id --name-only -r "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt"
+          else
+            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt"
+          fi
+
+      - name: Reconcile source READMEs
+        run: node scripts/reconcile-source-readmes.mjs --changed-paths-file "$RUNNER_TEMP/changed-paths.txt"
+
+      - name: Commit README updates
+        run: |
+          if git diff --quiet; then
+            echo "No README changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "**/notes/*/README.md"
+          git commit -m "docs: reconcile source learning logs [skip ci]"
+          git push

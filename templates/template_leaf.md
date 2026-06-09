@@ -1,40 +1,42 @@
-[⬅️ 상위 README로 이동](../README.md)
+[상위 topic으로 이동](../../README.md)
 
-# 📚 공부 기록 (Study Notes)
+# [책 또는 강의 이름]
 
-## 🏗 개요 (Overview)
-[책 or 강의 제목]을 기반으로 학습한 내용을 정리합니다.  
-웹/프로그래밍 기초/알고리즘 등 주제별로 실습 코드와 요약 노트를 작성합니다.
+## 개요
 
----
+[이 자료에서 공부할 내용을 적습니다.]
 
-## 🖥️ 코딩 (Coding)
-### 🏷 언어 및 기술
+## 자료 정보
 
-<!-- 필요에 따라 수정 -->
-![HTML5 Badge](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=fff&style=flat)
-![CSS Badge](https://img.shields.io/badge/CSS-639?logo=css&logoColor=fff&style=flat)
+- 유형: [book | lecture | mentoring | course | etc]
+- 언어 및 기술: [예: Java, Spring]
+- 참고 자료: [책 정보 또는 URL]
 
----
+## 디렉토리 구조
 
-## 📖 노트 정리 (Notes)
-### ✏️ 핵심 개념 요약
+```text
+[자료명]/
+├── README.md
+├── note/    # 학습 기록 Markdown
+└── src/     # 실행 코드와 실습 파일
+```
 
-- [노트 1](./note/파일명1.md)
-- [노트 2](./note/파일명2.md)
+## 작성 원칙
 
----
+- 학습 기록은 `note/<slug>.md`에 작성합니다.
+- 관련 코드는 `src/<slug>/`에 둡니다.
+- note와 src는 대소문자를 포함해 slug가 정확히 같을 때만 연결합니다.
+- note frontmatter에는 `created: YYYY-MM-DD`를 기록합니다.
+- 아래 학습 기록 marker 사이는 자동 관리되므로 직접 수정하지 않습니다.
 
-## 📆 학습 기록 (Learning Log)
+<!-- til-studio:learning-log:start -->
+## 학습 기록
 
+| 날짜 | 주제 | src | note |
+| --- | --- | --- | --- |
+| - | 아직 작성된 note가 없습니다. | - | - |
 
-| 날짜 | 학습 내용 | 소스 코드 |
-|------|----------|------|
-| YYYY-MM-DD | 섹션 1 | [ch2](./code/) |
-| YYYY-MM-DD | 섹션 2 |  |
-| YYYY-MM-DD | 섹션 3 |  |
+## note 작성 대기
 
----
-
-## 📌 참고 자료 (References)
-- [출처 링크 또는 강의 대시보드 링크](https://example.com)
+- 없음
+<!-- til-studio:learning-log:end -->

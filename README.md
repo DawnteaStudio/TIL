@@ -10,9 +10,12 @@
 
 - `theory/`: 여러 자료를 바탕으로 정리한 개념 문서
 - `notes/`: 강의, 책, 학습 중 작성한 기록
+- `notes/[자료명]/note/`: 글 형태의 학습 기록
+- `notes/[자료명]/src/`: note와 연결되는 실행 코드와 실습 파일
 - `coding-test/`: 백준, 프로그래머스, 코드트리 등 문제 풀이
 - `projects/`: 프로젝트 경험, 회고, 트러블슈팅
-- 각 영역의 `README.md`에서 목차와 진행 상황을 관리
+- note와 src는 대소문자를 포함해 slug가 정확히 같을 때만 연결
+- 각 source의 `README.md` 학습 기록은 til-studio와 GitHub Action이 관리
 
 ---
 
@@ -37,6 +40,12 @@ TIL/
 │   │   ├── README.md
 │   │   ├── theory/
 │   │   └── notes/
+│   │       └── [자료명]/
+│   │           ├── README.md
+│   │           ├── note/
+│   │           │   └── [slug].md
+│   │           └── src/
+│   │               └── [slug]/
 │   ├── databases/
 │   └── ...
 │
@@ -57,7 +66,10 @@ TIL/
 
 ## 정리 흐름
 
-1. 강의나 책을 공부할 때는 해당 주제의 `notes/[자료명]/` 아래에 기록합니다.
-2. 여러 기록을 다시 읽고 개념이 정리되면 `theory/`에 독립 문서로 옮깁니다.
-3. 문제 풀이는 주제 이론과 섞지 않고 `coding-test/`에 따로 관리합니다.
-4. 프로젝트에서 배운 내용은 `projects/`에 경험 중심으로 정리합니다.
+1. 강의나 책을 공부할 때는 `notes/[자료명]/note/[slug].md`에 기록합니다.
+2. 글과 연결되는 코드는 `notes/[자료명]/src/[slug]/`에 둡니다.
+3. note에는 `created: YYYY-MM-DD` frontmatter를 기록합니다.
+4. source README의 `til-studio:learning-log` marker 사이는 직접 수정하지 않습니다.
+5. 여러 기록을 다시 읽고 개념이 정리되면 `theory/`에 독립 문서로 옮깁니다.
+6. 문제 풀이는 주제 이론과 섞지 않고 `coding-test/`에 따로 관리합니다.
+7. 프로젝트에서 배운 내용은 `projects/`에 경험 중심으로 정리합니다.

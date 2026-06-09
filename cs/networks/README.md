@@ -29,4 +29,13 @@ networks/
 
 | 자료 | 링크 |
 | --- | --- |
-| TCP_IP(윤성우의 열혈) | [바로가기](./notes/TCP_IP(%EC%9C%A4%EC%84%B1%EC%9A%B0%EC%9D%98%20%EC%97%B4%ED%98%88)/) |
+| TCP_IP(윤성우의 열혈) | [바로가기](./notes/TCP_IP%28%EC%9C%A4%EC%84%B1%EC%9A%B0%EC%9D%98%20%EC%97%B4%ED%98%88%29/) |
+
+<!-- til-studio:index:start -->
+## Notes
+- [TCP_IP(윤성우의 열혈)](notes/TCP_IP%28%EC%9C%A4%EC%84%B1%EC%9A%B0%EC%9D%98%20%EC%97%B4%ED%98%88%29/)
+
+## Theory
+
+아직 등록된 theory가 없습니다.
+<!-- til-studio:index:end -->

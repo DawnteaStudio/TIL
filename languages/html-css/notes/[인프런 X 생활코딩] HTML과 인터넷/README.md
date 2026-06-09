@@ -1,4 +1,4 @@
-[⬅️ 상위 README로 이동](../README.md)
+[⬅️ 상위 README로 이동](../../README.md)
 # 📚 공부 기록 (Study Notes)
 
 ## 🏗 개요 (Overview)
@@ -24,14 +24,37 @@ HTML과 CSS의 기초 학습
 
 ---
 
-## 📆 학습 기록 (Learning Log)
-| 날짜 | 학습 내용 | 소스 코드 |
-|------|----------|----------|
-| 2025-03-10 | Section 1 HTML과 인터넷 | |
-| 2025-03-13 | Section 2 웹의 디자인과 상호작용 | |
-| 2025-03-13 | Section 3 CSS && JS | |
-
 ---
 
 ## 📌 참고 자료 (References)
 - [[인프런 X 생활코딩] HTML과 인터넷](https://www.inflearn.com/course/html%EA%B3%BC-%EC%9D%B8%ED%84%B0%EB%84%B7-%EC%83%9D%ED%99%9C%EC%BD%94%EB%94%A9/dashboard)
+
+## 디렉토리 구조
+
+```text
+[인프런 X 생활코딩] HTML과 인터넷/
+├── README.md
+├── note/    # 학습 기록 Markdown
+└── src/     # 실행 코드와 실습 파일
+```
+
+## 작성 원칙
+
+- 학습 기록은 `note/<slug>.md`에 작성한다.
+- 관련 코드는 `src/<slug>/`에 둔다.
+- note와 src는 대소문자를 포함해 slug가 정확히 같을 때만 연결한다.
+- 아래 학습 기록 marker 사이 내용은 자동 관리되므로 직접 수정하지 않는다.
+
+<!-- til-studio:learning-log:start -->
+## 학습 기록
+
+| 날짜 | 주제 | src | note |
+| --- | --- | --- | --- |
+| 2025-03-10 | 💻 HTML의 기본기 "태그" | - | [note](./note/ch1_html_basic.md) |
+| 2025-03-13 | 🌐 웹 소개 | - | [note](./note/ch2_web_intro.md) |
+| 2025-03-13 | 🖌️ CSS JS 소개 | - | [note](./note/ch3_css_js_intro.md) |
+
+## note 작성 대기
+
+- 없음
+<!-- til-studio:learning-log:end -->

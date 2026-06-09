@@ -1,9 +1,11 @@
+# etc
 
+[상위 topic으로 이동](../../README.md)
 
 ## 디렉토리 구조
 
 ```text
-TCP_IP(윤성우의 열혈)/
+etc/
 ├── README.md
 ├── note/    # 학습 기록 Markdown
 └── src/     # 실행 코드와 실습 파일
@@ -21,13 +23,9 @@ TCP_IP(윤성우의 열혈)/
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| - | 아직 작성된 note가 없습니다. | - | - |
+| 2026-06-05 | SOLID 원칙을 다시 정리하며: 헷갈렸던 OCP와 DIP까지 한 번에 묶어 이해한 기록 | - | [note](./note/solid-%EC%9B%90%EC%B9%99.md) |
 
 ## note 작성 대기
 
-- [ ] `ch1` ([src](./src/ch1/))
-- [ ] `ch2` ([src](./src/ch2/))
-- [ ] `ch3` ([src](./src/ch3/))
-- [ ] `ch4` ([src](./src/ch4/))
-- [ ] `ch5` ([src](./src/ch5/))
+- 없음
 <!-- til-studio:learning-log:end -->

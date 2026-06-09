@@ -30,3 +30,12 @@ cpp/
 | 자료 | 링크 |
 | --- | --- |
 | khu_OOP | [바로가기](./notes/khu_OOP/) |
+
+<!-- til-studio:index:start -->
+## Notes
+- [khu_OOP](notes/khu_OOP/)
+
+## Theory
+
+아직 등록된 theory가 없습니다.
+<!-- til-studio:index:end -->
