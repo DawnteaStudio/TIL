@@ -25,6 +25,6 @@ khu_OOP/
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| - | OOP_Assignments | [src](./src/OOP_Assignments/) | - |
-| - | OOP_Quiz | [src](./src/OOP_Quiz/) | - |
+| - | OOP_Assignments | [OOP_Assignments](./src/OOP_Assignments/) | - |
+| - | OOP_Quiz | [OOP_Quiz](./src/OOP_Quiz/) | - |
 <!-- til-studio:learning-log:end -->

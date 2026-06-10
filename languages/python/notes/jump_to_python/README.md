@@ -25,9 +25,9 @@ jump_to_python/
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| - | ch2 | [src](./src/ch2/) | - |
-| - | ch3 | [src](./src/ch3/) | - |
-| - | ch4 | [src](./src/ch4/) | - |
-| - | ch5 | [src](./src/ch5/) | - |
-| - | final 20 quiz | [src](./src/final%2020%20quiz/) | - |
+| - | ch2 | [ch2](./src/ch2/) | - |
+| - | ch3 | [ch3](./src/ch3/) | - |
+| - | ch4 | [ch4](./src/ch4/) | - |
+| - | ch5 | [ch5](./src/ch5/) | - |
+| - | final 20 quiz | [final 20 quiz](./src/final%2020%20quiz/) | - |
 <!-- til-studio:learning-log:end -->

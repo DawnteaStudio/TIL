@@ -50,7 +50,7 @@ HTML과 CSS의 기초 학습
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| 2025-03-10 | 💻 HTML의 기본기 "태그" | - | [note](./note/ch1_html_basic.md) |
-| 2025-03-13 | 🌐 웹 소개 | - | [note](./note/ch2_web_intro.md) |
-| 2025-03-13 | 🖌️ CSS JS 소개 | - | [note](./note/ch3_css_js_intro.md) |
+| 2025-03-10 | 💻 HTML의 기본기 "태그" | - | [ch1_html_basic.md](./note/ch1_html_basic.md) |
+| 2025-03-13 | 🌐 웹 소개 | - | [ch2_web_intro.md](./note/ch2_web_intro.md) |
+| 2025-03-13 | 🖌️ CSS JS 소개 | - | [ch3_css_js_intro.md](./note/ch3_css_js_intro.md) |
 <!-- til-studio:learning-log:end -->

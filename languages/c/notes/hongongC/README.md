@@ -42,14 +42,14 @@ hongongC/
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| 2023-07-30 | 📘 C 언어 입문: 기본 개념 정리 | [src](./src/ch2/) | [note](./note/ch2.md) |
-| 2023-11-28 | 📘 C 언어: 변수, 자료형, 입력 | [src](./src/ch3/) | [note](./note/ch3.md) |
-| 2024-03-08 | 📘 C 언어: 연산자 정리 | [src](./src/ch4/) | [note](./note/ch4.md) |
-| 2024-03-20 | 📘 C 언어: 조건문 정리 | [src](./src/ch5/) | [note](./note/ch5.md) |
-| 2024-03-20 | 📘 C 언어: 반복문과 제어문 정리 | [src](./src/ch6/) | [note](./note/ch6.md) |
-| 2024-03-22 | 📘 함수 (Functions) | [src](./src/ch7/) | [note](./note/ch7.md) |
-| 2024-03-24 | 📘 C 배열과 문자열 | [src](./src/ch8/) | [note](./note/ch8.md) |
-| 2024-03-27 | 📘 개념 정리 템플릿 - 포인터 | [src](./src/ch9/) | [note](./note/ch9.md) |
-| 2024-04-02 | 📘 배열과 포인터 | [src](./src/ch10/) | [note](./note/ch10.md) |
-| 2024-04-11 | 📘 개념 정리 템플릿 | [src](./src/ch11/) | [note](./note/ch11.md) |
+| 2023-07-30 | 📘 C 언어 입문: 기본 개념 정리 | [ch2](./src/ch2/) | [ch2.md](./note/ch2.md) |
+| 2023-11-28 | 📘 C 언어: 변수, 자료형, 입력 | [ch3](./src/ch3/) | [ch3.md](./note/ch3.md) |
+| 2024-03-08 | 📘 C 언어: 연산자 정리 | [ch4](./src/ch4/) | [ch4.md](./note/ch4.md) |
+| 2024-03-20 | 📘 C 언어: 조건문 정리 | [ch5](./src/ch5/) | [ch5.md](./note/ch5.md) |
+| 2024-03-20 | 📘 C 언어: 반복문과 제어문 정리 | [ch6](./src/ch6/) | [ch6.md](./note/ch6.md) |
+| 2024-03-22 | 📘 함수 (Functions) | [ch7](./src/ch7/) | [ch7.md](./note/ch7.md) |
+| 2024-03-24 | 📘 C 배열과 문자열 | [ch8](./src/ch8/) | [ch8.md](./note/ch8.md) |
+| 2024-03-27 | 📘 개념 정리 템플릿 - 포인터 | [ch9](./src/ch9/) | [ch9.md](./note/ch9.md) |
+| 2024-04-02 | 📘 배열과 포인터 | [ch10](./src/ch10/) | [ch10.md](./note/ch10.md) |
+| 2024-04-11 | 📘 개념 정리 템플릿 | [ch11](./src/ch11/) | [ch11.md](./note/ch11.md) |
 <!-- til-studio:learning-log:end -->
