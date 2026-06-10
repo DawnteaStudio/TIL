@@ -57,15 +57,15 @@ test("reconcileSourceReadme pairs exact note and src slugs", async () => {
   assert.match(readme, /## 작성 원칙/);
   assert.match(
     readme,
-    /\| 2026-06-10 \| 변수와 자료형 \| \[src\]\(\.\/src\/ch2\/\) \| \[note\]\(\.\/note\/ch2\.md\) \|/,
+    /\| 2026-06-10 \| 변수와 자료형 \| \[ch2\]\(\.\/src\/ch2\/\) \| \[ch2\.md\]\(\.\/note\/ch2\.md\) \|/,
   );
   assert.match(
     readme,
-    /\| 2026-06-11 \| 연산자 \| - \| \[note\]\(\.\/note\/ch3\.md\) \|/,
+    /\| 2026-06-11 \| 연산자 \| - \| \[ch3\.md\]\(\.\/note\/ch3\.md\) \|/,
   );
   assert.match(
     readme,
-    /\| - \| Ch3 \| \[src\]\(\.\/src\/Ch3\/\) \| - \|/,
+    /\| - \| Ch3 \| \[Ch3\]\(\.\/src\/Ch3\/\) \| - \|/,
   );
   assert.doesNotMatch(readme, /note 작성 대기/);
 });
@@ -84,7 +84,7 @@ test("reconcileSourceReadme creates a minimal README for src-first work", async 
   assert.match(readme, /\[상위 topic으로 이동\]\(\.\.\/\.\.\/README\.md\)/);
   assert.match(
     readme,
-    /\| - \| socket \| \[src\]\(\.\/src\/socket\/\) \| - \|/,
+    /\| - \| socket \| \[socket\]\(\.\/src\/socket\/\) \| - \|/,
   );
   assert.doesNotMatch(readme, /note 작성 대기/);
 });

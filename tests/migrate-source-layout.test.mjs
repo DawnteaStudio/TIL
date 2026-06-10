@@ -74,7 +74,8 @@ test("migrateRepository moves content and preserves README learning dates", asyn
   const note = await readFile(path.join(absoluteSource, "note", "ch2.md"), "utf8");
   const readme = await readFile(path.join(absoluteSource, "README.md"), "utf8");
   assert.match(note, /^---\ncreated: 2023-07-30\n---/);
-  assert.match(readme, /\[src\]\(\.\/src\/ch2\/\)/);
+  assert.match(readme, /\[ch2\]\(\.\/src\/ch2\/\)/);
+  assert.match(readme, /\[ch2\.md\]\(\.\/note\/ch2\.md\)/);
   assert.doesNotMatch(readme, /\.\/code\//);
   assert.equal(readme.match(/## 학습 기록/g)?.length, 1);
 });

@@ -107,14 +107,15 @@ function buildManagedBlock(notes, srcSlugs) {
   const noteSlugs = new Set(notes.map((note) => note.slug));
   const rows = notes.map((note) => {
     const src = srcSlugs.includes(note.slug)
-      ? `[src](${encodeMarkdownPath(`./src/${note.slug}/`)})`
+      ? `[${escapeLinkLabel(note.slug)}](${encodeMarkdownPath(`./src/${note.slug}/`)})`
       : "-";
-    return `| ${note.created} | ${escapeTable(note.title)} | ${src} | [note](${encodeMarkdownPath(`./note/${note.slug}.md`)}) |`;
+    const noteFilename = `${note.slug}.md`;
+    return `| ${note.created} | ${escapeTable(note.title)} | ${src} | [${escapeLinkLabel(noteFilename)}](${encodeMarkdownPath(`./note/${noteFilename}`)}) |`;
   });
 
   for (const slug of srcSlugs.filter((slug) => !noteSlugs.has(slug))) {
     rows.push(
-      `| - | ${escapeTable(readableSlug(slug))} | [src](${encodeMarkdownPath(`./src/${slug}/`)}) | - |`,
+      `| - | ${escapeTable(readableSlug(slug))} | [${escapeLinkLabel(slug)}](${encodeMarkdownPath(`./src/${slug}/`)}) | - |`,
     );
   }
 
@@ -193,6 +194,10 @@ ${sourceName}/
 
 function escapeTable(value) {
   return value.replaceAll("|", "\\|").replace(/\r?\n/g, " ");
+}
+
+function escapeLinkLabel(value) {
+  return escapeTable(value).replaceAll("[", "\\[").replaceAll("]", "\\]");
 }
 
 function readableSlug(slug) {
