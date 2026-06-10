@@ -52,8 +52,4 @@ hongongC/
 | 2024-03-27 | 📘 개념 정리 템플릿 - 포인터 | [src](./src/ch9/) | [note](./note/ch9.md) |
 | 2024-04-02 | 📘 배열과 포인터 | [src](./src/ch10/) | [note](./note/ch10.md) |
 | 2024-04-11 | 📘 개념 정리 템플릿 | [src](./src/ch11/) | [note](./note/ch11.md) |
-
-## note 작성 대기
-
-- 없음
 <!-- til-studio:learning-log:end -->

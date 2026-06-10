@@ -15,22 +15,6 @@ networks/
 └── notes/     # 강의/책/학습 중 작성한 기록
 ```
 
----
-
-## Theory
-
-| 문서 | 링크 |
-| --- | --- |
-| 아직 정리된 문서가 없습니다. | - |
-
----
-
-## Notes
-
-| 자료 | 링크 |
-| --- | --- |
-| TCP_IP(윤성우의 열혈) | [바로가기](./notes/TCP_IP%28%EC%9C%A4%EC%84%B1%EC%9A%B0%EC%9D%98%20%EC%97%B4%ED%98%88%29/) |
-
 <!-- til-studio:index:start -->
 ## Notes
 - [TCP_IP(윤성우의 열혈)](notes/TCP_IP%28%EC%9C%A4%EC%84%B1%EC%9A%B0%EC%9D%98%20%EC%97%B4%ED%98%88%29/)

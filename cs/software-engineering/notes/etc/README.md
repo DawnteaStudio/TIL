@@ -24,8 +24,4 @@ etc/
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
 | 2026-06-05 | SOLID 원칙을 다시 정리하며: 헷갈렸던 OCP와 DIP까지 한 번에 묶어 이해한 기록 | - | [note](./note/solid-%EC%9B%90%EC%B9%99.md) |
-
-## note 작성 대기
-
-- 없음
 <!-- til-studio:learning-log:end -->

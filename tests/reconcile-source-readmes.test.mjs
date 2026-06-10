@@ -63,7 +63,11 @@ test("reconcileSourceReadme pairs exact note and src slugs", async () => {
     readme,
     /\| 2026-06-11 \| 연산자 \| - \| \[note\]\(\.\/note\/ch3\.md\) \|/,
   );
-  assert.match(readme, /- \[ \] `Ch3` \(\[src\]\(\.\/src\/Ch3\/\)\)/);
+  assert.match(
+    readme,
+    /\| - \| Ch3 \| \[src\]\(\.\/src\/Ch3\/\) \| - \|/,
+  );
+  assert.doesNotMatch(readme, /note 작성 대기/);
 });
 
 test("reconcileSourceReadme creates a minimal README for src-first work", async () => {
@@ -78,7 +82,11 @@ test("reconcileSourceReadme creates a minimal README for src-first work", async 
   const readme = await readFile(path.join(absoluteSource, "README.md"), "utf8");
   assert.match(readme, /^# tcp-ip/m);
   assert.match(readme, /\[상위 topic으로 이동\]\(\.\.\/\.\.\/README\.md\)/);
-  assert.match(readme, /- \[ \] `socket` \(\[src\]\(\.\/src\/socket\/\)\)/);
+  assert.match(
+    readme,
+    /\| - \| socket \| \[src\]\(\.\/src\/socket\/\) \| - \|/,
+  );
+  assert.doesNotMatch(readme, /note 작성 대기/);
 });
 
 test("reconcileSourceReadme replaces an empty README with source guidance", async () => {

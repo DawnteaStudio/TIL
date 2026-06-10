@@ -25,10 +25,6 @@ khu_OOP/
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| - | 아직 작성된 note가 없습니다. | - | - |
-
-## note 작성 대기
-
-- [ ] `OOP_Assignments` ([src](./src/OOP_Assignments/))
-- [ ] `OOP_Quiz` ([src](./src/OOP_Quiz/))
+| - | OOP_Assignments | [src](./src/OOP_Assignments/) | - |
+| - | OOP_Quiz | [src](./src/OOP_Quiz/) | - |
 <!-- til-studio:learning-log:end -->

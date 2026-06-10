@@ -15,23 +15,6 @@ algorithms/
 └── notes/     # 강의/책/학습 중 작성한 기록
 ```
 
----
-
-## Theory
-
-| 문서 | 링크 |
-| --- | --- |
-| KMP | [바로가기](./theory/kmp.md) |
-| union-find | [바로가기](./theory/union-find.md) |
-
----
-
-## Notes
-
-| 자료 | 링크 |
-| --- | --- |
-| APSS | [바로가기](./notes/APSS/) |
-
 <!-- til-studio:index:start -->
 ## Notes
 - [APSS](notes/APSS/)
