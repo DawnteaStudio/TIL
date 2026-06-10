@@ -15,22 +15,6 @@ cpp/
 └── notes/     # 강의/책/학습 중 작성한 기록
 ```
 
----
-
-## Theory
-
-| 문서 | 링크 |
-| --- | --- |
-| 아직 정리된 문서가 없습니다. | - |
-
----
-
-## Notes
-
-| 자료 | 링크 |
-| --- | --- |
-| khu_OOP | [바로가기](./notes/khu_OOP/) |
-
 <!-- til-studio:index:start -->
 ## Notes
 - [khu_OOP](notes/khu_OOP/)

@@ -97,6 +97,101 @@ test("migrateRepository encodes parentheses in topic source links", async () => 
   );
 });
 
+test("migrateRepository removes legacy topic indexes before writing the managed index", async () => {
+  const root = await fixture();
+  const topicRoot = "cs/algorithms";
+  await mkdir(path.join(root, topicRoot, "notes", "APSS"), {
+    recursive: true,
+  });
+  await mkdir(path.join(root, topicRoot, "theory"), {
+    recursive: true,
+  });
+  await writeFile(
+    path.join(root, topicRoot, "theory", "kmp.md"),
+    "# KMP\n",
+  );
+  await writeFile(
+    path.join(root, topicRoot, "README.md"),
+    [
+      "# Algorithms",
+      "",
+      "## 구조",
+      "",
+      "설명",
+      "",
+      "---",
+      "",
+      "## Theory",
+      "",
+      "| 문서 | 링크 |",
+      "| --- | --- |",
+      "| KMP | [바로가기](./theory/kmp.md) |",
+      "",
+      "---",
+      "",
+      "## Notes",
+      "",
+      "| 자료 | 링크 |",
+      "| --- | --- |",
+      "| APSS | [바로가기](./notes/APSS/) |",
+      "",
+      "<!-- til-studio:index:start -->",
+      "## Notes",
+      "- [APSS](notes/APSS/)",
+      "",
+      "## Theory",
+      "- [kmp](theory/kmp.md)",
+      "<!-- til-studio:index:end -->",
+      "",
+    ].join("\n"),
+  );
+
+  await migrateRepository(root);
+
+  const readme = await readFile(path.join(root, topicRoot, "README.md"), "utf8");
+  assert.equal(readme.match(/^## Notes$/gm)?.length, 1);
+  assert.equal(readme.match(/^## Theory$/gm)?.length, 1);
+  assert.doesNotMatch(readme, /\| 자료 \| 링크 \|/);
+  assert.doesNotMatch(readme, /\| 문서 \| 링크 \|/);
+  assert.match(readme, /- \[APSS\]\(notes\/APSS\/\)/);
+  assert.match(readme, /- \[kmp\]\(theory\/kmp\.md\)/);
+});
+
+test("migrateRepository normalizes a topic even when it has no source directories", async () => {
+  const root = await fixture();
+  const topicRoot = "cs/security";
+  await mkdir(path.join(root, topicRoot), {
+    recursive: true,
+  });
+  await writeFile(
+    path.join(root, topicRoot, "README.md"),
+    [
+      "# Security",
+      "",
+      "## Theory",
+      "",
+      "| 문서 | 링크 |",
+      "| --- | --- |",
+      "| 아직 기록된 문서가 없습니다. | - |",
+      "",
+      "## Notes",
+      "",
+      "| 자료 | 링크 |",
+      "| --- | --- |",
+      "| 아직 기록된 자료가 없습니다. | - |",
+      "",
+    ].join("\n"),
+  );
+
+  await migrateRepository(root);
+
+  const readme = await readFile(path.join(root, topicRoot, "README.md"), "utf8");
+  assert.equal(readme.match(/^## Notes$/gm)?.length, 1);
+  assert.equal(readme.match(/^## Theory$/gm)?.length, 1);
+  assert.match(readme, /<!-- til-studio:index:start -->/);
+  assert.doesNotMatch(readme, /\| 자료 \| 링크 \|/);
+});
+
 test("planSourceMigration rejects destination collisions", async () => {
   const root = await fixture();
   const sourceRoot = "cs/networks/notes/tcp";

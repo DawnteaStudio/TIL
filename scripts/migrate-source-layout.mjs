@@ -86,7 +86,7 @@ export async function migrateRepository(repositoryRoot, options = {}) {
     await reconcileSourceReadme(repositoryRoot, plan.sourceRoot);
   }
 
-  for (const topicRoot of topicRootsFromSources(sourceRoots)) {
+  for (const topicRoot of await discoverTopicRoots(repositoryRoot)) {
     await reconcileTopicReadme(repositoryRoot, topicRoot);
   }
 
@@ -235,22 +235,52 @@ async function addCreatedFrontmatter(repositoryRoot, sourceRoot, dates) {
   }
 }
 
-function topicRootsFromSources(sourceRoots) {
-  return [
-    ...new Set(
-      sourceRoots.map((sourceRoot) => {
-        const segments = sourceRoot.split("/");
-        return segments.slice(0, segments.indexOf("notes")).join("/");
-      }),
-    ),
-  ].sort((left, right) => left.localeCompare(right));
+async function discoverTopicRoots(repositoryRoot) {
+  const roots = [];
+
+  async function walk(relativeDirectory) {
+    const absoluteDirectory = path.join(repositoryRoot, relativeDirectory);
+    const entries = await readdir(absoluteDirectory, { withFileTypes: true });
+    const directoryNames = new Set(
+      entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name),
+    );
+    const hasReadme = entries.some(
+      (entry) => entry.isFile() && entry.name === "README.md",
+    );
+    const readmeContent = hasReadme
+      ? await readFile(path.join(absoluteDirectory, "README.md"), "utf8")
+      : "";
+    const hasTopicIndex =
+      readmeContent.includes(INDEX_START) ||
+      (readmeContent.includes("## Notes") &&
+        readmeContent.includes("## Theory"));
+
+    if (
+      hasReadme &&
+      (directoryNames.has("notes") ||
+        directoryNames.has("theory") ||
+        hasTopicIndex)
+    ) {
+      roots.push(relativeDirectory);
+      return;
+    }
+
+    for (const entry of entries) {
+      if (!entry.isDirectory() || entry.name === ".git") continue;
+      await walk(path.posix.join(relativeDirectory, entry.name));
+    }
+  }
+
+  await walk("");
+  return roots.sort((left, right) => left.localeCompare(right));
 }
 
 async function reconcileTopicReadme(repositoryRoot, topicRoot) {
   const readmePath = path.join(repositoryRoot, topicRoot, "README.md");
-  const existing = existsSync(readmePath)
+  const original = existsSync(readmePath)
     ? await readFile(readmePath, "utf8")
     : `# ${path.posix.basename(topicRoot)}\n`;
+  const existing = removeLegacyTopicIndexes(original);
   const sourceDirectory = path.join(repositoryRoot, topicRoot, "notes");
   const theoryDirectory = path.join(repositoryRoot, topicRoot, "theory");
   const sources = existsSync(sourceDirectory)
@@ -295,7 +325,18 @@ async function reconcileTopicReadme(repositoryRoot, topicRoot) {
   const next = markerPattern.test(existing)
     ? `${existing.replace(markerPattern, block).trimEnd()}\n`
     : `${existing.trimEnd()}\n\n${block}\n`;
-  if (next !== existing) await writeFile(readmePath, next);
+  if (next !== original) await writeFile(readmePath, next);
+}
+
+function removeLegacyTopicIndexes(content) {
+  const markerIndex = content.indexOf(INDEX_START);
+  const prefix = markerIndex === -1 ? content : content.slice(0, markerIndex);
+  const suffix = markerIndex === -1 ? "" : content.slice(markerIndex);
+  const cleanedPrefix = prefix.replace(
+    /(?:\n---\n)?\n## (?:Theory|Notes)\n\n\| (?:문서|자료) \| 링크 \|\n\| --- \| --- \|\n(?:\|[^\n]*\|\n?)*/g,
+    "",
+  );
+  return `${cleanedPrefix.trimEnd()}${suffix ? `\n\n${suffix.trimStart()}` : "\n"}`;
 }
 
 function stripControlCharacters(value) {
