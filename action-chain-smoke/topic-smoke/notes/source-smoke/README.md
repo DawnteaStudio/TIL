@@ -57,7 +57,7 @@ source-smoke/
 <!-- til-studio:learning-log:start -->
 ## 학습 기록
 
-| 날짜 | 주제 | src | note |
+| 날짜 | 학습 내용 | 소스 코드 | 노트 |
 | --- | --- | --- | --- |
-| 2026-06-11 | Nested README cascade smoke test | - | [note-smoke.md](./note/note-smoke.md) |
+| - | 아직 작성된 학습 기록이 없습니다. | - | - |
 <!-- til-studio:learning-log:end -->
