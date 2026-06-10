@@ -38,18 +38,30 @@ jobs:
             git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt"
           fi
 
-      - name: Reconcile source READMEs
-        run: node scripts/reconcile-source-readmes.mjs --changed-paths-file "$RUNNER_TEMP/changed-paths.txt"
-
       - name: Commit README updates
         run: |
-          if git diff --quiet; then
-            echo "No README changes."
-            exit 0
-          fi
-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "**/notes/*/README.md"
-          git commit -m "docs: reconcile source learning logs [skip ci]"
-          git push
+
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            node scripts/reconcile-source-readmes.mjs --changed-paths-file "$RUNNER_TEMP/changed-paths.txt"
+
+            if git diff --quiet; then
+              echo "No README changes."
+              exit 0
+            fi
+
+            git add "**/notes/*/README.md"
+            git commit -m "docs: reconcile source learning logs [skip ci]"
+
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+
+            echo "Push attempt $attempt failed because main advanced."
+          done
+
+          echo "Failed to publish reconciled READMEs after 3 attempts."
+          exit 1
