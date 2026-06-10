@@ -105,36 +105,29 @@ function frontmatterValue(content, key) {
 
 function buildManagedBlock(notes, srcSlugs) {
   const noteSlugs = new Set(notes.map((note) => note.slug));
-  const rows = notes.length
-    ? notes
-        .map((note) => {
-          const src = srcSlugs.includes(note.slug)
-            ? `[src](${encodeMarkdownPath(`./src/${note.slug}/`)})`
-            : "-";
-          return `| ${note.created} | ${escapeTable(note.title)} | ${src} | [note](${encodeMarkdownPath(`./note/${note.slug}.md`)}) |`;
-        })
-        .join("\n")
-    : "| - | 아직 작성된 note가 없습니다. | - | - |";
-  const pending = srcSlugs.filter((slug) => !noteSlugs.has(slug));
-  const pendingSection = pending.length
-    ? pending
-        .map(
-          (slug) =>
-            `- [ ] \`${slug}\` ([src](${encodeMarkdownPath(`./src/${slug}/`)}))`,
-        )
-        .join("\n")
-    : "- 없음";
+  const rows = notes.map((note) => {
+    const src = srcSlugs.includes(note.slug)
+      ? `[src](${encodeMarkdownPath(`./src/${note.slug}/`)})`
+      : "-";
+    return `| ${note.created} | ${escapeTable(note.title)} | ${src} | [note](${encodeMarkdownPath(`./note/${note.slug}.md`)}) |`;
+  });
+
+  for (const slug of srcSlugs.filter((slug) => !noteSlugs.has(slug))) {
+    rows.push(
+      `| - | ${escapeTable(readableSlug(slug))} | [src](${encodeMarkdownPath(`./src/${slug}/`)}) | - |`,
+    );
+  }
+
+  if (!rows.length) {
+    rows.push("| - | 아직 작성된 학습 기록이 없습니다. | - | - |");
+  }
 
   return `${START_MARKER}
 ## 학습 기록
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-${rows}
-
-## note 작성 대기
-
-${pendingSection}
+${rows.join("\n")}
 ${END_MARKER}`;
 }
 
@@ -200,6 +193,10 @@ ${sourceName}/
 
 function escapeTable(value) {
   return value.replaceAll("|", "\\|").replace(/\r?\n/g, " ");
+}
+
+function readableSlug(slug) {
+  return slug.replaceAll("-", " ");
 }
 
 function encodeMarkdownPath(value) {

@@ -21,13 +21,9 @@ TCP_IP(윤성우의 열혈)/
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| - | 아직 작성된 note가 없습니다. | - | - |
-
-## note 작성 대기
-
-- [ ] `ch1` ([src](./src/ch1/))
-- [ ] `ch2` ([src](./src/ch2/))
-- [ ] `ch3` ([src](./src/ch3/))
-- [ ] `ch4` ([src](./src/ch4/))
-- [ ] `ch5` ([src](./src/ch5/))
+| - | ch1 | [src](./src/ch1/) | - |
+| - | ch2 | [src](./src/ch2/) | - |
+| - | ch3 | [src](./src/ch3/) | - |
+| - | ch4 | [src](./src/ch4/) | - |
+| - | ch5 | [src](./src/ch5/) | - |
 <!-- til-studio:learning-log:end -->

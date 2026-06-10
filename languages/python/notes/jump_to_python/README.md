@@ -25,13 +25,9 @@ jump_to_python/
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| - | 아직 작성된 note가 없습니다. | - | - |
-
-## note 작성 대기
-
-- [ ] `ch2` ([src](./src/ch2/))
-- [ ] `ch3` ([src](./src/ch3/))
-- [ ] `ch4` ([src](./src/ch4/))
-- [ ] `ch5` ([src](./src/ch5/))
-- [ ] `final 20 quiz` ([src](./src/final%2020%20quiz/))
+| - | ch2 | [src](./src/ch2/) | - |
+| - | ch3 | [src](./src/ch3/) | - |
+| - | ch4 | [src](./src/ch4/) | - |
+| - | ch5 | [src](./src/ch5/) | - |
+| - | final 20 quiz | [src](./src/final%2020%20quiz/) | - |
 <!-- til-studio:learning-log:end -->
