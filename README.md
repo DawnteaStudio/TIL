@@ -73,3 +73,13 @@ TIL/
 5. 여러 기록을 다시 읽고 개념이 정리되면 `theory/`에 독립 문서로 옮깁니다.
 6. 문제 풀이는 주제 이론과 섞지 않고 `coding-test/`에 따로 관리합니다.
 7. 프로젝트에서 배운 내용은 `projects/`에 경험 중심으로 정리합니다.
+
+<!-- til-studio:children:start -->
+## 하위 항목
+
+- [action-chain-smoke](action-chain-smoke/)
+- [coding-test](coding-test/)
+- [cs](cs/)
+- [languages](languages/)
+- [projects](projects/)
+<!-- til-studio:children:end -->
