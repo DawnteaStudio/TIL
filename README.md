@@ -77,7 +77,6 @@ TIL/
 <!-- til-studio:children:start -->
 ## 하위 항목
 
-- [action-chain-smoke](action-chain-smoke/)
 - [coding-test](coding-test/)
 - [cs](cs/)
 - [languages](languages/)
