@@ -38,11 +38,7 @@ export async function reconcileSourceReadme(repositoryRoot, sourceRoot) {
   const existing = current.trim()
     ? current
     : buildMinimalReadme(path.posix.basename(sourceRoot));
-  const guided = ensureSourceGuidance(
-    existing,
-    path.posix.basename(sourceRoot),
-  );
-  const next = upsertManagedBlock(guided, buildManagedBlock(notes, srcSlugs));
+  const next = upsertManagedBlock(existing, buildManagedBlock(notes, srcSlugs));
 
   if (next === existing) return false;
   await mkdir(absoluteSource, { recursive: true });
@@ -155,23 +151,6 @@ function buildMinimalReadme(sourceName) {
 
 ${sourceGuidance(sourceName)}
 `;
-}
-
-function ensureSourceGuidance(content, sourceName) {
-  if (
-    content.includes("## 디렉토리 구조") &&
-    content.includes("## 작성 원칙")
-  ) {
-    return content;
-  }
-
-  const guidance = sourceGuidance(sourceName);
-  const markerIndex = content.indexOf(START_MARKER);
-  if (markerIndex === -1) {
-    return `${content.trimEnd()}\n\n${guidance}\n`;
-  }
-
-  return `${content.slice(0, markerIndex).trimEnd()}\n\n${guidance}\n\n${content.slice(markerIndex)}`;
 }
 
 function sourceGuidance(sourceName) {

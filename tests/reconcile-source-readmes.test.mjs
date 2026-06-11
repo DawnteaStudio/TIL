@@ -53,8 +53,8 @@ test("reconcileSourceReadme pairs exact note and src slugs", async () => {
 
   const readme = await readFile(path.join(absoluteSource, "README.md"), "utf8");
   assert.match(readme, /직접 작성한 소개다\./);
-  assert.match(readme, /## 디렉토리 구조/);
-  assert.match(readme, /## 작성 원칙/);
+  assert.doesNotMatch(readme, /## 디렉토리 구조/);
+  assert.doesNotMatch(readme, /## 작성 원칙/);
   assert.match(
     readme,
     /\| 2026-06-10 \| 변수와 자료형 \| \[ch2\]\(\.\/src\/ch2\/\) \| \[ch2\.md\]\(\.\/note\/ch2\.md\) \|/,
@@ -134,3 +134,98 @@ test("reconcileSourceReadme rejects malformed managed markers", async () => {
     /managed learning-log markers are malformed/,
   );
 });
+
+test("reconcileSourceReadme updates only the learning log in a Studio-formatted README", async () => {
+  const root = await fixture();
+  const sourceRoot = "languages/java/notes/java-intro";
+  const absoluteSource = path.join(root, sourceRoot);
+  await mkdir(path.join(absoluteSource, "note"), { recursive: true });
+  await writeFile(
+    path.join(absoluteSource, "note", "variables.md"),
+    "---\ncreated: 2026-06-11\n---\n\n# 변수와 타입\n",
+  );
+  await writeFile(
+    path.join(absoluteSource, "README.md"),
+    studioReadme("java-intro", "| - | 이전 기록 | - | - |"),
+  );
+
+  await reconcileSourceReadme(root, sourceRoot);
+
+  const readme = await readFile(path.join(absoluteSource, "README.md"), "utf8");
+  assert.equal((readme.match(/## 디렉터리 구조/g) ?? []).length, 1);
+  assert.equal((readme.match(/## 디렉토리 구조/g) ?? []).length, 0);
+  assert.equal((readme.match(/## 작성 원칙/g) ?? []).length, 1);
+  assert.match(
+    readme,
+    /\| 2026-06-11 \| 변수와 타입 \| - \| \[variables\.md\]\(\.\/note\/variables\.md\) \|/,
+  );
+});
+
+test("reconcileSourceReadme is a no-op when a Studio learning log is current", async () => {
+  const root = await fixture();
+  const sourceRoot = "languages/java/notes/java-intro";
+  const absoluteSource = path.join(root, sourceRoot);
+  await mkdir(path.join(absoluteSource, "note"), { recursive: true });
+  await writeFile(
+    path.join(absoluteSource, "note", "variables.md"),
+    "---\ncreated: 2026-06-11\n---\n\n# 변수와 타입\n",
+  );
+  await writeFile(
+    path.join(absoluteSource, "README.md"),
+    studioReadme(
+      "java-intro",
+      "| 2026-06-11 | 변수와 타입 | - | [variables.md](./note/variables.md) |",
+    ),
+  );
+
+  assert.equal(await reconcileSourceReadme(root, sourceRoot), false);
+});
+
+function studioReadme(sourceName, learningRow) {
+  return `[상위 README로 이동](../../README.md)
+
+# Java Intro
+
+유형: 강의
+
+## 개요
+
+Java 학습 내용을 정리합니다.
+
+## 디렉터리 구조
+
+\`\`\`text
+
+${sourceName}/
+
+├── README.md
+
+├── note/    # 학습 기록 Markdown
+
+└── src/     # note와 같은 slug를 사용하는 실습 코드
+
+\`\`\`
+
+## 작성 원칙
+
+- 같은 학습 단위는 하나의 slug를 사용합니다.
+
+- 학습 기록은 \`note/<slug>.md\`에 작성합니다.
+
+- 관련 실습 코드는 \`src/<slug>/\` 아래에 둡니다.
+
+- note와 src는 어느 한쪽만 먼저 존재해도 됩니다.
+
+- 학습 기록 관리 블록은 자동 생성되므로 직접 수정하지 않습니다.
+
+---
+
+<!-- til-studio:learning-log:start -->
+## 학습 기록
+
+| 날짜 | 주제 | src | note |
+| --- | --- | --- | --- |
+${learningRow}
+<!-- til-studio:learning-log:end -->
+`;
+}
