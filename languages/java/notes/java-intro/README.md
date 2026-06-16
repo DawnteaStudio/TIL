@@ -67,5 +67,10 @@ java-intro/
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| - | 아직 작성된 학습 기록이 없습니다. | - | - |
+| - | ch1 | [ch1](./src/ch1/) | - |
+| - | ch2 | [ch2](./src/ch2/) | - |
+| - | ch3 | [ch3](./src/ch3/) | - |
+| - | ch4 | [ch4](./src/ch4/) | - |
+| - | ch7 | [ch7](./src/ch7/) | - |
+| - | ch8 | [ch8](./src/ch8/) | - |
 <!-- til-studio:learning-log:end -->
