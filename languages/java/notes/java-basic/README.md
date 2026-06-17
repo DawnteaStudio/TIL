@@ -67,5 +67,5 @@ java-basic/
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| - | 아직 작성된 학습 기록이 없습니다. | - | - |
+| - | ch1 | [ch1](./src/ch1/) | - |
 <!-- til-studio:learning-log:end -->
