@@ -59,6 +59,7 @@ async function readNotes(noteDirectory) {
       slug,
       title: firstHeading(content) || slug,
       created: frontmatterValue(content, "created") || "-",
+      srcSlugs: frontmatterSourceSlugs(content),
     });
   }
 
@@ -100,16 +101,29 @@ function frontmatterValue(content, key) {
 }
 
 function buildManagedBlock(notes, srcSlugs) {
-  const noteSlugs = new Set(notes.map((note) => note.slug));
+  const sourceSet = new Set(srcSlugs);
+  const linkedSourceSlugs = new Set();
   const rows = notes.map((note) => {
-    const src = srcSlugs.includes(note.slug)
-      ? `[${escapeLinkLabel(note.slug)}](${encodeMarkdownPath(`./src/${note.slug}/`)})`
+    const explicitSlugs = note.srcSlugs.filter((slug) => sourceSet.has(slug));
+    const linkedSlugs = explicitSlugs.length
+      ? explicitSlugs
+      : sourceSet.has(note.slug)
+        ? [note.slug]
+        : [];
+    for (const slug of linkedSlugs) linkedSourceSlugs.add(slug);
+    const src = linkedSlugs.length
+      ? linkedSlugs
+          .map(
+            (slug) =>
+              `[${escapeLinkLabel(slug)}](${encodeMarkdownPath(`./src/${slug}/`)})`,
+          )
+          .join(", ")
       : "-";
     const noteFilename = `${note.slug}.md`;
     return `| ${note.created} | ${escapeTable(note.title)} | ${src} | [${escapeLinkLabel(noteFilename)}](${encodeMarkdownPath(`./note/${noteFilename}`)}) |`;
   });
 
-  for (const slug of srcSlugs.filter((slug) => !noteSlugs.has(slug))) {
+  for (const slug of srcSlugs.filter((slug) => !linkedSourceSlugs.has(slug))) {
     rows.push(
       `| - | ${escapeTable(readableSlug(slug))} | [${escapeLinkLabel(slug)}](${encodeMarkdownPath(`./src/${slug}/`)}) | - |`,
     );
@@ -126,6 +140,49 @@ function buildManagedBlock(notes, srcSlugs) {
 | --- | --- | --- | --- |
 ${rows.join("\n")}
 ${END_MARKER}`;
+}
+
+function frontmatterSourceSlugs(content) {
+  const frontmatter = content.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1];
+  if (!frontmatter) return [];
+
+  const lines = frontmatter.split(/\r?\n/);
+  const slugs = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const inline = lines[index].match(/^src:\s*(.+?)\s*$/);
+    if (inline) {
+      slugs.push(...inlineSourceSlugs(inline[1]));
+      continue;
+    }
+
+    if (!/^src:\s*$/.test(lines[index])) continue;
+    for (let cursor = index + 1; cursor < lines.length; cursor += 1) {
+      const item = lines[cursor].match(/^\s*-\s*(.+?)\s*$/);
+      if (!item) break;
+      slugs.push(cleanSourceSlug(item[1]));
+      index = cursor;
+    }
+  }
+
+  return [...new Set(slugs.filter(Boolean))];
+}
+
+function inlineSourceSlugs(value) {
+  const trimmed = value.trim();
+  if (!trimmed) return [];
+  if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+    return trimmed
+      .slice(1, -1)
+      .split(",")
+      .map(cleanSourceSlug)
+      .filter(Boolean);
+  }
+  return [cleanSourceSlug(trimmed)].filter(Boolean);
+}
+
+function cleanSourceSlug(value) {
+  return value.trim().replace(/^["']|["']$/g, "");
 }
 
 function upsertManagedBlock(existing, managedBlock) {
@@ -167,7 +224,9 @@ ${sourceName}/
 
 - 학습 기록은 \`note/<slug>.md\`에 작성한다.
 - 관련 코드는 \`src/<slug>/\`에 둔다.
-- note와 src는 대소문자를 포함해 slug가 정확히 같을 때만 연결한다.
+- note와 src는 기본적으로 slug가 같으면 연결한다.
+- note slug와 src 폴더명이 다르면 note frontmatter의 \`src\` 목록으로 연결한다.
+- 예: \`src: [ch1, ch2]\`는 해당 note를 \`src/ch1/\`, \`src/ch2/\`와 연결한다.
 - 아래 학습 기록 marker 사이 내용은 자동 관리되므로 직접 수정하지 않는다.`;
 }
 

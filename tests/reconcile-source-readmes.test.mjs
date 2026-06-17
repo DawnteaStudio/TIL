@@ -70,6 +70,34 @@ test("reconcileSourceReadme pairs exact note and src slugs", async () => {
   assert.doesNotMatch(readme, /note 작성 대기/);
 });
 
+test("reconcileSourceReadme links notes to explicit source frontmatter", async () => {
+  const root = await fixture();
+  const sourceRoot = "languages/java/notes/java-basic";
+  const absoluteSource = path.join(root, sourceRoot);
+  await mkdir(path.join(absoluteSource, "note"), { recursive: true });
+  await mkdir(path.join(absoluteSource, "src", "ch1"), { recursive: true });
+  await mkdir(path.join(absoluteSource, "src", "ch2"), { recursive: true });
+  await mkdir(path.join(absoluteSource, "src", "ch3"), { recursive: true });
+  await writeFile(
+    path.join(absoluteSource, "note", "class-loading.md"),
+    "---\ncreated: 2026-06-17\nsrc:\n  - ch1\n  - ch2\n---\n\n# 클래스 로딩\n",
+  );
+  await writeFile(path.join(absoluteSource, "src", "ch1", "Main.java"), "class Main {}\n");
+  await writeFile(path.join(absoluteSource, "src", "ch2", "Main.java"), "class Main {}\n");
+  await writeFile(path.join(absoluteSource, "src", "ch3", "Main.java"), "class Main {}\n");
+
+  await reconcileSourceReadme(root, sourceRoot);
+
+  const readme = await readFile(path.join(absoluteSource, "README.md"), "utf8");
+  assert.match(
+    readme,
+    /\| 2026-06-17 \| 클래스 로딩 \| \[ch1\]\(\.\/src\/ch1\/\), \[ch2\]\(\.\/src\/ch2\/\) \| \[class-loading\.md\]\(\.\/note\/class-loading\.md\) \|/,
+  );
+  assert.match(readme, /\| - \| ch3 \| \[ch3\]\(\.\/src\/ch3\/\) \| - \|/);
+  assert.doesNotMatch(readme, /\| - \| ch1 \|/);
+  assert.doesNotMatch(readme, /\| - \| ch2 \|/);
+});
+
 test("reconcileSourceReadme creates a minimal README for src-first work", async () => {
   const root = await fixture();
   const sourceRoot = "cs/networks/notes/tcp-ip";
