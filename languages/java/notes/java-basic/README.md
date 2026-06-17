@@ -67,5 +67,6 @@ java-basic/
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
+| 2026-06-17 | Java 클래스와 데이터: 객체, 인스턴스, 그리고 접근 제어자 파헤치기 | - | [ch1-클래스와-데이터.md](./note/ch1-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0.md) |
 | - | ch1 | [ch1](./src/ch1/) | - |
 <!-- til-studio:learning-log:end -->
