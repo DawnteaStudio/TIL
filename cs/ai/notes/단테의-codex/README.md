@@ -47,5 +47,5 @@
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| - | 아직 작성된 학습 기록이 없습니다. | - | - |
+| 2026-07-07 | Codex 기본기: 필수 명령어와 세션 관리 | - | [codex-기본기.md](./note/codex-%EA%B8%B0%EB%B3%B8%EA%B8%B0.md) |
 <!-- til-studio:learning-log:end -->
