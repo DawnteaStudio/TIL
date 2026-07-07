@@ -11,29 +11,21 @@ test
 ## 디렉터리 구조
 
 ```text
-
 java-basic/
-
 ├── README.md
-
 ├── note/    # 학습 기록 Markdown
-
 └── src/     # note와 같은 slug를 사용하는 실습 코드
-
 ```
 
 ## 작성 원칙
 
-- 같은 학습 단위는 하나의 slug를 사용합니다.
-
+- 같은 학습 단위는 기본적으로 하나의 slug를 사용합니다.
 - 학습 기록은 `note/<slug>.md`에 작성합니다.
-
 - 관련 실습 코드는 `src/<slug>/` 아래에 둡니다.
-
+- note slug와 src 폴더명이 다르면 note frontmatter의 `src` 목록으로 연결합니다.
+- 예: `src: [ch1, ch2]`는 해당 note를 `src/ch1/`, `src/ch2/`와 연결합니다.
 - note와 src는 어느 한쪽만 먼저 존재해도 됩니다.
-
 - `build/`, `.gradle/`, `node_modules/`, 바이너리와 IDE 캐시는 커밋하지 않습니다.
-
 - 학습 기록 관리 블록은 자동 생성되므로 직접 수정하지 않습니다.
 
 ## 언어 및 기술
@@ -46,27 +38,10 @@ java-basic/
 
 ---
 
-## 디렉토리 구조
-
-```text
-java-basic/
-├── README.md
-├── note/    # 학습 기록 Markdown
-└── src/     # 실행 코드와 실습 파일
-```
-
-## 작성 원칙
-
-- 학습 기록은 `note/<slug>.md`에 작성한다.
-- 관련 코드는 `src/<slug>/`에 둔다.
-- note와 src는 대소문자를 포함해 slug가 정확히 같을 때만 연결한다.
-- 아래 학습 기록 marker 사이 내용은 자동 관리되므로 직접 수정하지 않는다.
-
 <!-- til-studio:learning-log:start -->
 ## 학습 기록
 
 | 날짜 | 주제 | src | note |
 | --- | --- | --- | --- |
-| 2026-06-17 | Java 클래스와 데이터: 객체, 인스턴스, 그리고 접근 제어자 파헤치기 | - | [ch1-클래스와-데이터.md](./note/ch1-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0.md) |
-| - | ch1 | [ch1](./src/ch1/) | - |
+| 2026-06-17 | Java 클래스와 데이터: 객체, 인스턴스, 그리고 접근 제어자 파헤치기 | [ch1](./src/ch1/) | [ch1-클래스와-데이터.md](./note/ch1-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0.md) |
 <!-- til-studio:learning-log:end -->
