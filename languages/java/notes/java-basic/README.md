@@ -45,4 +45,5 @@ java-basic/
 | --- | --- | --- | --- |
 | 2026-06-17 | Java 클래스와 데이터: 객체, 인스턴스, 그리고 접근 제어자 파헤치기 | [ch1](./src/ch1/) | [ch1-클래스와-데이터.md](./note/ch1-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0.md) |
 | 2026-08-10 | 기본형(Primitive Type) vs 참조형(Reference Type) | - | [기본형-vs-참조형.md](./note/%EA%B8%B0%EB%B3%B8%ED%98%95-vs-%EC%B0%B8%EC%A1%B0%ED%98%95.md) |
+| - | ch2 | [ch2](./src/ch2/) | - |
 <!-- til-studio:learning-log:end -->
