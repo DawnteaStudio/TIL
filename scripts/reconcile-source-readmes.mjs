@@ -1,13 +1,12 @@
 import { existsSync } from "node:fs";
 import {
-  mkdir,
   readFile,
   readdir,
-  stat,
   writeFile,
 } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseMarkdown } from "./markdown.mjs";
 
 const START_MARKER = "<!-- til-studio:learning-log:start -->";
 const END_MARKER = "<!-- til-studio:learning-log:end -->";
@@ -25,25 +24,45 @@ export function findSourceRoots(changedPaths) {
   return [...roots].sort((left, right) => left.localeCompare(right));
 }
 
-export async function reconcileSourceReadme(repositoryRoot, sourceRoot) {
-  const absoluteSource = path.join(repositoryRoot, sourceRoot);
-  if (!existsSync(absoluteSource)) return false;
+async function existingText(filename) {
+  try {
+    return await readFile(filename, "utf8");
+  } catch (error) {
+    if (error.code === "ENOENT") return "";
+    throw error;
+  }
+}
 
-  const notes = await readNotes(path.join(absoluteSource, "note"));
-  const srcSlugs = await readSourceSlugs(path.join(absoluteSource, "src"));
-  const readmePath = path.join(absoluteSource, "README.md");
-  const current = existsSync(readmePath)
-    ? await readFile(readmePath, "utf8")
-    : "";
-  const existing = current.trim()
-    ? current
-    : buildMinimalReadme(path.posix.basename(sourceRoot));
-  const next = upsertManagedBlock(existing, buildManagedBlock(notes, srcSlugs));
+async function directories(directory) {
+  if (!existsSync(directory)) return [];
+  const entries = await readdir(directory, { withFileTypes: true });
+  return entries.filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
+    .map((entry) => entry.name).sort();
+}
 
-  if (next === existing) return false;
-  await mkdir(absoluteSource, { recursive: true });
-  await writeFile(readmePath, next);
+async function planSourceReadme(root, source) {
+  const dir = path.join(root, source);
+  const notes = await readNotes(path.join(dir, "note"));
+  const slugs = await readSourceSlugs(path.join(dir, "src"));
+  const readme = source + "/README.md";
+  const current = await existingText(path.join(root, readme));
+  const existing = current.trim() ? current : buildMinimalReadme(path.posix.basename(source));
+  const content = upsertManagedBlock(existing, buildManagedBlock(notes, slugs), "learning-log", readme);
+  return { path: readme, current, content, articleCount: notes.length, hasPractice: slugs.length > 0 };
+}
+
+export async function reconcileSourceReadme(root, source) {
+  if (!existsSync(path.join(root, source))) return false;
+  const plan = await planSourceReadme(root, source);
+  if (plan.current === plan.content) return false;
+  await writeFile(path.join(root, plan.path), plan.content);
   return true;
+}
+
+const readmeName = /^readme(?:[._-].*)?\.md$/i;
+
+function isArticleFile(entry) {
+  return entry.isFile() && entry.name.endsWith(".md") && !readmeName.test(entry.name);
 }
 
 async function readNotes(noteDirectory) {
@@ -52,43 +71,41 @@ async function readNotes(noteDirectory) {
   const notes = [];
 
   for (const entry of entries) {
-    if (!entry.isFile() || !entry.name.endsWith(".md")) continue;
+    if (!isArticleFile(entry)) continue;
     const slug = entry.name.slice(0, -3);
     const content = await readFile(path.join(noteDirectory, entry.name), "utf8");
     notes.push({
       slug,
-      title: firstHeading(content) || slug,
-      created: frontmatterValue(content, "created") || "-",
+      title: parseMarkdown(content).title || readableSlug(slug),
+      created: frontmatterValue(content, "created").match(/^["']?(\d{4}-\d{2}-\d{2})["']?$/)?.[1] ?? "",
       srcSlugs: frontmatterSourceSlugs(content),
     });
   }
 
   return notes.sort(
     (left, right) =>
-      left.created.localeCompare(right.created) ||
-      left.slug.localeCompare(right.slug),
+      compareText(left.created, right.created) || compareText(left.slug, right.slug),
   );
 }
 
-async function readSourceSlugs(srcDirectory) {
-  if (!existsSync(srcDirectory)) return [];
-  const entries = await readdir(srcDirectory, { withFileTypes: true });
-  return entries
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .sort((left, right) => left.localeCompare(right));
+function compareText(left, right) {
+  return left < right ? -1 : left > right ? 1 : 0;
 }
 
-function firstHeading(content) {
-  const body = content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "");
-  const heading = body
-    .split(/\r?\n/)
-    .map((line) => line.match(/^#{1,6}[ \t]+(.+)$/)?.[1])
-    .find(Boolean);
-  return heading
-    ?.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .replace(/[*_`]/g, "")
-    .trim();
+async function containsFile(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    if (entry.name === ".gitkeep") continue;
+    if (entry.isFile() || (entry.isDirectory() && await containsFile(path.join(directory, entry.name)))) return true;
+  }
+  return false;
+}
+
+async function readSourceSlugs(srcDirectory) {
+  const slugs = [];
+  for (const slug of await directories(srcDirectory)) {
+    if (await containsFile(path.join(srcDirectory, slug))) slugs.push(slug);
+  }
+  return slugs;
 }
 
 function frontmatterValue(content, key) {
@@ -112,21 +129,15 @@ function buildManagedBlock(notes, srcSlugs) {
         : [];
     for (const slug of linkedSlugs) linkedSourceSlugs.add(slug);
     const src = linkedSlugs.length
-      ? linkedSlugs
-          .map(
-            (slug) =>
-              `[${escapeLinkLabel(slug)}](${encodeMarkdownPath(`./src/${slug}/`)})`,
-          )
-          .join(", ")
+      ? linkedSlugs.map((slug) => tableLink(slug, `./src/${slug}/`)).join(", ")
       : "-";
-    const noteFilename = `${note.slug}.md`;
-    return `| ${note.created} | ${escapeTable(note.title)} | ${src} | [${escapeLinkLabel(noteFilename)}](${encodeMarkdownPath(`./note/${noteFilename}`)}) |`;
+    const noteFilename = note.slug + ".md";
+    const noteLink = tableLink(noteFilename, "./note/" + noteFilename);
+    return `| ${note.created || "-"} | ${tableText(note.title)} | ${src} | ${noteLink} |`;
   });
 
   for (const slug of srcSlugs.filter((slug) => !linkedSourceSlugs.has(slug))) {
-    rows.push(
-      `| - | ${escapeTable(readableSlug(slug))} | [${escapeLinkLabel(slug)}](${encodeMarkdownPath(`./src/${slug}/`)}) | - |`,
-    );
+    rows.push(`| - | ${tableText(readableSlug(slug))} | ${tableLink(slug, `./src/${slug}/`)} | - |`);
   }
 
   if (!rows.length) {
@@ -185,20 +196,19 @@ function cleanSourceSlug(value) {
   return value.trim().replace(/^["']|["']$/g, "");
 }
 
-function upsertManagedBlock(existing, managedBlock) {
-  const startCount = count(existing, START_MARKER);
-  const endCount = count(existing, END_MARKER);
-  if (startCount !== endCount || startCount > 1) {
-    throw new Error("managed learning-log markers are malformed");
+function upsertManagedBlock(existing, block, kind, readme) {
+  const startMarker = `<!-- til-studio:${kind}:start -->`;
+  const endMarker = `<!-- til-studio:${kind}:end -->`;
+  const start = existing.indexOf(startMarker);
+  const end = existing.indexOf(endMarker);
+  if (start === -1 && end === -1) {
+    const separator = !existing || /\n\r?\n$/.test(existing) ? "" : existing.endsWith("\n") ? "\n" : "\n\n";
+    return existing + separator + block + "\n";
   }
-
-  if (startCount === 0) {
-    return `${existing.trimEnd()}\n\n${managedBlock}\n`;
+  if (start < 0 || end < start || start !== existing.lastIndexOf(startMarker) || end !== existing.lastIndexOf(endMarker)) {
+    throw new Error(`${readme}: managed ${kind} markers are malformed`);
   }
-
-  const start = existing.indexOf(START_MARKER);
-  const end = existing.indexOf(END_MARKER) + END_MARKER.length;
-  return `${existing.slice(0, start)}${managedBlock}${existing.slice(end)}`;
+  return existing.slice(0, start) + block + existing.slice(end + endMarker.length);
 }
 
 function buildMinimalReadme(sourceName) {
@@ -234,8 +244,16 @@ function escapeTable(value) {
   return value.replaceAll("|", "\\|").replace(/\r?\n/g, " ");
 }
 
+function tableText(value) {
+  return escapeTable(value.replaceAll("\\", "\\\\"));
+}
+
+function tableLink(label, destination) {
+  return escapeTable(link(label, destination));
+}
+
 function escapeLinkLabel(value) {
-  return escapeTable(value).replaceAll("[", "\\[").replaceAll("]", "\\]");
+  return value.replaceAll("\\", "\\\\").replaceAll("[", "\\[").replaceAll("]", "\\]");
 }
 
 function readableSlug(slug) {
@@ -251,32 +269,117 @@ function encodeMarkdownPath(value) {
     .join("/");
 }
 
-function count(value, needle) {
-  return value.split(needle).length - 1;
+const infrastructure = new Set(["docs", "node_modules", "scripts", "templates", "tests"]);
+const studyAreas = new Set(["cs", "languages", "projects", "software-engineering"]);
+
+function link(label, destination) {
+  return `[${escapeLinkLabel(label)}](${encodeMarkdownPath(destination)})`;
 }
 
-async function readChangedPathsFile(filePath) {
-  const content = await readFile(filePath, "utf8");
-  return content.split(/\r?\n/).filter(Boolean);
+function managedList(kind, lines) {
+  return [`<!-- til-studio:${kind}:start -->`, ...lines, `<!-- til-studio:${kind}:end -->`].join("\n");
+}
+
+async function planTopic(root, topic, plans) {
+  const topicDir = path.join(root, topic);
+  const sourceNames = await directories(path.join(topicDir, "notes"));
+  let articleCount = 0;
+  let hasPractice = false;
+  for (const sourceName of sourceNames) {
+    const source = await planSourceReadme(root, `${topic}/notes/${sourceName}`);
+    plans.push(source);
+    articleCount += source.articleCount;
+    hasPractice ||= source.hasPractice;
+  }
+
+  const theoryDir = path.join(topicDir, "theory");
+  const articles = existsSync(theoryDir)
+    ? (await readdir(theoryDir, { withFileTypes: true })).filter(isArticleFile).map((entry) => entry.name).sort()
+    : [];
+  const lines = ["## Notes"];
+  if (sourceNames.length) {
+    for (const name of sourceNames) lines.push("- " + link(name, `notes/${name}/`));
+  } else lines.push("", "아직 등록된 note가 없습니다.");
+  lines.push("", "## Theory");
+  if (articles.length) {
+    for (const name of articles) {
+      const title = parseMarkdown(await readFile(path.join(theoryDir, name), "utf8")).title;
+      lines.push("- " + link(title || name.slice(0, -3), "theory/" + name));
+    }
+  } else lines.push("", "아직 등록된 theory가 없습니다.");
+
+  const readme = topic + "/README.md";
+  const current = await existingText(path.join(root, readme));
+  const base = current || `[상위 README로 이동](../README.md)\n\n# ${path.posix.basename(topic)}\n`;
+  plans.push({ path: readme, current, content: upsertManagedBlock(base, managedList("index", lines), "index", readme) });
+  return { articleCount: articleCount + articles.length, hasPractice };
+}
+
+// Only migrate the old links-only table. A customized section is human content.
+function replaceLegacyLanguagesList(current, block) {
+  if (current.includes("<!-- til-studio:children:")) return current;
+  return current.replace(
+    /^## 언어 목록\r?\n\r?\n\| 언어 \| 링크 \|\r?\n\| --- \| --- \|(?:\r?\n\| [^|\r\n]+ \| \[바로가기\]\(\.\/[^/)]+\/\) \|)+(?=\r?\n\r?\n(?:---|## )|\r?\n?$)/m,
+    () => block,
+  );
+}
+
+async function planChildren(root, dir, rows) {
+  const readme = dir ? dir + "/README.md" : "README.md";
+  const current = await existingText(path.join(root, readme));
+  let base = current || (dir ? `[상위 README로 이동](../README.md)\n\n# ${dir}\n` : "# TIL\n");
+  const block = managedList("children", ["## 하위 항목", "", ...(rows.length ? rows : ["아직 등록된 하위 항목이 없습니다."])]);
+  if (dir === "languages") base = replaceLegacyLanguagesList(base, block);
+  return { path: readme, current, content: upsertManagedBlock(base, block, "children", readme) };
+}
+
+// Plan all changes before writing so a malformed marker cannot partially update the indexes.
+export async function reconcileRepository(root, { check = false } = {}) {
+  const plans = [];
+  const areas = (await directories(root)).filter((name) => !infrastructure.has(name));
+  for (const area of areas.filter((name) => studyAreas.has(name))) {
+    const dir = path.join(root, area);
+    const topics = await directories(dir);
+    const rows = [];
+    for (const name of topics) {
+      const topic = area + "/" + name;
+      if (area !== "cs" && area !== "languages"
+          && !existsSync(path.join(root, topic, "notes")) && !existsSync(path.join(root, topic, "theory"))
+          && !(await existingText(path.join(root, topic, "README.md"))).includes("<!-- til-studio:index:")) {
+        continue;
+      }
+      const { articleCount, hasPractice } = await planTopic(root, topic, plans);
+      const status = articleCount ? `글 ${articleCount}편` : hasPractice ? "실습 코드" : "작성 예정";
+      rows.push(`- ${link(name, name + "/")} — ${status}`);
+    }
+    const previous = await existingText(path.join(dir, "README.md"));
+    if (rows.length || previous.includes("<!-- til-studio:children:")) {
+      plans.push(await planChildren(root, area, rows));
+    }
+  }
+  plans.push(await planChildren(root, "", areas.map((area) => "- " + link(area, area + "/"))));
+  const changes = plans.filter(({ current, content }) => current !== content);
+  if (!check) {
+    for (const change of changes) await writeFile(path.join(root, change.path), change.content);
+  }
+  return changes.map((change) => change.path);
 }
 
 async function main() {
   const args = process.argv.slice(2);
-  const fileIndex = args.indexOf("--changed-paths-file");
-  if (fileIndex === -1 || !args[fileIndex + 1]) {
-    throw new Error("usage: node scripts/reconcile-source-readmes.mjs --changed-paths-file <path>");
+  const check = args.includes("--check");
+  const changedFile = args.indexOf("--changed-paths-file");
+  if (changedFile >= 0 && args[changedFile + 1]) {
+    // Legacy callers may provide NUL- or newline-delimited Git paths. All indexes
+    // depend on the current tree, including paths removed or renamed in a push.
+    await readFile(args[changedFile + 1]);
+  } else if (!args.includes("--all") && !check) {
+    throw new Error("usage: node scripts/reconcile-source-readmes.mjs --all [--check]");
   }
-
-  const repositoryRoot = process.cwd();
-  const changedPaths = await readChangedPathsFile(args[fileIndex + 1]);
-  const roots = findSourceRoots(changedPaths);
-  let changed = 0;
-
-  for (const sourceRoot of roots) {
-    if (await reconcileSourceReadme(repositoryRoot, sourceRoot)) changed += 1;
-  }
-
-  console.log(`Reconciled ${roots.length} source(s); updated ${changed} README file(s).`);
+  const changes = await reconcileRepository(process.cwd(), { check });
+  for (const file of changes) console.log(file);
+  console.log(`${check ? "Out of date" : "Updated"}: ${changes.length} README(s).`);
+  if (check && changes.length) process.exitCode = 1;
 }
 
 const isMain =

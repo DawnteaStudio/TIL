@@ -4,3 +4,6 @@
 |---|---|---|
 |[Trail 2 / 시뮬레이션 I / 사각형 칠하기](https://www.codetree.ai/trail-info/novice-mid/)|[[Test]계속 중첩되는 사각형](https://www.codetree.ai/trails/complete/curated-cards/test-continuously-overlapping-squares/)|쉬움|
 
+<!-- codetree:navigation:start -->
+[이날의 문제 목록](../README.md) · [풀이 코드 · continuously-overlapping-squares.cpp](./continuously-overlapping-squares.cpp)
+<!-- codetree:navigation:end -->

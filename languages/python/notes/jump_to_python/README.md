@@ -2,7 +2,7 @@ Jump to python 입니다. (유지보수 중)
 
 ## 🔗 상위로
 
-- [🔝 C-CPP 메인으로](../../README.md)
+- [🔝 Python 주제 목차로](../../README.md)
 
 ## 디렉토리 구조
 
@@ -17,7 +17,7 @@ jump_to_python/
 
 - 학습 기록은 `note/<slug>.md`에 작성한다.
 - 관련 코드는 `src/<slug>/`에 둔다.
-- note와 src는 대소문자를 포함해 slug가 정확히 같을 때만 연결한다.
+- 실습은 노트의 frontmatter에 `src: [ch1, ch2]`로 지정합니다. `src`가 없으면 노트 파일명과 대소문자까지 같은 실습 폴더를 연결합니다.
 - 아래 학습 기록 marker 사이 내용은 자동 관리되므로 직접 수정하지 않는다.
 
 <!-- til-studio:learning-log:start -->

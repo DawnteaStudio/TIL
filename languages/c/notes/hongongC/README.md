@@ -19,7 +19,7 @@
 ---
 
 ## 📌 참고 자료 (References)
-* [서현우, 『혼자 공부하는 C언어 개정판』 (2023)]()
+* 서현우, 『혼자 공부하는 C언어 개정판』 (2023)
 
 ## 디렉토리 구조
 
@@ -34,7 +34,7 @@ hongongC/
 
 - 학습 기록은 `note/<slug>.md`에 작성한다.
 - 관련 코드는 `src/<slug>/`에 둔다.
-- note와 src는 대소문자를 포함해 slug가 정확히 같을 때만 연결한다.
+- 실습은 노트의 frontmatter에 `src: [ch1, ch2]`로 지정합니다. `src`가 없으면 노트 파일명과 대소문자까지 같은 실습 폴더를 연결합니다.
 - 아래 학습 기록 marker 사이 내용은 자동 관리되므로 직접 수정하지 않는다.
 
 <!-- til-studio:learning-log:start -->
@@ -49,7 +49,7 @@ hongongC/
 | 2024-03-20 | 📘 C 언어: 반복문과 제어문 정리 | [ch6](./src/ch6/) | [ch6.md](./note/ch6.md) |
 | 2024-03-22 | 📘 함수 (Functions) | [ch7](./src/ch7/) | [ch7.md](./note/ch7.md) |
 | 2024-03-24 | 📘 C 배열과 문자열 | [ch8](./src/ch8/) | [ch8.md](./note/ch8.md) |
-| 2024-03-27 | 📘 개념 정리 템플릿 - 포인터 | [ch9](./src/ch9/) | [ch9.md](./note/ch9.md) |
+| 2024-03-27 | 📘 포인터와 주소 연산 | [ch9](./src/ch9/) | [ch9.md](./note/ch9.md) |
 | 2024-04-02 | 📘 배열과 포인터 | [ch10](./src/ch10/) | [ch10.md](./note/ch10.md) |
-| 2024-04-11 | 📘 개념 정리 템플릿 | [ch11](./src/ch11/) | [ch11.md](./note/ch11.md) |
+| 2024-04-11 | 📘 문자 입출력과 입력 버퍼 | [ch11](./src/ch11/) | [ch11.md](./note/ch11.md) |
 <!-- til-studio:learning-log:end -->

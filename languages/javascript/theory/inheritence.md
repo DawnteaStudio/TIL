@@ -1,8 +1,9 @@
 [⬅️ 상위 README로 이동](../README.md)
-## 📦 JavaScript에서 상속(Inheritance) 구조
+# 📦 JavaScript에서 상속(Inheritance) 구조
 
 ## 📌 목차
 
+<!-- til:toc:start -->
 - [1. 개요](#1-개요)
 - [2. 상속의 목적과 개념](#2-상속의-목적과-개념)
 - [3. 프로토타입 기반 상속의 원리](#3-프로토타입-기반-상속의-원리)
@@ -10,10 +11,11 @@
 - [5. instanceof 연산자 동작 원리](#5-instanceof-연산자-동작-원리)
 - [6. ES6 클래스 상속과 차이점](#6-es6-클래스-상속과-차이점)
 - [📌 참고 자료](#-참고-자료)
+<!-- til:toc:end -->
 
 ---
 
-### **1. 개요**
+## **1. 개요**
 
 - JavaScript는 **클래스 기반 상속**이 아닌 **프로토타입 기반 상속**을 사용한다.
 - 객체는 자신의 프로퍼티에 없으면 **__proto__** 를 따라 부모의 프로퍼티를 탐색한다.
@@ -21,7 +23,7 @@
 
 ---
 
-### **2. 상속의 목적과 개념**
+## **2. 상속의 목적과 개념**
 
 - **공통된 속성 및 메서드를 재사용**하여 객체 간 중복 제거
 - 하위 객체가 상위 객체의 메서드 및 속성에 접근할 수 있도록 **상속 체계**를 만든다
@@ -29,7 +31,7 @@
 
 ---
 
-### **3. 프로토타입 기반 상속의 원리**
+## **3. 프로토타입 기반 상속의 원리**
 
 ```javascript
 function Person(name) {
@@ -100,7 +102,7 @@ Programmer.prototype = new Temp();
 
 ---
 
-### **4. 생성자 함수 상속 구현 방식**
+## **4. 생성자 함수 상속 구현 방식**
 
 1. **부모 생성자 함수 호출**: `Person.call(this, ...)`
 2. **프로토타입 연결**: `Programmer.prototype = Object.create(Person.prototype)`
@@ -117,7 +119,7 @@ p (new Programmer)
 
 ---
 
-### **5. instanceof 연산자 동작 원리**
+## **5. instanceof 연산자 동작 원리**
 
 - `a instanceof B`는 `a.__proto__`, `a.__proto__.__proto__` ... 를 따라가며
   `B.prototype`과 일치하는지 확인한다
@@ -132,7 +134,7 @@ p instanceof Object;     // true
 
 ---
 
-### **6. ES6 클래스 상속과 차이점**
+## **6. ES6 클래스 상속과 차이점**
 
 ```javascript
 class Person {
@@ -173,7 +175,7 @@ dev
 
 ---
 
-### 📌 참고 자료
+## 📌 참고 자료
 
 - [MDN - Inheritance and the prototype chain](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain)
 - [JavaScript Info - Prototype inheritance](https://javascript.info/prototype-inheritance)

@@ -4,3 +4,6 @@
 |---|---|---|
 |[Trail 2 / 완전탐색 I / 자리 수 단위로 완전탐색](https://www.codetree.ai/trail-info/novice-mid/)|[[Concept]모이자](https://www.codetree.ai/trails/complete/curated-cards/intro-gather/)|쉬움|
 
+<!-- codetree:navigation:start -->
+[이날의 문제 목록](../README.md) · [풀이 코드 · gather.cpp](./gather.cpp)
+<!-- codetree:navigation:end -->

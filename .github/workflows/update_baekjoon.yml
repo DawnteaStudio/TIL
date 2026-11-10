@@ -1,15 +1,19 @@
-name: Update BOJ/PGM README
+name: Organize coding-test submissions
 
 on:
   push:
+    branches: [main]
     paths:
       - '백준/**'
       - '프로그래머스/**'
-      - '.github/workflows/update_baekjoon.py'
+      - 'coding-test/code_tree/**'
+      - 'scripts/reconcile-codetree.py'
+      - 'tests/test_coding_archive.py'
+      - '.github/workflows/update_baekjoon.*'
   workflow_dispatch:
     inputs:
       problem_numbers:
-        description: '추가할 문제 번호(공백 구분)'
+        description: '정리할 문제 번호. 공백으로 구분하며 비워 두면 전체를 처리합니다.'
         required: false
         default: ''
 
@@ -17,36 +21,45 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-readme-${{ github.ref }}
+  group: coding-test-archive-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  update-readme:
-    if: github.actor != 'github-actions[bot]'
+  organize:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-
-      - name: Run organizer script
+      - name: Test source preservation and organize the latest main
         env:
-          INPUT_PROBLEM_NUMBERS: ${{ github.event.inputs.problem_numbers }}
+          PROBLEM_NUMBERS: ${{ inputs.problem_numbers }}
+          PYTHONDONTWRITEBYTECODE: '1'
         run: |
-          python .github/workflows/update_baekjoon.py
-
-      - name: Push commits
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-
-          git fetch origin main
-          git pull --rebase origin main || true
-          git push origin HEAD:main
+          set -euo pipefail
+          read -r -a numbers <<< "$PROBLEM_NUMBERS"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            work="$RUNNER_TEMP/coding-test-attempt-$attempt"
+            git worktree add --detach "$work" FETCH_HEAD
+            (
+              cd "$work"
+              python -m unittest discover -s tests -p test_coding_archive.py
+              python .github/workflows/update_baekjoon.py --stage --numbers "${numbers[@]}"
+              python scripts/reconcile-codetree.py
+              python scripts/reconcile-codetree.py --check
+              git add -u
+              git add -A -- coding-test
+              if ! git diff --cached --quiet; then
+                git commit -m "docs: organize coding-test submissions and indexes"
+              fi
+            )
+            if git -C "$work" push origin HEAD:refs/heads/main; then exit 0; fi
+          done
+          exit 1

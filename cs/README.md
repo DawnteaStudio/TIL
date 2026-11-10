@@ -24,15 +24,15 @@
 <!-- til-studio:children:start -->
 ## 하위 항목
 
-- [ai](ai/)
-- [algorithms](algorithms/)
-- [computer-architecture](computer-architecture/)
-- [data-structures](data-structures/)
-- [databases](databases/)
-- [development-tools](development-tools/)
-- [networks](networks/)
-- [operating-systems](operating-systems/)
-- [security](security/)
-- [software-engineering](software-engineering/)
-- [system-design](system-design/)
+- [ai](ai/) — 글 1편
+- [algorithms](algorithms/) — 글 2편
+- [computer-architecture](computer-architecture/) — 작성 예정
+- [data-structures](data-structures/) — 작성 예정
+- [databases](databases/) — 글 1편
+- [development-tools](development-tools/) — 작성 예정
+- [networks](networks/) — 실습 코드
+- [operating-systems](operating-systems/) — 작성 예정
+- [security](security/) — 작성 예정
+- [software-engineering](software-engineering/) — 글 1편
+- [system-design](system-design/) — 작성 예정
 <!-- til-studio:children:end -->

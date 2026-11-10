@@ -1,20 +1,22 @@
 [⬅️ 상위 README로 이동](../README.md)
-## 📦 JavaScript에서 Prototype과 __proto__ 체계
+# 📦 JavaScript에서 Prototype과 __proto__ 체계
 
 ## 📌 목차
 
+<!-- til:toc:start -->
 - [1. 개요](#1-개요)
 - [2. prototype과 __proto__의 역할](#2-prototype과-__proto__의-역할)
 - [3. new 키워드와 객체 생성 과정](#3-new-키워드와-객체-생성-과정)
 - [4. 함수(Function)와 객체(Object)의 생성 구조](#4-함수function와-객체object의-생성-구조)
 - [5. 프로토타입 체인과 프로퍼티 탐색 과정](#5-프로토타입-체인과-프로퍼티-탐색-과정)
 - [6. Function.prototype은 왜 함수인가](#6-functionprototype은-왜-함수인가)
-- [7. 코드 기반 정리 및 요약](#-7-실험-코드-기반-핵심-정리-stack-overflow-이미지-구조-기반)
+- [📦 7. 실험 코드 기반 핵심 정리 (stack overflow 이미지 구조 기반)](#-7-실험-코드-기반-핵심-정리-stack-overflow-이미지-구조-기반)
 - [📌 참고 자료](#-참고-자료)
+<!-- til:toc:end -->
 
 ---
 
-### **1. 개요**
+## **1. 개요**
 
 - 자바스크립트는 **프로토타입 기반(prototype-based)** 언어이다.
 - 객체는 **__proto__** 링크를 통해 상속 체인을 형성한다.
@@ -23,9 +25,9 @@
 
 ---
 
-### **2. prototype과 __proto__의 역할**
+## **2. prototype과 __proto__의 역할**
 
-#### **2.1 prototype**
+### **2.1 prototype**
 
 - **함수(Function)**가 가진 **"설계도 객체"**. (일반 객체는 존재하지 않는다. typeof로 확인하면 undefine)
 - `new` 키워드로 인스턴스 생성 시, 새 객체의 `__proto__`가 생성자의 `prototype`으로 설정된다.
@@ -36,7 +38,7 @@ function Person() {}
 console.log(Person.prototype); // { constructor: Person }
 ```
 
-#### **2.2 __proto__**
+### **2.2 __proto__**
 
 - **모든 객체**가 가진 숨겨진 링크.
 - 프로퍼티 탐색 시 상속 체인을 따라가는 경로.
@@ -49,7 +51,7 @@ console.log(p.__proto__ === Person.prototype); // true
 
 ---
 
-### **3. new 키워드와 객체 생성 과정**
+## **3. new 키워드와 객체 생성 과정**
 
 1. 빈 객체 `{}`를 생성
 2. 객체의 `__proto__`를 생성자 함수의 `prototype`으로 설정
@@ -66,7 +68,7 @@ console.log(dog.__proto__ === Animal.prototype); // true
 
 ---
 
-### **4. 함수(Function)와 객체(Object)의 생성 구조**
+## **4. 함수(Function)와 객체(Object)의 생성 구조**
 
 | 객체 | __proto__ | prototype |
 |:---|:---|:---|
@@ -77,7 +79,7 @@ console.log(dog.__proto__ === Animal.prototype); // true
 
 ---
 
-### **5. 프로토타입 체인과 프로퍼티 탐색 과정**
+## **5. 프로토타입 체인과 프로퍼티 탐색 과정**
 
 1. 자기 자신에서 프로퍼티 탐색
 2. 없으면 `__proto__`를 따라 부모 탐색
@@ -97,7 +99,7 @@ p.sayHi(); // p에는 sayHi 없음 → p.__proto__ (Person.prototype)에서 찾�
 
 ---
 
-### **6. Function.prototype은 왜 함수인가**
+## **6. Function.prototype은 왜 함수인가**
 
 - ES5 명세에서 Function.prototype은 스스로 **Function 객체**가 되어야 한다고 규정한다.
 - 이유:
@@ -126,11 +128,11 @@ Function.prototype은 **호환성을 위해 여전히 함수 객체로 유지**�
 
 ---
 
-### 📦 7. 실험 코드 기반 핵심 정리 (stack overflow 이미지 구조 기반)
+## 📦 7. 실험 코드 기반 핵심 정리 (stack overflow 이미지 구조 기반)
 
 ![Prototype Chain 구조](./prototype_images/prototype-01.png)
 
-#### 7-1 등장하는 주요 객체
+### 7-1 등장하는 주요 객체
 
 - `Function` (내장 함수 생성자)
 - `Object` (내장 객체 생성자)
@@ -140,7 +142,7 @@ Function.prototype은 **호환성을 위해 여전히 함수 객체로 유지**�
 
 ---
 
-#### 7-2 Function
+### 7-2 Function
 
 ```javascript
 console.log(typeof Function.__proto__); // "function"
@@ -160,7 +162,7 @@ console.log(Function === Function.prototype); // false
 
 ---
 
-#### 7-3 Object
+### 7-3 Object
 
 ```javascript
 console.log(typeof Object.__proto__); // "function"
@@ -176,7 +178,7 @@ console.log(typeof Object.prototype); // "object"
 
 ---
 
-#### 7-4 Person (사용자 정의 생성자)
+### 7-4 Person (사용자 정의 생성자)
 
 ```javascript
 function Person() {}
@@ -193,7 +195,7 @@ console.log(typeof Person.prototype); // "object"
 
 ---
 
-#### 7-5 person (new Person()) 객체
+### 7-5 person (new Person()) 객체
 
 ```javascript
 let person = new Person();
@@ -210,7 +212,7 @@ console.log(typeof person.prototype); // "undefined"
 
 ---
 
-#### 7-6 obj (`{}` 리터럴 객체)
+### 7-6 obj (`{}` 리터럴 객체)
 
 ```javascript
 let obj = {};
@@ -227,7 +229,7 @@ console.log(typeof obj.prototype); // "undefined"
 
 ---
 
-#### 7-7 전체 구조 요약
+### 7-7 전체 구조 요약
 
 ```plaintext
 Function
@@ -254,7 +256,7 @@ obj (리터럴 객체)
 
 ---
 
-#### 7-8 그럼 prototype의 __proto__는???
+### 7-8 그럼 prototype의 __proto__는???
 
 - prototype을 설명하는 대부분의 글에서 잘 없는 내용이기도 하고, 필자가 공부하다가 제일 헷갈렸던 부분이라 남겨둔다.
 - **__proto__는 모든 객체가 가지고 있음**을 다시 기억하자.
@@ -263,14 +265,14 @@ obj (리터럴 객체)
 
 ---
 
-#### 7-9 핵심 요약 문장
+### 7-9 핵심 요약 문장
 
 - **"Function, Object, Person은 모두 Function.prototype을 부모로 가지는 함수 객체다.**
 - **생성된 인스턴스(person, obj)는 각각 Person.prototype, Object.prototype을 __proto__로 삼는다.**
 - **Function과 Function.prototype은 같은 객체가 아니라, Function의 부모가 Function.prototype이다."**
 
 
-### 📌 참고 자료
+## 📌 참고 자료
 
 - [MDN - Prototype chain](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain)
 - [V8 blog - Fast Properties and Hidden Classes](https://v8.dev/blog/fast-properties)

@@ -4,13 +4,21 @@ created: 2024-03-20
 
 [⬅️ 상위 README로 이동](../README.md)
 
-## 📘 C 언어: 조건문 정리
+# 📘 C 언어: 조건문 정리
 
 ## 📌 목차
 
-* [1. if, if else, if else if else](#1-if-if-else-if-else-if-else)
-* [2. switch case 문](#2-switch-case-문)
-* [📌 참고 자료](#-참고-자료)
+<!-- til:toc:start -->
+- [1. if, if else, if else if else](#1-if-if-else-if-else-if-else)
+  - [else 문](#else-문)
+  - [else if 문](#else-if-문)
+  - [1-1. 중괄호 생략 주의](#1-1-중괄호-생략-주의)
+- [2. switch case 문](#2-switch-case-문)
+  - [2-1. 예제](#2-1-예제)
+  - [break 생략 시 주의](#break-생략-시-주의)
+  - [2-2. default 위치](#2-2-default-위치)
+- [📌 참고 자료](#-참고-자료)
+<!-- til:toc:end -->
 
 ---
 
@@ -163,3 +171,7 @@ switch (condition) {
 
 - 열혈 C 프로그래밍
 - [C 언어 공식 문서 (MS Learn)](https://learn.microsoft.com/ko-kr/cpp/c-language)
+
+<!-- til:chapters:start -->
+이전 글: [📘 C 언어: 연산자 정리](./ch4.md) · [자료 목차](../README.md) · 다음 글: [📘 C 언어: 반복문과 제어문 정리](./ch6.md)
+<!-- til:chapters:end -->

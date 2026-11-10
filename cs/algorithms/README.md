@@ -20,6 +20,6 @@ algorithms/
 - [APSS](notes/APSS/)
 
 ## Theory
-- [kmp](theory/kmp.md)
-- [union-find](theory/union-find.md)
+- [📘 알고리즘: KMP (Knuth, Morris, Pratt)](theory/kmp.md)
+- [📘 알고리즘: Union-Find (Disjoint Set Union, DSU)](theory/union-find.md)
 <!-- til-studio:index:end -->

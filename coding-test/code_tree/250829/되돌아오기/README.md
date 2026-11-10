@@ -4,3 +4,6 @@
 |---|---|---|
 |[Trail 2 / 시뮬레이션 II / dx dy technique](https://www.codetree.ai/trail-info/novice-mid/)|[[Challenge]되돌아오기](https://www.codetree.ai/trails/complete/curated-cards/challenge-come-back/)|쉬움|
 
+<!-- codetree:navigation:start -->
+[이날의 문제 목록](../README.md) · [풀이 코드 · come-back.cpp](./come-back.cpp)
+<!-- codetree:navigation:end -->

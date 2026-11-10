@@ -1,67 +1,47 @@
-name: Reconcile source READMEs
+name: Reconcile learning indexes
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - "**/notes/*/note/**"
-      - "**/notes/*/src/**"
-      - "**/notes/*/README.md"
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: reconcile-source-readmes-${{ github.ref }}
+  group: reconcile-readmes-main
   cancel-in-progress: false
 
 jobs:
   reconcile:
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
-
-      - name: Collect changed paths
-        env:
-          BEFORE_SHA: ${{ github.event.before }}
-          CURRENT_SHA: ${{ github.sha }}
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Regenerate indexes on the current main branch
         run: |
-          if [[ "$BEFORE_SHA" == "0000000000000000000000000000000000000000" ]]; then
-            git diff-tree --no-commit-id --name-only -r "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt"
-          else
-            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt"
-          fi
-
-      - name: Commit README updates
-        run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           for attempt in 1 2 3; do
-            git fetch origin main
-            git reset --hard origin/main
-            node scripts/reconcile-source-readmes.mjs --changed-paths-file "$RUNNER_TEMP/changed-paths.txt"
-
-            if git diff --quiet; then
-              echo "No README changes."
+            git fetch origin refs/heads/main
+            git reset --hard FETCH_HEAD
+            npm ci
+            node scripts/article-toc.mjs --write
+            node scripts/reconcile-source-readmes.mjs --all
+            git add -A -- '*.md'
+            if git diff --cached --quiet; then
               exit 0
             fi
-
-            git add "**/notes/*/README.md"
-            git commit -m "docs: reconcile source learning logs [skip ci]"
-
+            git commit -m "docs: reconcile learning indexes"
             if git push origin HEAD:main; then
               exit 0
             fi
-
-            echo "Push attempt $attempt failed because main advanced."
           done
-
-          echo "Failed to publish reconciled READMEs after 3 attempts."
+          echo "Could not publish the indexes on the current main branch." >&2
           exit 1

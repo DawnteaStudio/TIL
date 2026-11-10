@@ -1,0 +1,24 @@
+name: Check Markdown navigation
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - run: node scripts/article-toc.mjs --check
+      - run: node scripts/reconcile-source-readmes.mjs --all --check
+      - run: python3 scripts/reconcile-codetree.py --check
+      - run: npm run check:markdown

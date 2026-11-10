@@ -4,14 +4,20 @@ created: 2024-03-20
 
 [⬅️ 상위 README로 이동](../README.md)
 
-## 📘 C 언어: 반복문과 제어문 정리
+# 📘 C 언어: 반복문과 제어문 정리
 
 ## 📌 목차
 
-* [1. while, do while](#1-while-do-while)
-* [2. for](#2-for)
-* [3. break, continue](#3-break-continue)
-* [📌 참고 자료](#-참고-자료)
+<!-- til:toc:start -->
+- [1. while, do while](#1-while-do-while)
+  - [1-1. while 문](#1-1-while-문)
+  - [1-2. do while 문](#1-2-do-while-문)
+- [2. for](#2-for)
+- [3. break, continue](#3-break-continue)
+  - [3-1. break](#3-1-break)
+  - [3-2. continue](#3-2-continue)
+- [📌 참고 자료](#-참고-자료)
+<!-- til:toc:end -->
 
 ---
 
@@ -141,3 +147,7 @@ printf("sum: %d\n", sum); // 3의 배수를 제외한 합
 
 - 열혈 C 프로그래밍
 - [C 언어 반복문 공식 문서](https://learn.microsoft.com/ko-kr/cpp/c-language)
+
+<!-- til:chapters:start -->
+이전 글: [📘 C 언어: 조건문 정리](./ch5.md) · [자료 목차](../README.md) · 다음 글: [📘 함수 (Functions)](./ch7.md)
+<!-- til:chapters:end -->

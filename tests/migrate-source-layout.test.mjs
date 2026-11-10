@@ -155,7 +155,7 @@ test("migrateRepository removes legacy topic indexes before writing the managed 
   assert.doesNotMatch(readme, /\| 자료 \| 링크 \|/);
   assert.doesNotMatch(readme, /\| 문서 \| 링크 \|/);
   assert.match(readme, /- \[APSS\]\(notes\/APSS\/\)/);
-  assert.match(readme, /- \[kmp\]\(theory\/kmp\.md\)/);
+  assert.match(readme, /- \[KMP\]\(theory\/kmp\.md\)/);
 });
 
 test("migrateRepository normalizes a topic even when it has no source directories", async () => {

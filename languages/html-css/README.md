@@ -17,9 +17,9 @@ html-css/
 
 <!-- til-studio:index:start -->
 ## Notes
-- [[인프런 X 생활코딩] HTML과 인터넷](notes/%5B%EC%9D%B8%ED%94%84%EB%9F%B0%20X%20%EC%83%9D%ED%99%9C%EC%BD%94%EB%94%A9%5D%20HTML%EA%B3%BC%20%EC%9D%B8%ED%84%B0%EB%84%B7/)
+- [\[인프런 X 생활코딩\] HTML과 인터넷](notes/%5B%EC%9D%B8%ED%94%84%EB%9F%B0%20X%20%EC%83%9D%ED%99%9C%EC%BD%94%EB%94%A9%5D%20HTML%EA%B3%BC%20%EC%9D%B8%ED%84%B0%EB%84%B7/)
 
 ## Theory
-- [flex-align](theory/flex-align.md)
-- [height&&width](theory/height%26%26width.md)
+- [📘 align-items vs align-content](theory/flex-align.md)
+- [height: 100% vs width: 50% 의 차이](theory/height%26%26width.md)
 <!-- til-studio:index:end -->

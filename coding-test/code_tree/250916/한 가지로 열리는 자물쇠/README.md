@@ -4,3 +4,6 @@
 |---|---|---|
 |[Trail 2 / 완전탐색 I / 자리 마다 숫자를 정하는 완전탐색](https://www.codetree.ai/trail-info/novice-mid/)|[[Concept]한 가지로 열리는 자물쇠](https://www.codetree.ai/trails/complete/curated-cards/intro-one-way-lock/)|쉬움|
 
+<!-- codetree:navigation:start -->
+[이날의 문제 목록](../README.md) · [풀이 코드 · one-way-lock.cpp](./one-way-lock.cpp)
+<!-- codetree:navigation:end -->

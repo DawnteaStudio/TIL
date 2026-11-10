@@ -11,15 +11,16 @@
 
 ---
 
-## 언어 목록
+<!-- til-studio:children:start -->
+## 하위 항목
 
-| 언어 | 링크 |
-| --- | --- |
-| C | [바로가기](./c/) |
-| C++ | [바로가기](./cpp/) |
-| Python | [바로가기](./python/) |
-| JavaScript | [바로가기](./javascript/) |
-| HTML/CSS | [바로가기](./html-css/) |
+- [c](c/) — 글 10편
+- [cpp](cpp/) — 실습 코드
+- [html-css](html-css/) — 글 5편
+- [java](java/) — 글 3편
+- [javascript](javascript/) — 글 5편
+- [python](python/) — 실습 코드
+<!-- til-studio:children:end -->
 
 ---
 

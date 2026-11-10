@@ -21,9 +21,9 @@ javascript/
 아직 등록된 note가 없습니다.
 
 ## Theory
-- [function](theory/function.md)
-- [inheritence](theory/inheritence.md)
-- [num_and_str](theory/num_and_str.md)
-- [object](theory/object.md)
-- [prototype](theory/prototype.md)
+- [𝒇 함수](theory/function.md)
+- [📦 JavaScript에서 상속(Inheritance) 구조](theory/inheritence.md)
+- [💻 숫자와 문자](theory/num_and_str.md)
+- [📦 javascript에서 객체란?](theory/object.md)
+- [📦 JavaScript에서 Prototype과 proto 체계](theory/prototype.md)
 <!-- til-studio:index:end -->

@@ -9,10 +9,9 @@ import {
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { reconcileSourceReadme } from "./reconcile-source-readmes.mjs";
+import { reconcileRepository } from "./reconcile-source-readmes.mjs";
 
 const INDEX_START = "<!-- til-studio:index:start -->";
-const INDEX_END = "<!-- til-studio:index:end -->";
 
 export async function planSourceMigration(repositoryRoot, sourceRoot) {
   const absoluteSource = path.join(repositoryRoot, sourceRoot);
@@ -83,13 +82,17 @@ export async function migrateRepository(repositoryRoot, options = {}) {
 
     await normalizeReadme(repositoryRoot, plan.sourceRoot);
     await addCreatedFrontmatter(repositoryRoot, plan.sourceRoot, plan.noteDates);
-    await reconcileSourceReadme(repositoryRoot, plan.sourceRoot);
   }
 
   for (const topicRoot of await discoverTopicRoots(repositoryRoot)) {
-    await reconcileTopicReadme(repositoryRoot, topicRoot);
+    const readmePath = path.join(repositoryRoot, topicRoot, "README.md");
+    if (!existsSync(readmePath)) continue;
+    const original = await readFile(readmePath, "utf8");
+    const cleaned = removeLegacyTopicIndexes(original);
+    if (cleaned !== original) await writeFile(readmePath, cleaned);
   }
 
+  await reconcileRepository(repositoryRoot);
   return {
     sourceCount: sourceRoots.length,
     moves: plans.flatMap((plan) => plan.moves),
@@ -275,59 +278,6 @@ async function discoverTopicRoots(repositoryRoot) {
   return roots.sort((left, right) => left.localeCompare(right));
 }
 
-async function reconcileTopicReadme(repositoryRoot, topicRoot) {
-  const readmePath = path.join(repositoryRoot, topicRoot, "README.md");
-  const original = existsSync(readmePath)
-    ? await readFile(readmePath, "utf8")
-    : `# ${path.posix.basename(topicRoot)}\n`;
-  const existing = removeLegacyTopicIndexes(original);
-  const sourceDirectory = path.join(repositoryRoot, topicRoot, "notes");
-  const theoryDirectory = path.join(repositoryRoot, topicRoot, "theory");
-  const sources = existsSync(sourceDirectory)
-    ? (await readdir(sourceDirectory, { withFileTypes: true }))
-        .filter((entry) => entry.isDirectory())
-        .map((entry) => entry.name)
-        .sort((left, right) => left.localeCompare(right))
-    : [];
-  const theories = existsSync(theoryDirectory)
-    ? (await readdir(theoryDirectory, { withFileTypes: true }))
-        .filter(
-          (entry) =>
-            entry.isFile() &&
-            entry.name.endsWith(".md") &&
-            entry.name.toLowerCase() !== "readme.md",
-        )
-        .map((entry) => entry.name)
-        .sort((left, right) => left.localeCompare(right))
-    : [];
-  const block = [
-    INDEX_START,
-    "## Notes",
-    ...(sources.length
-      ? sources.map(
-          (source) =>
-            `- [${source}](${encodeMarkdownPath(`notes/${source}/`)})`,
-        )
-      : ["", "아직 등록된 note가 없습니다."]),
-    "",
-    "## Theory",
-    ...(theories.length
-      ? theories.map(
-          (theory) =>
-            `- [${theory.replace(/\.md$/i, "")}](${encodeMarkdownPath(`theory/${theory}`)})`,
-        )
-      : ["", "아직 등록된 theory가 없습니다."]),
-    INDEX_END,
-  ].join("\n");
-  const markerPattern = new RegExp(
-    `${escapeRegExp(INDEX_START)}[\\s\\S]*?${escapeRegExp(INDEX_END)}`,
-  );
-  const next = markerPattern.test(existing)
-    ? `${existing.replace(markerPattern, block).trimEnd()}\n`
-    : `${existing.trimEnd()}\n\n${block}\n`;
-  if (next !== original) await writeFile(readmePath, next);
-}
-
 function removeLegacyTopicIndexes(content) {
   const markerIndex = content.indexOf(INDEX_START);
   const prefix = markerIndex === -1 ? content : content.slice(0, markerIndex);
@@ -336,24 +286,12 @@ function removeLegacyTopicIndexes(content) {
     /(?:\n---\n)?\n## (?:Theory|Notes)\n\n\| (?:문서|자료) \| 링크 \|\n\| --- \| --- \|\n(?:\|[^\n]*\|\n?)*/g,
     "",
   );
+  if (cleanedPrefix === prefix) return content;
   return `${cleanedPrefix.trimEnd()}${suffix ? `\n\n${suffix.trimStart()}` : "\n"}`;
 }
 
 function stripControlCharacters(value) {
   return value.replace(/[\u0000-\u001f\u007f]/g, "");
-}
-
-function encodeMarkdownPath(value) {
-  return value
-    .split("/")
-    .map((segment) =>
-      encodeURIComponent(segment).replace(/\(/g, "%28").replace(/\)/g, "%29"),
-    )
-    .join("/");
-}
-
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 async function main() {

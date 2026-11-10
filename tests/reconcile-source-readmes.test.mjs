@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { mkdtemp, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import {
   findSourceRoots,
+  reconcileRepository,
   reconcileSourceReadme,
 } from "../scripts/reconcile-source-readmes.mjs";
 
@@ -257,3 +259,94 @@ ${learningRow}
 <!-- til-studio:learning-log:end -->
 `;
 }
+
+test("full reconciliation indexes human titles, empty topics, and checks without writing", async () => {
+  const root = await fixture();
+  const files = {
+    "README.md": "# 학습\n",
+    "cs/README.md": "# 컴퓨터공학\n",
+    "cs/os/README.md": "# OS\n",
+    "cs/empty/README.md": "# 나중에\n",
+    "cs/net/notes/book/src/ch1/App.c": "int main() {}",
+    "cs/os/theory/문서 (새).md": "---\ncreated: 2000-01-01\n---\n\n```md\n# 코드 제목\n```\n\n## 진짜 **제목**\n",
+    "cs/os/theory/images/example.png": "png",
+    "cs/os/theory/README_ko.md": "# 설명",
+    "cs/os/notes/수업/note/배열.md": "---\ncreated: '2026-06-01'\n---\n# 배열",
+  };
+  for (const [name, body] of Object.entries(files)) {
+    await mkdir(path.dirname(path.join(root, name)), { recursive: true });
+    await writeFile(path.join(root, name), body);
+  }
+  const changes = await reconcileRepository(root, { check: true });
+  assert.ok(changes.includes("cs/os/notes/수업/README.md"));
+  assert.equal(await readFile(path.join(root, "cs/os/README.md"), "utf8"), "# OS\n");
+  await reconcileRepository(root);
+  const topic = await readFile(path.join(root, "cs/os/README.md"), "utf8");
+  assert.match(topic, /\[진짜 제목\]\(theory\/.+%28.+%29\.md\)/);
+  assert.doesNotMatch(topic, /example\.png|README_ko/);
+  const area = await readFile(path.join(root, "cs/README.md"), "utf8");
+  assert.match(area, /\[os\]\(os\/\) — 글 2편/);
+  assert.match(area, /\[empty\]\(empty\/\) — 작성 예정/);
+  assert.match(area, /\[net\]\(net\/\) — 실습 코드/);
+  assert.deepEqual(await reconcileRepository(root, { check: true }), []);
+});
+
+test("malformed topic markers stop generation before writing any README", async () => {
+  const root = await fixture();
+  await mkdir(path.join(root, "cs", "a", "theory"), { recursive: true });
+  await writeFile(path.join(root, "cs/a/theory/new.md"), "# 새 글");
+  await mkdir(path.join(root, "cs", "z"), { recursive: true });
+  await writeFile(path.join(root, "cs/z/README.md"), "<!-- til-studio:index:end -->\n수기\n<!-- til-studio:index:start -->");
+  await assert.rejects(reconcileRepository(root), /cs\/z\/README.md.*malformed/);
+  await assert.rejects(readFile(path.join(root, "cs/a/README.md")), /ENOENT/);
+});
+
+test("a renamed Korean note and a new README can be staged together after multiple commits", async () => {
+  const root = await fixture();
+  const git = (...args) => execFileSync("git", args, { cwd: root, encoding: "utf8" });
+  git("init", "-q");
+  git("config", "user.name", "fixture");
+  git("config", "user.email", "fixture@example.invalid");
+  const source = "cs/algorithms/notes/강의 (1)";
+  const before = source + "/note/이전.md";
+  const after = source + "/note/변경.md";
+  await mkdir(path.join(root, source, "note"), { recursive: true });
+  await writeFile(path.join(root, before), "# 예전 제목\n");
+  git("add", ".");
+  git("commit", "-qm", "first");
+  await rename(path.join(root, before), path.join(root, after));
+  await writeFile(path.join(root, after), "# 최종 제목\n");
+  git("add", "-A");
+  git("commit", "-qm", "rename");
+  await reconcileRepository(root);
+  git("add", "-A", "--", "*.md");
+  const staged = git("diff", "--cached", "--name-only", "-z").split("\0");
+  assert.ok(staged.includes(source + "/README.md"));
+  const index = await readFile(path.join(root, source, "README.md"), "utf8");
+  assert.match(index, /최종 제목/);
+  assert.doesNotMatch(index, /이전/);
+  assert.match(await readFile(path.join(root, "cs/algorithms/README.md"), "utf8"), /%28/);
+  assert.deepEqual(await reconcileRepository(root, { check: true }), []);
+});
+
+test("source marker replacement preserves outer bytes and rejects reversed or duplicated pairs", async () => {
+  const root = await fixture();
+  const source = "cs/a/notes/책";
+  await mkdir(path.join(root, source), { recursive: true });
+  const filename = path.join(root, source, "README.md");
+  const start = "<!-- til-studio:learning-log:start -->";
+  const end = "<!-- til-studio:learning-log:end -->";
+  const prefix = "# 수기  \r\n\r\n";
+  const suffix = "\r\n참고  \r\n\r\n";
+  await writeFile(filename, prefix + start + "\nold\n" + end + suffix);
+  await reconcileSourceReadme(root, source);
+  const result = await readFile(filename, "utf8");
+  assert.ok(result.startsWith(prefix + start));
+  assert.ok(result.endsWith(end + suffix));
+  for (const markers of [[end, start], [start, end, start, end]]) {
+    const invalid = markers.join("\n");
+    await writeFile(filename, invalid);
+    await assert.rejects(reconcileSourceReadme(root, source), /malformed/);
+    assert.equal(await readFile(filename, "utf8"), invalid);
+  }
+});

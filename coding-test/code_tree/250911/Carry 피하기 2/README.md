@@ -4,3 +4,6 @@
 |---|---|---|
 |[Trail 2 / 완전탐색 I / 자리 수 단위로 완전탐색](https://www.codetree.ai/trail-info/novice-mid/)|[[Challenge]Carry 피하기 2](https://www.codetree.ai/trails/complete/curated-cards/challenge-escaping-carry-2/)|어려움|
 
+<!-- codetree:navigation:start -->
+[이날의 문제 목록](../README.md) · [풀이 코드 · escaping-carry-2.cpp](./escaping-carry-2.cpp)
+<!-- codetree:navigation:end -->
