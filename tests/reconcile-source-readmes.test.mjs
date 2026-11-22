@@ -291,6 +291,21 @@ test("full reconciliation indexes human titles, empty topics, and checks without
   assert.deepEqual(await reconcileRepository(root, { check: true }), []);
 });
 
+test("pending BaekjoonHub submissions leave the root index unchanged", async () => {
+  const root = await fixture();
+  await mkdir(path.join(root, "coding-test"));
+  await reconcileRepository(root);
+
+  for (const platform of ["백준", "프로그래머스"]) {
+    await mkdir(path.join(root, platform, "1145"), { recursive: true });
+  }
+  assert.deepEqual(await reconcileRepository(root, { check: true }), []);
+  assert.deepEqual(await reconcileRepository(root), []);
+
+  await mkdir(path.join(root, "algorithms"));
+  assert.deepEqual(await reconcileRepository(root, { check: true }), ["README.md"]);
+});
+
 test("malformed topic markers stop generation before writing any README", async () => {
   const root = await fixture();
   await mkdir(path.join(root, "cs", "a", "theory"), { recursive: true });

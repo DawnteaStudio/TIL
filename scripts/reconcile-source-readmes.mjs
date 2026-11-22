@@ -269,7 +269,8 @@ function encodeMarkdownPath(value) {
     .join("/");
 }
 
-const infrastructure = new Set(["docs", "node_modules", "scripts", "templates", "tests"]);
+// The coding-test organizer moves submissions out of the two BaekjoonHub inboxes.
+const excludedRootDirectories = new Set(["docs", "node_modules", "scripts", "templates", "tests", "백준", "프로그래머스"]);
 const studyAreas = new Set(["cs", "languages", "projects", "software-engineering"]);
 
 function link(label, destination) {
@@ -336,7 +337,7 @@ async function planChildren(root, dir, rows) {
 // Plan all changes before writing so a malformed marker cannot partially update the indexes.
 export async function reconcileRepository(root, { check = false } = {}) {
   const plans = [];
-  const areas = (await directories(root)).filter((name) => !infrastructure.has(name));
+  const areas = (await directories(root)).filter((name) => !excludedRootDirectories.has(name));
   for (const area of areas.filter((name) => studyAreas.has(name))) {
     const dir = path.join(root, area);
     const topics = await directories(dir);
